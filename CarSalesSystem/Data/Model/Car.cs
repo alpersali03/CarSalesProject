@@ -76,8 +76,8 @@ namespace CarSalesSystem.Data.Model
         /// <summary>
         /// dealer of the car 
         /// </summary>  
-        [ForeignKey("DealerId")]
-        public Dealer Dealer { get; set; } = null!;
+        //[ForeignKey("DealerId")]
+        //public Dealer Dealer { get; set; } = null!;
 
         /// <summary>
         /// if car is booked this is the id of booking 
