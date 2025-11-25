@@ -95,7 +95,7 @@ namespace CarSalesSystem.Controllers
             _context.SaveChanges();
             return RedirectToAction("GetAll");
         }
-        [HttpPost]
+        [HttpGet]
         public IActionResult Details(int id)
         {
             var dealer = _context.Dealers.Include(d=>d.Cars).FirstOrDefault(d=> d.Id == id);
