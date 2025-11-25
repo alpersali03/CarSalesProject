@@ -1,0 +1,26 @@
+﻿@using CarSalesSystem.DTOs
+@using CarSalesSystem.Data.Model
+@model List<DealerDto>
+
+<a asp-controller="Dealer" asp-action="GetAll" class="btn btn-primary mb-3 top-0 left-0" type="submit">GoBack</a>
+
+
+
+<div class="row">
+	@foreach (var dealer in Model)
+	{
+		<div class="col-md-4">
+			<div class="card mb-3">
+				<div class="card-body text-center">
+					<h5 class="card-title text-center"> @dealer.Name</h5>
+					<p class="card-title text-center"> Number: @dealer.PhoneNumber</p>
+					<p class="card-title text-center"> CompanyName: @dealer.CompanyName</p>
+
+					<a asp-controller="Dealer" asp-action="Edit" asp-route-id="@dealer.Id" class="btn btn-warning">Edit</a>
+					@* <a asp-controller="Product" asp-action="ProductsByCategory" asp-route-categoryId="@product.Id" class="btn btn-primary">Products by category</a>
+					<a asp-controller="Category" asp-action="Delete" asp-route-id="@dealer.Id" class="btn btn-danger" onclick="myFunction() ">Delete</a> *@
+				</div>
+			</div>
+		</div>
+	}
+</div>
