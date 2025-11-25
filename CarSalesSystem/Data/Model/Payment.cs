@@ -9,10 +9,12 @@ namespace CarSalesSystem.Data.Model
 
         public DateTime PaymentTime { get; set; }
 
+        [Required]
+        public decimal TotalAmount { get; set; } 
 
         [Required]
         public int DebitCardId { get; set; }
-        public DebitCard? DebitCard { get; set; }
+        public DebitCard DebitCard { get; set; } = null!;
 
         [Required]
         public string UserId { get; set; } = null!;
@@ -20,7 +22,9 @@ namespace CarSalesSystem.Data.Model
         [Required]
         public int CarId { get; set; }
 
-        [Required]
-        public bool IsValid { get; set; }
+        public Car Car { get; set; } = null!;
+
+        public bool IsSuccessful { get; set; } 
     }
+
 }
