@@ -51,7 +51,7 @@ namespace CarSalesSystem.Controllers
             };
             _context.Categories.Add(category);
             _context.SaveChanges();
-            return View(category);
+            return RedirectToAction("GetAll");
 
         }
         [HttpGet]
