@@ -6,8 +6,9 @@ namespace CarSalesSystem.Data.Model
     {
         [Key]
         public int Id { get; set; }
+
         [Required]
-        public long CreditCardNumber { get; set; }
+        public string CardNumber { get; set; } = null!;
 
         [Required]
         public int CVV { get; set; }
@@ -16,11 +17,12 @@ namespace CarSalesSystem.Data.Model
         public string FullName { get; set; } = null!;
 
         [Required]
-        public string ExpMonth { get; set; } = null!;
+        public string ExpirationMonth { get; set; } = null!;
 
         [Required]
-        public int ExpYear { get; set; }
+        public int ExpirationYear { get; set; }
 
-        public List<Payment>? Payments { get; set; } = new List<Payment>();
+        public List<Payment> Payments { get; set; } = new();
     }
+
 }
