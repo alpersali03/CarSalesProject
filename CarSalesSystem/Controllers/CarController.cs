@@ -69,7 +69,7 @@ namespace CarSalesSystem.Controllers
             _context.Cars.Add(car);
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(GetAll));
+            return RedirectToAction("GetAll");
         }
 
         [HttpGet]
@@ -127,7 +127,7 @@ namespace CarSalesSystem.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(GetAll));
+            return RedirectToAction("GetAll");
         }
 
         [HttpGet]
@@ -155,7 +155,7 @@ namespace CarSalesSystem.Controllers
             _context.Cars.Remove(car);
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(GetAll));
+            return RedirectToAction("GetAll");
         }
 
         [HttpGet]
