@@ -5,89 +5,45 @@ namespace CarSalesSystem.Data.Model
 {
     public class Car
     {
-        /// <summary>
-        /// car id 
-        /// </summary>
         [Key]
         public int Id { get; set; }
 
-        /// <summary>
-        /// car brand 
-        /// </summary>
         [Required]
         public string Brand { get; set; } = null!;
 
-        /// <summary>
-        /// car model 
-        /// </summary>
         [Required]
         public string Model { get; set; } = null!;
 
-        /// <summary>
-        /// desctription of the car  
-        /// </summary>
         [Required]
         public string Description { get; set; } = null!;
 
-        /// <summary>
-        /// photo of the car 
-        /// </summary>
         [Required]
-        public byte[] CarPhoto { get; set; } = null!;
-
-        /// <summary>
-        /// when the car is made
-        /// </summary>
+        public string ImageUrl { get; set; } = null!; 
 
         public int Year { get; set; }
 
-        /// <summary>
-        /// if the car is public
-        /// </summary>
-        public bool IsPublic { get; set; }
+        public int Mileage { get; set; } 
 
-        /// <summary>
-        /// if the car is booked
-        /// </summary>
-        public bool IsBooked { get; set; } = false;
+        [Required]
+        public string FuelType { get; set; } = null!; 
 
-        /// <summary>
-        /// price for 1 day for the car 
-        /// </summary>
+        [Required]
+        public string Transmission { get; set; } = null!; 
 
         public decimal Price { get; set; }
 
-        /// <summary>
-        /// foreign key 
-        /// </summary>  
-        public int CategoryId { get; set; }
+        public bool IsListed { get; set; } 
 
-        /// <summary>
-        /// foreign key
-        /// </summary> 
+        public string Country { get; set; } = null!;
+        public string City { get; set; } = null!;
+
+        public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        /// <summary>
-        /// dealer of the car 
-        /// </summary>  
         public int DealerId { get; set; }
-
-        /// <summary>
-        /// dealer of the car 
-        /// </summary>  
         [ForeignKey("DealerId")]
         public Dealer Dealer { get; set; } = null!;
-
-        /// <summary>
-        /// if car is booked this is the id of booking 
-        /// </summary>
-        public int? BookingId { get; set; }
-
-        [Required]
-        public string Country { get; set; } = null!;
-
-        [Required]
-        public string City { get; set; } = null!;
     }
+
 }
