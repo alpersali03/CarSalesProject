@@ -21,7 +21,7 @@ namespace CarSalesSystem.Controllers
             var cars = _context.Cars
                 .Include(c => c.Category)
                 .Include(c => c.Dealer)
-                .Select(c => new CarDto
+                .Select(c => new CatDto
                 {
                     Id = c.Id,
                     Brand = c.Brand,
@@ -77,8 +77,9 @@ namespace CarSalesSystem.Controllers
         {
             var car = _context.Cars.Find(id);
             if (car == null)
+            {
                 return NotFound();
-
+            }
             var dto = new CarFormDto
             {
                 Brand = car.Brand,
@@ -163,7 +164,7 @@ namespace CarSalesSystem.Controllers
             var cars = _context.Cars
                 .OrderBy(c => c.Brand)
                 .ThenBy(c => c.Model)
-                .Select(c => new CarDto
+                .Select(c => new CatDto
                 {
                     Id = c.Id,
                     Brand = c.Brand,
@@ -182,7 +183,7 @@ namespace CarSalesSystem.Controllers
         {
             var cars = _context.Cars
                 .OrderBy(c => c.Price)
-                .Select(c => new CarDto
+                .Select(c => new CatDto
                 {
                     Id = c.Id,
                     Brand = c.Brand,
@@ -201,7 +202,7 @@ namespace CarSalesSystem.Controllers
         {
             var cars = _context.Cars
                 .Where(c => c.CategoryId == categoryId)
-                .Select(c => new CarDto
+                .Select(c => new CatDto
                 {
                     Id = c.Id,
                     Brand = c.Brand,

@@ -1,6 +1,6 @@
 ﻿namespace CarSalesSystem.DTOs
 {
-    public class CarDto
+    public class CatDto
     {
         public int Id { get; set; }
         public string Brand { get; set; } = null!;
