@@ -42,7 +42,7 @@ namespace CarSalesSystem.Controllers
             _context.DebitCards.Add(debit);
             _context.SaveChanges();
 
-            return RedirectToAction("GetAll");
+            return View();
         }
 
         [HttpGet]
