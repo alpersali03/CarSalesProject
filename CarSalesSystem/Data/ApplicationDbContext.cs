@@ -14,5 +14,7 @@ namespace CarSalesSystem.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Dealer> Dealers { get; set; }
         public DbSet<DebitCard> DebitCards { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
     }
 }
