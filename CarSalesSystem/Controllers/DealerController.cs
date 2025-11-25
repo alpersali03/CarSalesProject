@@ -30,7 +30,8 @@ namespace CarSalesSystem.Controllers
                 PhoneNumber = d.PhoneNumber,
                 UserId = d.UserId,
             }).ToList();
-            return View();
+            return View(dealer); 
+
         }
 
         [HttpGet]
@@ -86,14 +87,11 @@ namespace CarSalesSystem.Controllers
             {
                 return NotFound();
             }
-            var dto = new DealerDto
-            {
-                Id = dealer.Id,
-                Name = dealer.Name,
-                CompanyName = dealer.CompanyName,
-                PhoneNumber = dealer.PhoneNumber,
-                UserId = dealer.UserId,
-            };
+            dealer.Name = dealerDto.Name;
+            dealer.CompanyName = dealerDto.CompanyName;
+            dealer.PhoneNumber = dealerDto.PhoneNumber;
+            dealer.UserId = dealerDto.UserId;
+
             _context.SaveChanges();
             return RedirectToAction("GetAll");
         }
