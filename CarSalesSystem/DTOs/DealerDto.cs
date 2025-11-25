@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CarSalesSystem.Data.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarSalesSystem.DTOs
 {
@@ -16,5 +17,7 @@ namespace CarSalesSystem.DTOs
 
       
         public string UserId { get; set; } = null!;
+
+        public IEnumerable<Car> Cars { get; set; } = new List<Car>();
     }
 }

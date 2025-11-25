@@ -3,80 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\views\\car\\add.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:views\\car\\add.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\dtos\\carformdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:dtos\\carformdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\controllers\\carcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:controllers\\carcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\views\\car\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:views\\car\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\views\\car\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:views\\car\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\views\\car\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:views\\car\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\views\\car\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:views\\car\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\data\\model\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:data\\model\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\data\\model\\debitcard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:data\\model\\debitcard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\data\\model\\dealer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:data\\model\\dealer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\data\\model\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:data\\model\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\data\\model\\car.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:data\\model\\car.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\controllers\\debitcardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:controllers\\debitcardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\controllers\\dealercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:controllers\\dealercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:controllers\\categorycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:controllers\\paymentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\dtos\\paymentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:dtos\\paymentdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\views\\car\\add.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:views\\car\\add.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:scaffoldingreadme.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\data\\migrations\\20251125054923_entitesupdated.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:data\\migrations\\20251125054923_entitesupdated.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -86,11 +30,20 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CarFormDto.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\DTOs\\CarFormDto.cs",
+              "RelativeDocumentMoniker": "DTOs\\CarFormDto.cs",
+              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\DTOs\\CarFormDto.cs",
+              "RelativeToolTip": "DTOs\\CarFormDto.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAADwvyIAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-25T11:27:11.283Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
@@ -102,142 +55,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Dealer.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Model\\Dealer.cs",
-              "RelativeDocumentMoniker": "Data\\Model\\Dealer.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Model\\Dealer.cs",
-              "RelativeToolTip": "Data\\Model\\Dealer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-25T11:11:19.855Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Car\\Index.cshtml",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Index.cshtml",
-              "RelativeToolTip": "Views\\Car\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAALAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-25T11:09:30.427Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Edit.cshtml",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Edit.cshtml",
-              "RelativeDocumentMoniker": "Views\\Car\\Edit.cshtml",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Edit.cshtml",
-              "RelativeToolTip": "Views\\Car\\Edit.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-25T11:09:16.225Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Details.cshtml",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Details.cshtml",
-              "RelativeDocumentMoniker": "Views\\Car\\Details.cshtml",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Details.cshtml",
-              "RelativeToolTip": "Views\\Car\\Details.cshtml",
-              "ViewState": "AgIAAFEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-25T11:09:08.061Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Delete.cshtml",
-              "RelativeDocumentMoniker": "Views\\Car\\Delete.cshtml",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Delete.cshtml",
-              "RelativeToolTip": "Views\\Car\\Delete.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-25T11:08:56.753Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "Add.cshtml",
               "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Add.cshtml",
               "RelativeDocumentMoniker": "Views\\Car\\Add.cshtml",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Add.cshtml*",
-              "RelativeToolTip": "Views\\Car\\Add.cshtml*",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAFsAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\Add.cshtml",
+              "RelativeToolTip": "Views\\Car\\Add.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD8AAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-11-25T11:08:43.288Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "DealerController.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Controllers\\DealerController.cs",
-              "RelativeDocumentMoniker": "Controllers\\DealerController.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Controllers\\DealerController.cs",
-              "RelativeToolTip": "Controllers\\DealerController.cs",
-              "ViewState": "AgIAAFUAAAAAAAAAAAAwwGYAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-25T10:25:45.083Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "CategoryController.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Controllers\\CategoryController.cs",
-              "RelativeDocumentMoniker": "Controllers\\CategoryController.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Controllers\\CategoryController.cs",
-              "RelativeToolTip": "Controllers\\CategoryController.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAgwDUAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-25T10:25:19.688Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "PaymentController.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Controllers\\PaymentController.cs",
-              "RelativeDocumentMoniker": "Controllers\\PaymentController.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Controllers\\PaymentController.cs",
-              "RelativeToolTip": "Controllers\\PaymentController.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAAADYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-25T10:03:51.951Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "PaymentDto.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\DTOs\\PaymentDto.cs",
-              "RelativeDocumentMoniker": "DTOs\\PaymentDto.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\DTOs\\PaymentDto.cs",
-              "RelativeToolTip": "DTOs\\PaymentDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-25T10:01:34.154Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "DebitCardController.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Controllers\\DebitCardController.cs",
-              "RelativeDocumentMoniker": "Controllers\\DebitCardController.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Controllers\\DebitCardController.cs",
-              "RelativeToolTip": "Controllers\\DebitCardController.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwDAAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-25T09:51:31.741Z",
               "EditorCaption": ""
             },
             {
@@ -255,83 +81,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "DebitCard.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Model\\DebitCard.cs",
-              "RelativeDocumentMoniker": "Data\\Model\\DebitCard.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Model\\DebitCard.cs",
-              "RelativeToolTip": "Data\\Model\\DebitCard.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABYAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T09:31:41.127Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Payment.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Model\\Payment.cs",
-              "RelativeDocumentMoniker": "Data\\Model\\Payment.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Model\\Payment.cs",
-              "RelativeToolTip": "Data\\Model\\Payment.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAswAQAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T09:32:47.713Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 2,
               "Title": "Car.cs",
               "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Model\\Car.cs",
               "RelativeDocumentMoniker": "Data\\Model\\Car.cs",
               "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Model\\Car.cs",
               "RelativeToolTip": "Data\\Model\\Car.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAArAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAwwCIAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-20T09:19:26.07Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Category.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Model\\Category.cs",
-              "RelativeDocumentMoniker": "Data\\Model\\Category.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Model\\Category.cs",
-              "RelativeToolTip": "Data\\Model\\Category.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T09:22:48.505Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "ApplicationDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\ApplicationDbContext.cs",
-              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\ApplicationDbContext.cs",
-              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-20T09:33:52.656Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "20251125054923_EntitesUpdated.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Migrations\\20251125054923_EntitesUpdated.cs",
-              "RelativeDocumentMoniker": "Data\\Migrations\\20251125054923_EntitesUpdated.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Data\\Migrations\\20251125054923_EntitesUpdated.cs",
-              "RelativeToolTip": "Data\\Migrations\\20251125054923_EntitesUpdated.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-25T05:49:23.88Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 4,
               "Title": "ScaffoldingReadMe.txt",
               "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\ScaffoldingReadMe.txt",
               "RelativeDocumentMoniker": "ScaffoldingReadMe.txt",
