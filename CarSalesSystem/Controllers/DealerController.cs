@@ -46,6 +46,7 @@ namespace CarSalesSystem.Controllers
             {
                 return View(dto);
             }
+            var getUserId = User.
             var delaer = new Dealer
             {
                 Id = dto.Id,
