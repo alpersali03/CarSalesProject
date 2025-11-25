@@ -139,7 +139,10 @@ namespace CarSalesSystem.Controllers
                 .FirstOrDefault(c => c.Id == id);
 
             if (car == null)
+            {
                 return NotFound();
+
+            }
 
             return View(car); 
         }
