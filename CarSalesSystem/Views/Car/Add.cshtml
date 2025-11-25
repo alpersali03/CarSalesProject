@@ -1,4 +1,6 @@
-﻿@model CarSalesSystem.Data.Model.Car
+﻿@using CarSalesSystem.DTOs
+@using CarSalesSystem.Data.Model
+@model CarFormDto
 
 @{
     ViewData["Title"] = "Add";
@@ -88,7 +90,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Add">Back to List</a>
+
 </div>
 
 @section Scripts {
