@@ -1,8 +1,10 @@
-﻿using CarSalesSystem.DTOs;
+﻿using CarSalesSystem.Data;
+using CarSalesSystem.Data.Model;
+using CarSalesSystem.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarSalesSystem.Data.Model
+namespace CarSalesSystem.Controllers
 {
     public class PaymentController : Controller
     {
