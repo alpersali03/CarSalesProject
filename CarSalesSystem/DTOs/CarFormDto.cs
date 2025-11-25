@@ -33,6 +33,8 @@ namespace CarSalesSystem.DTOs
 
         public int CategoryId { get; set; }
         public int DealerId { get; set; }
+
+        public bool IsListed { get; set; }
     }
 
 }
