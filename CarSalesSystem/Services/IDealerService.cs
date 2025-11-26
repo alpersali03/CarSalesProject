@@ -2,5 +2,6 @@
 {
 	public interface IDealerService
 	{
+		bool CheckIsDealerByUserId(string userId);
 	}
 }
