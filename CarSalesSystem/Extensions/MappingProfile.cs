@@ -1,4 +1,5 @@
-﻿using CarSalesSystem.Data.Model;
+﻿using AutoMapper;
+using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
 
 
@@ -6,8 +7,12 @@ using CarSalesSystem.DTOs;
 namespace CarSalesSystem.Extensions
 
 {
-	public class MappingProfile
+	public class MappingProfile : Profile
 	{
-
+		public MappingProfile()
+		{
+			CreateMap<Dealer, DealerDto>();
+			CreateMap<DealerDto, Dealer>();
+		}
 	}
 }
