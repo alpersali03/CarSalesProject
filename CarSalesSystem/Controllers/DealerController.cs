@@ -1,6 +1,7 @@
 ﻿using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
+using CarSalesSystem.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,7 +47,11 @@ namespace CarSalesSystem.Controllers
             {
                 return View(dto);
             }
-            var getUserId = User.
+            var getUserId = User.GetId();
+            if(getUserId == null)
+            {
+                return NotFound();
+            }
             var delaer = new Dealer
             {
                 Id = dto.Id,
@@ -81,9 +86,15 @@ namespace CarSalesSystem.Controllers
         public IActionResult Edit(int id, DealerDto dealerDto)
         {
             if (!ModelState.IsValid)
+            {
                 return View(dealerDto);
-
-            var dealer = _context.Dealers.FirstOrDefault(d => d.Id == id);
+            }
+			var getUserId = User.GetId();
+			if (getUserId == null)
+			{
+				return NotFound();
+			}
+			var dealer = _context.Dealers.FirstOrDefault(d => d.Id == id);
             if (dealer == null)
             {
                 return NotFound();
