@@ -54,11 +54,10 @@ namespace CarSalesSystem.Controllers
             }
             var delaer = new Dealer
             {
-                Id = dto.Id,
                 Name = dto.Name,
                 CompanyName = dto.CompanyName,
                 PhoneNumber = dto.PhoneNumber,
-                UserId = dto.UserId,
+                UserId = getUserId,
             };
             _context.Dealers.Add(delaer);
             _context.SaveChanges();
