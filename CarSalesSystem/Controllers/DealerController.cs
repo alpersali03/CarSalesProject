@@ -101,7 +101,6 @@ namespace CarSalesSystem.Controllers
             dealer.Name = dealerDto.Name;
             dealer.CompanyName = dealerDto.CompanyName;
             dealer.PhoneNumber = dealerDto.PhoneNumber;
-            dealer.UserId = dealerDto.UserId;
 
             _context.SaveChanges();
             return RedirectToAction("GetAll");
