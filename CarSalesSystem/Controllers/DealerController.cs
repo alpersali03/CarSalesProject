@@ -11,8 +11,8 @@ namespace CarSalesSystem.Controllers
     public class DealerController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly DealerService _dealerService;
-        public DealerController(ApplicationDbContext context, DealerService dealerService)
+        private readonly IDealerService _dealerService;
+        public DealerController(ApplicationDbContext context, IDealerService dealerService)
         {
             _context = context;
             _dealerService = dealerService;
@@ -38,17 +38,19 @@ namespace CarSalesSystem.Controllers
         [HttpPost]
         public IActionResult Add(DealerDto dto)
         {
-            _dealerService.Add(dto);
+			var getUserId = User.GetId();
+
+			if (getUserId == null)
+			{
+				return NotFound();
+			}
+			_dealerService.Add(dto);
             return RedirectToAction("GetAll");
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var dealer = _context.Dealers.FirstOrDefault(d => d.Id == id);
-            if (dealer == null)
-            {
-                return NotFound();
-            }
+            _dealerService.Edit(id);
             var dto = new DealerDto
             {
                 Id = dealer.Id,

@@ -4,6 +4,8 @@ using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
 using Humanizer;
 using Microsoft.EntityFrameworkCore;
+using CarSalesSystem.Extensions;
+using System.Linq.Expressions;
 
 namespace CarSalesSystem.Services
 {
@@ -24,17 +26,13 @@ namespace CarSalesSystem.Services
 			{
 				throw new ArgumentNullException("There is no such dealer!");
 			}
-			var getUserId = dealer.UserId;
-			if (getUserId == null)
-			{
-				throw new ArgumentNullException("There is no dealer with this id!");
-			}
+			
 			var delaer = new Dealer
 			{
 				Name = dealer.Name,
 				CompanyName = dealer.CompanyName,
 				PhoneNumber = dealer.PhoneNumber,
-				UserId = getUserId,
+				UserId = dealer.UserId
 			};
 			_context.Dealers.Add(delaer);
 			_context.SaveChanges();
@@ -71,19 +69,17 @@ namespace CarSalesSystem.Services
 
 		public void Edit(DealerDto dealer)
 		{
-			var dealerDto = _context.Dealers.FirstOrDefault(d => d.Id == dealer.Id);
+			var dealers = _context.Dealers.FirstOrDefault(d => d.Id == dealer.Id);
 			if (dealer == null)
 			{
-				throw new ArgumentException("Dealer not found!");
+				throw new ArgumentNullException("There is no such dealer!");
 			}
-			var dto = new DealerDto
-			{
-				Id = dealer.Id,
-				Name = dealer.Name,
-				CompanyName = dealer.CompanyName,
-				PhoneNumber = dealer.PhoneNumber,
-				UserId = dealer.UserId,
-			};
+			
+			dealer.Name = dealers.Name;
+			dealer.CompanyName = dealers.CompanyName;
+			dealer.PhoneNumber = dealers.PhoneNumber;
+
+			_context.SaveChanges();
 		}
 
 		public List<DealerDto> GetAll()

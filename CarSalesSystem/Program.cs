@@ -2,6 +2,7 @@ using CarSalesSystem.Data;
 using CarSalesSystem.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace CarSalesSystem
 {
@@ -20,6 +21,7 @@ namespace CarSalesSystem
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+			builder.Services.AddAutoMapper(cfg => { }, AppDomain.CurrentDomain.GetAssemblies());
 			builder.Services.AddTransient<IDealerService, DealerService>();
 			var app = builder.Build();
 

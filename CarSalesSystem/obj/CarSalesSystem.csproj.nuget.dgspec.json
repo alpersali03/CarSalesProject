@@ -48,7 +48,7 @@
           "dependencies": {
             "AutoMapper": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[15.1.0, )"
             },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
