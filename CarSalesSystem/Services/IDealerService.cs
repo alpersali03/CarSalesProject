@@ -6,5 +6,7 @@ namespace CarSalesSystem.Services
 	{
 		bool CheckIsDealerByUserId(string userId);
 		List<DealerDto> GetAll();
+
+		void Add(DealerDto dealer);
 	}
 }
