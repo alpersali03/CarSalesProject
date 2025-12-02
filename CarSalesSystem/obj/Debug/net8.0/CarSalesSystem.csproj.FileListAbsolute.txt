@@ -292,3 +292,4 @@ C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\ref
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\CarSalesSystem.pdb
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\CarSalesSystem.genruntimeconfig.cache
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\ref\CarSalesSystem.dll
+C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\bin\Debug\net8.0\AutoMapper.dll
