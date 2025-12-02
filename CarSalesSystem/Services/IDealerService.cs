@@ -8,5 +8,7 @@ namespace CarSalesSystem.Services
 		List<DealerDto> GetAll();
 
 		void Add(DealerDto dealer);
+
+		void Edit(DealerDto dealer);
 	}
 }

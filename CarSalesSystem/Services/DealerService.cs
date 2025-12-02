@@ -59,6 +59,23 @@ namespace CarSalesSystem.Services
 
         }
 
+		public void Edit(DealerDto dealer)
+		{
+			var dealerDto = _context.Dealers.FirstOrDefault(d => d.Id == dealer.Id);
+			if (dealer == null)
+			{
+				throw new ArgumentException("Dealer not found!");
+			}
+			var dto = new DealerDto
+			{
+				Id = dealer.Id,
+				Name = dealer.Name,
+				CompanyName = dealer.CompanyName,
+				PhoneNumber = dealer.PhoneNumber,
+				UserId = dealer.UserId,
+			};
+		}
+
 		public List<DealerDto> GetAll()
 		{
 			var dealers = _context.Dealers.ToList();
