@@ -20,7 +20,7 @@ namespace CarSalesSystem
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
-			builder.Services.AddScoped<IDealerService, DealerService>();
+			builder.Services.AddTransient<IDealerService, DealerService>();
 			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
