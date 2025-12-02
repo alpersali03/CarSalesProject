@@ -3,6 +3,7 @@ using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
 using Humanizer;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarSalesSystem.Services
 {
@@ -58,6 +59,15 @@ namespace CarSalesSystem.Services
 
 
         }
+
+		public void Details(int id)
+		{
+			var dealer = _context.Dealers.Include(d => d.Cars).FirstOrDefault(d => d.Id == id);
+			if (dealer == null)
+			{
+				throw new ArgumentException("Dealer not found!");
+			}
+		}
 
 		public void Edit(DealerDto dealer)
 		{
