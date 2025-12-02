@@ -2,6 +2,7 @@
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
 using CarSalesSystem.Extensions;
+using CarSalesSystem.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,11 @@ namespace CarSalesSystem.Controllers
     public class DealerController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public DealerController(ApplicationDbContext context)
+        private readonly DealerService _dealerService;
+        public DealerController(ApplicationDbContext context, DealerService dealerService)
         {
             _context = context;
+            _dealerService = dealerService;
         }
 
         public IActionResult Index()
@@ -23,15 +25,8 @@ namespace CarSalesSystem.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var dealer = _context.Dealers.Include(d=>d.Cars).Select(d=> new DealerDto
-            {
-                Id = d.Id, 
-                Name = d.Name,
-                CompanyName = d.CompanyName,
-                PhoneNumber = d.PhoneNumber,
-                UserId = d.UserId,
-            }).ToList();
-            return View(dealer); 
+            var dealers = _dealerService.GetAll();
+            return View(dealers); 
 
         }
 
