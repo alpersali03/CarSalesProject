@@ -38,24 +38,7 @@ namespace CarSalesSystem.Controllers
         [HttpPost]
         public IActionResult Add(DealerDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(dto);
-            }
-            var getUserId = User.GetId();
-            if(getUserId == null)
-            {
-                return NotFound();
-            }
-            var delaer = new Dealer
-            {
-                Name = dto.Name,
-                CompanyName = dto.CompanyName,
-                PhoneNumber = dto.PhoneNumber,
-                UserId = getUserId,
-            };
-            _context.Dealers.Add(delaer);
-            _context.SaveChanges();
+            _dealerService.Add(dto);
             return RedirectToAction("GetAll");
         }
         [HttpGet]
