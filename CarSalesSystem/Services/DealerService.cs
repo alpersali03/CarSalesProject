@@ -1,14 +1,19 @@
-﻿using CarSalesSystem.Data;
+﻿using AutoMapper;
+using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
+using CarSalesSystem.DTOs;
 
 namespace CarSalesSystem.Services
 {
 	public class DealerService : IDealerService
 	{
+		
 		private readonly ApplicationDbContext _context;
-		public DealerService(ApplicationDbContext context)
+		private readonly IMapper _mapper;
+		public DealerService(ApplicationDbContext context, IMapper mapper)
 		{
 			_context = context;
+			_mapper = mapper;
 		}
 		public bool CheckIsDealerByUserId(string userId)
 		{
@@ -28,5 +33,11 @@ namespace CarSalesSystem.Services
 
 
         }
+
+		public List<DealerDto> GetAll()
+		{
+			var dealers = _context.Dealers.ToList();
+			return _mapper.Map<List<DealerDto>>(dealers);
+		}
 	}
 }
