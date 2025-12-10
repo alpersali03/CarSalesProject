@@ -1,4 +1,5 @@
-﻿using CarSalesSystem.DTOs;
+﻿using CarSalesSystem.Data.Model;
+using CarSalesSystem.DTOs;
 
 namespace CarSalesSystem.Services
 {
@@ -11,6 +12,10 @@ namespace CarSalesSystem.Services
 
 		void Edit(DealerDto dealer);
 
-		void Details(int id);
+		Dealer Details(int id);
+
+		Dealer GetById(int id);
+
+		void Update(Dealer dealer);
 	}
 }

@@ -2,84 +2,61 @@
 using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
-using Humanizer;
 using Microsoft.EntityFrameworkCore;
-using CarSalesSystem.Extensions;
-using System.Linq.Expressions;
 
 namespace CarSalesSystem.Services
 {
 	public class DealerService : IDealerService
 	{
-		
 		private readonly ApplicationDbContext _context;
 		private readonly IMapper _mapper;
-		public DealerService(ApplicationDbContext context, IMapper mapper)
+		private readonly ILogger<DealerService> _logger;
+
+		public DealerService(ApplicationDbContext context, IMapper mapper, ILogger<DealerService> logger)
 		{
 			_context = context;
 			_mapper = mapper;
+			_logger = logger;
 		}
 
-		public void Add(DealerDto dealer)
+		public void Add(DealerDto dto)
 		{
-			if (string.IsNullOrWhiteSpace(dealer.Name))
+			try
 			{
-				throw new ArgumentNullException("There is no such dealer!");
+				if (dto == null)
+					throw new ArgumentNullException(nameof(dto));
+
+				var dealer = new Dealer
+				{
+					Name = dto.Name,
+					CompanyName = dto.CompanyName,
+					PhoneNumber = dto.PhoneNumber,
+					UserId = dto.UserId
+				};
+
+				_context.Dealers.Add(dealer);
+				_context.SaveChanges();
 			}
-			
-			var delaer = new Dealer
+			catch (Exception ex)
 			{
-				Name = dealer.Name,
-				CompanyName = dealer.CompanyName,
-				PhoneNumber = dealer.PhoneNumber,
-				UserId = dealer.UserId
-			};
-			_context.Dealers.Add(delaer);
-			_context.SaveChanges();
-			
+				_logger.LogError(ex, "Failed to add dealer.");
+				throw;
+			}
 		}
 
 		public bool CheckIsDealerByUserId(string userId)
 		{
-			var getUserId = _context.Users.FirstOrDefault(x=>x.Id == userId);	
-			if (getUserId == null)
-			{
-				return false;
-			}
-			var dealer = _context.Dealers.FirstOrDefault(x=>x.UserId == userId);
-
-            if (dealer == null)
-			{
+			if (string.IsNullOrEmpty(userId))
 				return false;
 
-			}
-			return true;
-
-
-        }
-
-		public void Details(int id)
-		{
-			var dealer = _context.Dealers.Include(d => d.Cars).FirstOrDefault(d => d.Id == id);
-			if (dealer == null)
-			{
-				throw new ArgumentException("Dealer not found!");
-			}
+			return _context.Dealers.Any(d => d.UserId == userId);
 		}
 
-		public void Edit(DealerDto dealer)
+		public Dealer GetById(int id)
 		{
-			var dealers = _context.Dealers.FirstOrDefault(d => d.Id == dealer.Id);
-			if (dealer == null)
-			{
-				throw new ArgumentNullException("There is no such dealer!");
-			}
-			
-			dealer.Name = dealers.Name;
-			dealer.CompanyName = dealers.CompanyName;
-			dealer.PhoneNumber = dealers.PhoneNumber;
-
-			_context.SaveChanges();
+			return _context.Dealers
+				.Include(d => d.Cars)
+				.FirstOrDefault(d => d.Id == id);
 		}
 
 		public List<DealerDto> GetAll()
@@ -87,5 +64,58 @@ namespace CarSalesSystem.Services
 			var dealers = _context.Dealers.ToList();
 			return _mapper.Map<List<DealerDto>>(dealers);
 		}
+
+		public void Update(Dealer dealer)
+		{
+			try
+			{
+				if (dealer == null)
+					throw new ArgumentNullException(nameof(dealer));
+
+				_context.Dealers.Update(dealer);
+				_context.SaveChanges();
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Failed to update dealer.");
+				throw;
+			}
+		}
+
+		public Dealer Details(int id)
+		{
+			var dealer = _context.Dealers
+				.Include(d => d.Cars)
+				.FirstOrDefault(d => d.Id == id);
+
+			if (dealer == null)
+				throw new ArgumentException("Dealer not found!");
+
+			return dealer;
+		}
+
+		public void Edit(DealerDto dto)
+		{
+			try
+			{
+				var dealer = _context.Dealers.FirstOrDefault(d => d.Id == dto.Id);
+
+				if (dealer == null)
+					throw new ArgumentException("Dealer not found!");
+
+				
+				dealer.Name = dto.Name;
+				dealer.CompanyName = dto.CompanyName;
+				dealer.PhoneNumber = dto.PhoneNumber;
+
+				_context.SaveChanges();
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error editing dealer.");
+				throw;
+			}
+		}
+
 	}
 }
