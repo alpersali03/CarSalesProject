@@ -2,7 +2,9 @@
 using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace CarSalesSystem.Services
 {
@@ -41,6 +43,17 @@ namespace CarSalesSystem.Services
             category.Name = dto.Name;
 
 
+            _context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var category = _context.Categories.FirstOrDefault(cat => cat.Id == id);
+            if (category == null)
+            {
+                throw  new ArgumentException("This category does not exist!");
+            }
+            _context.Categories.Remove(category);
             _context.SaveChanges();
         }
     }

@@ -6,5 +6,7 @@ namespace CarSalesSystem.Services
     {
         void Add(CategoryDto dto);
         void Edit(int id, CategoryDto dto);
+
+        void Delete(int id);
     }
 }

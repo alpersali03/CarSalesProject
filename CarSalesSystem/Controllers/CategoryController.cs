@@ -78,13 +78,7 @@ namespace CarSalesSystem.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var category = _context.Categories.FirstOrDefault(cat=>cat.Id == id);
-            if(category == null)
-            {
-                return NotFound();
-            }
-            _context.Categories.Remove(category);
-            _context.SaveChanges();
+            _categoryService.Delete(id);
 
             return RedirectToAction("GetAll");
         }
