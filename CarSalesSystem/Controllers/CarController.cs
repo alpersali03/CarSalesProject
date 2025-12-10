@@ -3,16 +3,19 @@ using Microsoft.EntityFrameworkCore;
 using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
+using CarSalesSystem.Services;
 
 namespace CarSalesSystem.Controllers
 {
     public class CarController : Controller
     {
         private readonly ApplicationDbContext _context;
+		private readonly ICarService _carService;
 
-        public CarController(ApplicationDbContext context)
+        public CarController(ApplicationDbContext context, ICarService carService)
         {
             _context = context;
+            _carService = carService;
         }
 
         [HttpGet]
@@ -21,7 +24,7 @@ namespace CarSalesSystem.Controllers
             var cars = _context.Cars
                 .Include(c => c.Category)
                 .Include(c => c.Dealer)
-                .Select(c => new CatDto
+                .Select(c => new CarDto
                 {
                     Id = c.Id,
                     Brand = c.Brand,
@@ -42,95 +45,61 @@ namespace CarSalesSystem.Controllers
         }
 
         
-        [HttpPost]
-        public IActionResult Add(CarFormDto dto)
-        {
-            if (!ModelState.IsValid)
-                return View(dto);
+		[HttpPost]
+		public IActionResult Add(CarFormDto dto)
+		{
+			if (!ModelState.IsValid)
+				return View(dto);
 
-            var car = new Car
-            {
-                Brand = dto.Brand,
-                Model = dto.Model,
-                Description = dto.Description,
-                ImageUrl = dto.ImageUrl,
-                Year = dto.Year,
-                Mileage = dto.Mileage,
-                FuelType = dto.FuelType,
-                Transmission = dto.Transmission,
-                Price = dto.Price,
-                Country = dto.Country,
-                City = dto.City,
-                CategoryId = dto.CategoryId,
-                DealerId = dto.DealerId,
-                IsListed = true
-            };
+			_carService.Add(dto);
 
-            _context.Cars.Add(car);
-            _context.SaveChanges();
+			return RedirectToAction("GetAll");
+		}
 
-            return RedirectToAction("GetAll");
-        }
 
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            var car = _context.Cars.Find(id);
-            if (car == null)
-            {
-                return NotFound();
-            }
-            var dto = new CarFormDto
-            {
-                Brand = car.Brand,
-                Model = car.Model,
-                Description = car.Description,
-                ImageUrl = car.ImageUrl,
-                Year = car.Year,
-                Mileage = car.Mileage,
-                FuelType = car.FuelType,
-                Transmission = car.Transmission,
-                Price = car.Price,
-                Country = car.Country,
-                City = car.City,
-                CategoryId = car.CategoryId,
-                DealerId = car.DealerId
-            };
+		[HttpGet]
+		public IActionResult Edit(int id)
+		{
+			var car = _carService.GetById(id);
 
-            return View(dto);
-        }
+			if (car == null)
+				return NotFound();
 
-        
-        [HttpPost]
-        public IActionResult Edit(int id, CarFormDto dto)
-        {
-            if (!ModelState.IsValid)
-                return View(dto);
+			var dto = new CarFormDto
+			{
+				Brand = car.Brand,
+				Model = car.Model,
+				Description = car.Description,
+				ImageUrl = car.ImageUrl,
+				Year = car.Year,
+				Mileage = car.Mileage,
+				FuelType = car.FuelType,
+				Transmission = car.Transmission,
+				Price = car.Price,
+				Country = car.Country,
+				City = car.City,
+				CategoryId = car.CategoryId,
+				DealerId = car.DealerId
+			};
 
-            var car = _context.Cars.Find(id);
-            if (car == null)
-                return NotFound();
+			return View(dto);
+		}
 
-            car.Brand = dto.Brand;
-            car.Model = dto.Model;
-            car.Description = dto.Description;
-            car.ImageUrl = dto.ImageUrl;
-            car.Year = dto.Year;
-            car.Mileage = dto.Mileage;
-            car.FuelType = dto.FuelType;
-            car.Transmission = dto.Transmission;
-            car.Price = dto.Price;
-            car.Country = dto.Country;
-            car.City = dto.City;
-            car.CategoryId = dto.CategoryId;
-            car.DealerId = dto.DealerId;
 
-            _context.SaveChanges();
 
-            return RedirectToAction("GetAll");
-        }
+		[HttpPost]
+		public IActionResult Edit(int id, CarFormDto dto)
+		{
+			if (!ModelState.IsValid)
+				return View(dto);
 
-        [HttpGet]
+			_carService.Edit(id, dto);
+
+			return RedirectToAction("GetAll");
+		}
+
+
+		[HttpGet]
         public IActionResult Details(int id)
         {
             var car = _context.Cars
@@ -167,7 +136,7 @@ namespace CarSalesSystem.Controllers
             var cars = _context.Cars
                 .OrderBy(c => c.Brand)
                 .ThenBy(c => c.Model)
-                .Select(c => new CatDto
+                .Select(c => new CarDto
                 {
                     Id = c.Id,
                     Brand = c.Brand,
@@ -186,7 +155,7 @@ namespace CarSalesSystem.Controllers
         {
             var cars = _context.Cars
                 .OrderBy(c => c.Price)
-                .Select(c => new CatDto
+                .Select(c => new CarDto
                 {
                     Id = c.Id,
                     Brand = c.Brand,
@@ -205,7 +174,7 @@ namespace CarSalesSystem.Controllers
         {
             var cars = _context.Cars
                 .Where(c => c.CategoryId == categoryId)
-                .Select(c => new CatDto
+                .Select(c => new CarDto
                 {
                     Id = c.Id,
                     Brand = c.Brand,

@@ -24,8 +24,9 @@ namespace CarSalesSystem.Services
 			try
 			{
 				if (dto == null)
+				{
 					throw new ArgumentNullException(nameof(dto));
-
+				}
 				var dealer = new Dealer
 				{
 					Name = dto.Name,
