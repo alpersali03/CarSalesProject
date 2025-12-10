@@ -1,0 +1,10 @@
+﻿using CarSalesSystem.DTOs;
+
+namespace CarSalesSystem.Services
+{
+    public interface ICategoryService
+    {
+        void Add(CategoryDto dto);
+        void Edit(int id, CategoryDto dto);
+    }
+}

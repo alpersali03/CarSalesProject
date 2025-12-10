@@ -22,8 +22,11 @@ namespace CarSalesSystem
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 			builder.Services.AddAutoMapper(cfg => { }, AppDomain.CurrentDomain.GetAssemblies());
-			builder.Services.AddTransient<IDealerService, DealerService>();
-			var app = builder.Build();
+            builder.Services.AddTransient<IDealerService, DealerService>();
+            builder.Services.AddScoped<ICarService, CarService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

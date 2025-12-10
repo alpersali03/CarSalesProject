@@ -17,6 +17,8 @@ namespace CarSalesSystem.Extensions
 			CreateMap<CarFormDto, Car>();
 			CreateMap<Car, CarDto>();
 			CreateMap<CarDto, Car>();
-		}
+            CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryDto, Category>();
+        }
 	}
 }

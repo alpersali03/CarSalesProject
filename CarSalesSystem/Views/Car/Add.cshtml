@@ -12,7 +12,8 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Add" asp-controller="Car" method="post">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Brand" class="control-label"></label>
@@ -75,16 +76,20 @@
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <label asp-for="CategoryId"></label>
+                <select asp-for="CategoryId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"></select>
             </div>
+
             <div class="form-group">
-                <label asp-for="DealerId" class="control-label"></label>
-                <select asp-for="DealerId" class ="form-control" asp-items="ViewBag.DealerId"></select>
+                <label asp-for="DealerId"></label>
+                <select asp-for="DealerId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.Dealers, "Id", "Name"))"></select>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+                <input type="submit" value="Add" class="btn btn-primary" />
+            </div>  
         </form>
     </div>
 </div>

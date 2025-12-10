@@ -1,6 +1,7 @@
 ﻿using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
+using CarSalesSystem.Services;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,11 @@ namespace CarSalesSystem.Controllers
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public CategoryController(ApplicationDbContext context)
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ApplicationDbContext context, ICategoryService categoryService)
         {
             _context = context;
+            _categoryService = categoryService;
         }
 
         public IActionResult Index()
@@ -44,13 +46,7 @@ namespace CarSalesSystem.Controllers
             if (!ModelState.IsValid)
                 return View(dto);
 
-            var category = new Category
-            {
-                Id = dto.Id,
-                Name = dto.Name,
-            };
-            _context.Categories.Add(category);
-            _context.SaveChanges();
+            _categoryService.Add(dto);
             return RedirectToAction("GetAll");
 
         }
@@ -75,17 +71,9 @@ namespace CarSalesSystem.Controllers
             if (!ModelState.IsValid)
                 return View(dto);
 
-            var category = _context.Categories.Find(id);
-            if (category == null)
-                return NotFound();
+           _categoryService.Edit(id, dto);
 
-            category.Id = dto.Id;
-            category.Name = dto.Name;
-
-
-            _context.SaveChanges();
-
-            return RedirectToAction(nameof(GetAll));
+            return RedirectToAction("GetAll");
         }
         [HttpPost]
         public IActionResult Delete(int id)

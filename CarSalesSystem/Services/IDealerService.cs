@@ -3,19 +3,15 @@ using CarSalesSystem.DTOs;
 
 namespace CarSalesSystem.Services
 {
-	public interface IDealerService
-	{
-		bool CheckIsDealerByUserId(string userId);
-		List<DealerDto> GetAll();
+    public interface IDealerService
+    {
+        void Add(DealerDto dto);
+        bool CheckIsDealerByUserId(string userId);
+        Dealer GetById(int id);
+        List<DealerDto> GetAll();
+        void Update(Dealer dealer);
+        Dealer Details(int id);
+        void Edit(DealerDto dto);
 
-		void Add(DealerDto dealer);
-
-		void Edit(DealerDto dealer);
-
-		Dealer Details(int id);
-
-		Dealer GetById(int id);
-
-		void Update(Dealer dealer);
-	}
+    }
 }

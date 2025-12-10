@@ -41,11 +41,14 @@ namespace CarSalesSystem.Controllers
         [HttpGet]
         public IActionResult Add()
         {
+            var category = ViewBag.Categories = _context.Categories.ToList();
+            var dealer = ViewBag.Dealers = _context.Dealers.ToList();
             return View(new CarFormDto());
         }
 
-        
-		[HttpPost]
+
+
+        [HttpPost]
 		public IActionResult Add(CarFormDto dto)
 		{
 			if (!ModelState.IsValid)
