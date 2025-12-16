@@ -104,6 +104,38 @@ namespace CarSalesSystem.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Sedan"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "SUV"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Pickup truck"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Hatchback"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Minivan"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Sports car"
+                        });
                 });
 
             modelBuilder.Entity("CarSalesSystem.Data.Model.Dealer", b =>
