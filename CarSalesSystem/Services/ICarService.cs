@@ -8,5 +8,8 @@ namespace CarSalesSystem.Services
 		void Add(CarFormDto carDto);
 		void Edit(int id, CarFormDto dto);
 		Car GetById(int id);
+
+
+
 	}
 }

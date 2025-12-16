@@ -1,4 +1,5 @@
-﻿using CarSalesSystem.DTOs;
+﻿using CarSalesSystem.Data.Model;
+using CarSalesSystem.DTOs;
 
 namespace CarSalesSystem.Services
 {
@@ -8,5 +9,7 @@ namespace CarSalesSystem.Services
         void Edit(int id, CategoryDto dto);
 
         void Delete(int id);
+
+        
     }
 }
