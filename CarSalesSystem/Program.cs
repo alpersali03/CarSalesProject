@@ -22,9 +22,9 @@ namespace CarSalesSystem
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 			builder.Services.AddAutoMapper(cfg => { }, AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddTransient<IDealerService, DealerService>();
             builder.Services.AddScoped<ICarService, CarService>();
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             var app = builder.Build();
 
