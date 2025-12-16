@@ -278,11 +278,6 @@ C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\Car
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\CarSalesSystem.sourcelink.json
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\staticwebassets.development.json
-C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\staticwebassets\msbuild.CarSalesSystem.Microsoft.AspNetCore.StaticWebAssets.props
-C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\staticwebassets\msbuild.build.CarSalesSystem.props
-C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.CarSalesSystem.props
-C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.CarSalesSystem.props
-C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\staticwebassets.pack.json
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\scopedcss\bundle\CarSalesSystem.styles.css
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\scopedcss\projectbundle\CarSalesSystem.bundle.scp.css
@@ -293,3 +288,11 @@ C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\Car
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\CarSalesSystem.genruntimeconfig.cache
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\ref\CarSalesSystem.dll
 C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\bin\Debug\net8.0\CarSalesSystem.staticwebassets.endpoints.json
+C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
+C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\staticwebassets.build.json.cache
+C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\PC\Documents\GitHub\CarSalesProject\CarSalesSystem\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
