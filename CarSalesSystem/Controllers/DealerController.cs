@@ -40,6 +40,7 @@ public class DealerController : Controller
 	[HttpGet]
 	public IActionResult Add()
 	{
+
 		return View(new DealerDto());
 	}
 
@@ -49,11 +50,12 @@ public class DealerController : Controller
 		try
 		{
 			var getUserId = User.GetId();
+
 			if (getUserId == null)
 			{
 				return NotFound();
 			}
-
+			dto.UserId = getUserId;
 			_dealerService.Add(dto);
 			return RedirectToAction("GetAll");
 		}

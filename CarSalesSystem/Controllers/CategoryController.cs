@@ -19,68 +19,76 @@ namespace CarSalesSystem.Controllers
             _categoryService = categoryService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var category = _context.Categories.Include(cat=>cat.Cars).Select(cat => new CategoryDto
-            {
-                Id = cat.Id,
-                Name = cat.Name,
-            }).ToList();
+        //[HttpGet]
+        //public IActionResult GetAll()
+        //{
+        //    var category = _context.Categories.Include(cat=>cat.Cars).Select(cat => new CategoryDto
+        //    {
+        //        Id = cat.Id,
+        //        Name = cat.Name,
+        //    }).ToList();
 
-            return View(category);
-        }
-        [HttpGet]
-        public IActionResult Add()
-        {
-            return View(new CategoryDto());
-        }
-        [HttpPost]
-        public IActionResult Add(CategoryDto dto)
-        {
-            if (!ModelState.IsValid)
-                return View(dto);
+        //    return View(category);
+        //}
+        //[HttpGet]
+        //public IActionResult Add()
+        //{
+        //    return View(new CategoryDto());
+        //}
+        //[HttpPost]
+        //public IActionResult Add(CategoryDto dto)
+        //{
+            
+        //    if (!ModelState.IsValid)
+        //        return View(dto);
+        //    try
+        //    {
+        //        _categoryService.Add(dto);
 
-            _categoryService.Add(dto);
-            return RedirectToAction("GetAll");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return RedirectToAction("Error", "Home");  
+        //    }
+        //    return RedirectToAction("GetAll");
 
-        }
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            var category = _context.Categories.Find(id);
-            if(category == null)
-            {
-                return NotFound();  
-            }
-            var dto = new CategoryDto
-            {
-                Id = category.Id,
-                Name = category.Name,
-            };
-            return View(dto);
-        }
-        [HttpPost]
-        public IActionResult Edit(int id, CategoryDto dto)
-        {
-            if (!ModelState.IsValid)
-                return View(dto);
+        //}
+        //[HttpGet]
+        //public IActionResult Edit(int id)
+        //{
+        //    var category = _context.Categories.Find(id);
+        //    if(category == null)
+        //    {
+        //        return NotFound();  
+        //    }
+        //    var dto = new CategoryDto
+        //    {
+        //        Id = category.Id,
+        //        Name = category.Name,
+        //    };
+        //    return View(dto);
+        //}
+        //[HttpPost]
+        //public IActionResult Edit(int id, CategoryDto dto)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return View(dto);
 
-           _categoryService.Edit(id, dto);
+        //   _categoryService.Edit(id, dto);
 
-            return RedirectToAction("GetAll");
-        }
-        [HttpPost]
-        public IActionResult Delete(int id)
-        {
-            _categoryService.Delete(id);
+        //    return RedirectToAction("GetAll");
+        //}
+        //[HttpPost]
+        //public IActionResult Delete(int id)
+        //{
+        //    _categoryService.Delete(id);
 
-            return RedirectToAction("GetAll");
-        }
+        //    return RedirectToAction("GetAll");
+        //}
     }
 }
