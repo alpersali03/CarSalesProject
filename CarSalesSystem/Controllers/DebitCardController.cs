@@ -121,7 +121,7 @@ namespace CarSalesSystem.Controllers
 				_context.DebitCards.Remove(debit);
 				_context.SaveChanges();
 
-				return RedirectToAction("GetAll");
+				return RedirectToAction("Index");
 			}
 			catch (Exception)
 			{
@@ -129,11 +129,7 @@ namespace CarSalesSystem.Controllers
 			}
 		}
 
-		[HttpGet]
-		public IActionResult GetAll()
-		{
-			var cards = _context.DebitCards.ToList();
-			return View(cards);
-		}
+
+
 	}
 }

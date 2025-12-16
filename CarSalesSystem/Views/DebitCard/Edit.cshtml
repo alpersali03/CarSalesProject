@@ -1,0 +1,45 @@
+﻿@using CarSalesSystem.DTOs
+@using CarSalesSystem.Data.Model
+@model DebitCardDto
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="heading-margin text-center">@ViewBag.Title</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="CardNumber"></label>
+                <input asp-for="CardNumber" class="form-control" placeholder="Card number...">
+                <span asp-validation-for="CardNumber" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CVV"></label>
+                <input asp-for="CVV" class="form-control" placeholder="CVV...">
+                <span asp-validation-for="CVV" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullName"></label>
+                <input asp-for="FullName" class="form-control" placeholder="Full name...">
+                <span asp-validation-for="FullName" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpirationMonth"></label>
+                <input asp-for="ExpirationMonth" class="form-control" placeholder="Expiration month...">
+                <span asp-validation-for="ExpirationMonth" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpirationYear"></label>
+                <input asp-for="ExpirationYear" class="form-control" placeholder="Expiration year...">
+                <span asp-validation-for="ExpirationYear" class="small text-danger"></span>
+            </div>
+
+
+
+            <input class="btn btn-primary mt-3" type="submit" value="Save" />
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
