@@ -7,88 +7,109 @@ using CarSalesSystem.Services;
 
 namespace CarSalesSystem.Controllers
 {
-    public class CarController : Controller
-    {
-        private readonly ApplicationDbContext _context;
+	public class CarController : Controller
+	{
+		private readonly ApplicationDbContext _context;
 		private readonly ICarService _carService;
 
-        public CarController(ApplicationDbContext context, ICarService carService)
-        {
-            _context = context;
-            _carService = carService;
-        }
+		public CarController(ApplicationDbContext context, ICarService carService)
+		{
+			_context = context;
+			_carService = carService;
+		}
 
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var cars = _context.Cars
-                .Include(c => c.Category)
-                .Include(c => c.Dealer)
-                .Select(c => new CarDto
-                {
-                    Id = c.Id,
-                    Brand = c.Brand,
-                    Model = c.Model,
-                    Price = c.Price,
-                    ImageUrl = c.ImageUrl,
-                    City = c.City
-                })
-                .ToList();
+		[HttpGet]
+		public IActionResult GetAll()
+		{
+			try
+			{
+				var cars = _context.Cars
+					.Include(c => c.Category)
+					.Include(c => c.Dealer)
+					.Select(c => new CarDto
+					{
+						Id = c.Id,
+						Brand = c.Brand,
+						Model = c.Model,
+						Price = c.Price,
+						ImageUrl = c.ImageUrl,
+						City = c.City
+					})
+					.ToList();
 
-            return View(cars);
-        }
+				return View(cars);
+			}
+			catch (Exception)
+			{
+				return BadRequest("An error occurred while loading cars.");
+			}
+		}
 
-        [HttpGet]
-        public IActionResult Add()
-        {
-            var category = ViewBag.Categories = _context.Categories.ToList();
-            var dealer = ViewBag.Dealers = _context.Dealers.ToList();
-            return View(new CarFormDto());
-        }
+		[HttpGet]
+		public IActionResult Add()
+		{
+			try
+			{
+				ViewBag.Categories = _context.Categories.ToList();
+				ViewBag.Dealers = _context.Dealers.ToList();
+				return View(new CarFormDto());
+			}
+			catch (Exception)
+			{
+				return BadRequest("An error occurred while loading form data.");
+			}
+		}
 
-
-
-        [HttpPost]
+		[HttpPost]
 		public IActionResult Add(CarFormDto dto)
 		{
 			if (!ModelState.IsValid)
 				return View(dto);
 
-			_carService.Add(dto);
-
-			return RedirectToAction("GetAll");
+			try
+			{
+				_carService.Add(dto);
+				return RedirectToAction("GetAll");
+			}
+			catch (Exception)
+			{
+				return BadRequest("Failed to add car.");
+			}
 		}
-
 
 		[HttpGet]
 		public IActionResult Edit(int id)
 		{
-			var car = _carService.GetById(id);
-
-			if (car == null)
-				return NotFound();
-
-			var dto = new CarFormDto
+			try
 			{
-				Brand = car.Brand,
-				Model = car.Model,
-				Description = car.Description,
-				ImageUrl = car.ImageUrl,
-				Year = car.Year,
-				Mileage = car.Mileage,
-				FuelType = car.FuelType,
-				Transmission = car.Transmission,
-				Price = car.Price,
-				Country = car.Country,
-				City = car.City,
-				CategoryId = car.CategoryId,
-				DealerId = car.DealerId
-			};
+				var car = _carService.GetById(id);
+				if (car == null)
+					return NotFound();
 
-			return View(dto);
+				var dto = new CarFormDto
+				{
+					Brand = car.Brand,
+					Model = car.Model,
+					Description = car.Description,
+					ImageUrl = car.ImageUrl,
+					Year = car.Year,
+					Mileage = car.Mileage,
+					FuelType = car.FuelType,
+					Transmission = car.Transmission,
+					Price = car.Price,
+					Country = car.Country,
+					City = car.City,
+					CategoryId = car.CategoryId,
+					DealerId = car.DealerId
+				};
+
+				return View(dto);
+			}
+			catch (Exception)
+			{
+				return BadRequest("An error occurred while loading car details.");
+			}
 		}
-
-
 
 		[HttpPost]
 		public IActionResult Edit(int id, CarFormDto dto)
@@ -96,99 +117,135 @@ namespace CarSalesSystem.Controllers
 			if (!ModelState.IsValid)
 				return View(dto);
 
-			_carService.Edit(id, dto);
-
-			return RedirectToAction("GetAll");
+			try
+			{
+				_carService.Edit(id, dto);
+				return RedirectToAction("GetAll");
+			}
+			catch (Exception)
+			{
+				return BadRequest("Failed to update car.");
+			}
 		}
 
+		[HttpGet]
+		public IActionResult Details(int id)
+		{
+			try
+			{
+				var car = _context.Cars
+					.Include(c => c.Category)
+					.Include(c => c.Dealer)
+					.FirstOrDefault(c => c.Id == id);
+
+				if (car == null)
+					return NotFound();
+
+				return View(car);
+			}
+			catch (Exception)
+			{
+				return BadRequest("An error occurred while loading car details.");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult Delete(int id)
+		{
+			try
+			{
+				var car = _context.Cars.Find(id);
+				if (car == null)
+					return NotFound();
+
+				_context.Cars.Remove(car);
+				_context.SaveChanges();
+
+				return RedirectToAction("GetAll");
+			}
+			catch (Exception)
+			{
+				return BadRequest("Failed to delete car.");
+			}
+		}
 
 		[HttpGet]
-        public IActionResult Details(int id)
-        {
-            var car = _context.Cars
-                .Include(c => c.Category)
-                .Include(c => c.Dealer)
-                .FirstOrDefault(c => c.Id == id);
+		public IActionResult SortByName()
+		{
+			try
+			{
+				var cars = _context.Cars
+					.OrderBy(c => c.Brand)
+					.ThenBy(c => c.Model)
+					.Select(c => new CarDto
+					{
+						Id = c.Id,
+						Brand = c.Brand,
+						Model = c.Model,
+						Price = c.Price,
+						ImageUrl = c.ImageUrl,
+						City = c.City
+					})
+					.ToList();
 
-            if (car == null)
-            {
-                return NotFound();
+				return View("GetAll", cars);
+			}
+			catch (Exception)
+			{
+				return BadRequest("Failed to sort by name.");
+			}
+		}
 
-            }
+		[HttpGet]
+		public IActionResult SortByPrice()
+		{
+			try
+			{
+				var cars = _context.Cars
+					.OrderBy(c => c.Price)
+					.Select(c => new CarDto
+					{
+						Id = c.Id,
+						Brand = c.Brand,
+						Model = c.Model,
+						Price = c.Price,
+						ImageUrl = c.ImageUrl,
+						City = c.City
+					})
+					.ToList();
 
-            return View(car); 
-        }
+				return View("GetAll", cars);
+			}
+			catch (Exception)
+			{
+				return BadRequest("Failed to sort by price.");
+			}
+		}
 
-        
-        [HttpPost]
-        public IActionResult Delete(int id)
-        {
-            var car = _context.Cars.Find(id);
-            if (car == null)
-                return NotFound();
+		[HttpGet]
+		public IActionResult CarsByCategory(int categoryId)
+		{
+			try
+			{
+				var cars = _context.Cars
+					.Where(c => c.CategoryId == categoryId)
+					.Select(c => new CarDto
+					{
+						Id = c.Id,
+						Brand = c.Brand,
+						Model = c.Model,
+						Price = c.Price,
+						ImageUrl = c.ImageUrl,
+						City = c.City
+					})
+					.ToList();
 
-            _context.Cars.Remove(car);
-            _context.SaveChanges();
-
-            return RedirectToAction("GetAll");
-        }
-
-        [HttpGet]
-        public IActionResult SortByName()
-        {
-            var cars = _context.Cars
-                .OrderBy(c => c.Brand)
-                .ThenBy(c => c.Model)
-                .Select(c => new CarDto
-                {
-                    Id = c.Id,
-                    Brand = c.Brand,
-                    Model = c.Model,
-                    Price = c.Price,
-                    ImageUrl = c.ImageUrl,
-                    City = c.City
-                })
-                .ToList();
-
-            return View("GetAll", cars);
-        }
-
-        [HttpGet]
-        public IActionResult SortByPrice()
-        {
-            var cars = _context.Cars
-                .OrderBy(c => c.Price)
-                .Select(c => new CarDto
-                {
-                    Id = c.Id,
-                    Brand = c.Brand,
-                    Model = c.Model,
-                    Price = c.Price,
-                    ImageUrl = c.ImageUrl,
-                    City = c.City
-                })
-                .ToList();
-
-            return View("GetAll", cars);
-        }
-
-        [HttpGet]
-        public IActionResult CarsByCategory(int categoryId)
-        {
-            var cars = _context.Cars
-                .Where(c => c.CategoryId == categoryId)
-                .Select(c => new CarDto
-                {
-                    Id = c.Id,
-                    Brand = c.Brand,
-                    Model = c.Model,
-                    Price = c.Price,
-                    ImageUrl = c.ImageUrl,
-                    City = c.City
-                })
-                .ToList();
-
-            return View("GetAll", cars);
-        }
-    }
+				return View("GetAll", cars);
+			}
+			catch (Exception)
+			{
+				return BadRequest("Failed to filter cars by category.");
+			}
+		}
+	}
 }
