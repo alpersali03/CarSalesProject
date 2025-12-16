@@ -12,16 +12,18 @@ namespace CarSalesSystem.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
-        public CategoryService(ApplicationDbContext context, IMapper mapper, ILogger logger)
+       
+        public CategoryService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _logger = logger;
         }
         public void Add(CategoryDto dto)
         {
-           
+            if (String.IsNullOrWhiteSpace(dto.Name))
+            {
+                throw new ArgumentNullException("This category does not exist!");
+            }
             
             var category = new Category
             {
