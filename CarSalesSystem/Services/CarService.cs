@@ -22,22 +22,22 @@ namespace CarSalesSystem.Services
 
 		public void Add(CarFormDto dto)
 		{
-			try
-			{
-				if (dto == null)
-					throw new ArgumentNullException(nameof(dto));
 
-				var car = _mapper.Map<Car>(dto);
+			if (string.IsNullOrEmpty(dto.Brand) ||
+		string.IsNullOrEmpty(dto.Model) ||
+		string.IsNullOrEmpty(dto.City) ||
+		string.IsNullOrEmpty(dto.Country) ||
+		string.IsNullOrEmpty(dto.Transmission))
+			{
+				throw new ArgumentNullException("Cannot add a car, nullable data added!");
+			}
+			var car = _mapper.Map<Car>(dto);
 				car.IsListed = true;
 
 				_context.Cars.Add(car);
 				_context.SaveChanges();
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "Failed to add car.");
-				throw;
-			}
+			
+			
 		}
 
 
