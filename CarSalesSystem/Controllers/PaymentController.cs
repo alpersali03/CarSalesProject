@@ -12,7 +12,7 @@ namespace CarSalesSystem.Controllers
 
 		public PaymentController(ApplicationDbContext context)
 		{
-			_context = context; // ✅ Fixed assignment
+			_context = context; 
 		}
 
 		public IActionResult Index()
@@ -48,7 +48,7 @@ namespace CarSalesSystem.Controllers
 			}
 			catch (Exception)
 			{
-				return RedirectToAction("Error", "Home"); // Optional: log exception
+				return RedirectToAction("Error", "Home"); 
 			}
 		}
 
