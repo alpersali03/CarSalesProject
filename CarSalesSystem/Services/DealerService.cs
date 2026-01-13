@@ -21,8 +21,7 @@ namespace CarSalesSystem.Services
 
 		public void Add(DealerDto dto)
 		{
-			try
-			{
+			
 				if (dto == null)
 				{
 					throw new ArgumentNullException(nameof(dto));
@@ -33,16 +32,12 @@ namespace CarSalesSystem.Services
 					CompanyName = dto.CompanyName,
 					PhoneNumber = dto.PhoneNumber,
 					UserId = dto.UserId
+
 				};
 
 				_context.Dealers.Add(dealer);
 				_context.SaveChanges();
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "Failed to add dealer.");
-				throw;
-			}
+			
 		}
 
 		public bool CheckIsDealerByUserId(string userId)
@@ -68,19 +63,14 @@ namespace CarSalesSystem.Services
 
 		public void Update(Dealer dealer)
 		{
-			try
-			{
+			
 				if (dealer == null)
 					throw new ArgumentNullException(nameof(dealer));
 
 				_context.Dealers.Update(dealer);
 				_context.SaveChanges();
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError(ex, "Failed to update dealer.");
-				throw;
-			}
+			
+			
 		}
 
 		public Dealer Details(int id)
@@ -118,5 +108,10 @@ namespace CarSalesSystem.Services
 			}
 		}
 
+		public Dealer GetDealerByUserId(string userId)
+		{
+			var dealer = _context.Dealers.FirstOrDefault(d => d.UserId == userId);
+			return dealer;
+		}
 	}
 }

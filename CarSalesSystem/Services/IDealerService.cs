@@ -13,5 +13,7 @@ namespace CarSalesSystem.Services
         Dealer Details(int id);
         void Edit(DealerDto dto);
 
-    }
+        Dealer GetDealerByUserId(string  userId);    
+
+	}
 }

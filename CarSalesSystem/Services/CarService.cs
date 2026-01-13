@@ -11,12 +11,14 @@ namespace CarSalesSystem.Services
 		private readonly ApplicationDbContext _context;
 		private readonly IMapper _mapper;
 		private readonly ILogger<CarService> _logger;
+		private readonly IDealerService _dealerService;	
 
-		public CarService(ApplicationDbContext context, IMapper mapper, ILogger<CarService> logger)
+		public CarService(ApplicationDbContext context, IMapper mapper, ILogger<CarService> logger, IDealerService dealerService)
 		{
 			_context = context;
 			_mapper = mapper;
 			_logger = logger;
+			_dealerService = dealerService;
 		}
 
 
@@ -33,8 +35,10 @@ namespace CarSalesSystem.Services
 			}
 			var car = _mapper.Map<Car>(dto);
 				car.IsListed = true;
+			
+			car.DealerId = _dealerService.GetDealerByUserId(dto.UserId).Id;
+			_context.Cars.Add(car);
 
-				_context.Cars.Add(car);
 				_context.SaveChanges();
 			
 			
@@ -56,7 +60,7 @@ namespace CarSalesSystem.Services
 				if (car == null)
 					throw new ArgumentException("Car not found");
 
-				
+				car.Id = dto.Id;
 				car.Brand = dto.Brand;
 				car.Model = dto.Model;
 				car.Description = dto.Description;
