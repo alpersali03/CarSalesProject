@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@using CarSalesSystem.Extensions
+@using CarSalesSystem.Services
+@inject IDealerService _dealerService
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,6 +12,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CarSalesSystem.styles.css" asp-append-version="true" />
+    
 </head>
 <body>
     <header>
@@ -24,6 +30,24 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        @if (_dealerService.CheckIsDealerByUserId(User.GetId()))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="Add">Add cars </a>
+                            </li> 
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Dealer" asp-action="Add">Become dealer</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Dealer" asp-action="GetAll">Get all dealers </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="GetAll">Get all cars </a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
