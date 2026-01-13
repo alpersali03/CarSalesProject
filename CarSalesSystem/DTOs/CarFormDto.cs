@@ -4,8 +4,8 @@ namespace CarSalesSystem.DTOs
 {
     public class CarFormDto
     {
-        
-        public string Brand { get; set; } = null!;
+		public int Id { get; set; }
+		public string Brand { get; set; } = null!;
 
         
         public string Model { get; set; } = null!;
@@ -35,6 +35,7 @@ namespace CarSalesSystem.DTOs
         public int DealerId { get; set; }
 
         public bool IsListed { get; set; }
-    }
+		public string? UserId { get; set; } 
+	}
 
 }

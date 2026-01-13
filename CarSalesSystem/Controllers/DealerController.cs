@@ -2,6 +2,7 @@
 using CarSalesSystem.DTOs;
 using CarSalesSystem.Extensions;
 using CarSalesSystem.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,44 +39,64 @@ public class DealerController : Controller
 	}
 
 	[HttpGet]
+	[Authorize]
 	public IActionResult Add()
 	{
+		
+		var userId = User.GetId();
+		if (_dealerService.CheckIsDealerByUserId(userId))
+		{
+			
+			TempData["Error"] = "You are already registered as a dealer.";
+			return RedirectToAction("GetAll");
+		}
 
 		return View(new DealerDto());
 	}
 
+
 	[HttpPost]
+	[Authorize]
 	public IActionResult Add(DealerDto dto)
 	{
 		try
 		{
-			var getUserId = User.GetId();
-
-			if (getUserId == null)
+			var userId = User.GetId();
+			if (userId == null)
 			{
-				return NotFound();
+				return RedirectToAction("Login", "Account");
 			}
-			dto.UserId = getUserId;
+				
+
+			if (_dealerService.CheckIsDealerByUserId(userId))
+			{
+				TempData["Error"] = "You are already registered as a dealer.";
+				return RedirectToAction("GetAll");
+			}
+
+			dto.UserId = userId;
 			_dealerService.Add(dto);
 			return RedirectToAction("GetAll");
 		}
 		catch (Exception ex)
 		{
-			// Log exception
 			ModelState.AddModelError("", "An error occurred while adding the dealer.");
 			return View(dto);
 		}
 	}
+
 
 	[HttpGet]
 	public IActionResult Edit(int id)
 	{
 		try
 		{
+			var dealerById = _dealerService.GetDealerByUserId(User.GetId());
+
 			var dealer = _dealerService.GetById(id);
-			if (dealer == null)
+			if (dealer.UserId != User.GetId())
 			{
-				return NotFound();
+				return RedirectToAction("Error", "Home");
 			}
 
 			var dto = new DealerDto

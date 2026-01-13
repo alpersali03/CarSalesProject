@@ -6,9 +6,9 @@ namespace CarSalesSystem.Extensions
 	public static class ClaimPrincipal
 	{
 
-		public static string GetId(this ClaimsPrincipal user)
+		public static string? GetId(this ClaimsPrincipal user)
 		{
-			return user.FindFirst(ClaimTypes.NameIdentifier).Value;
+			return user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 		}
 
 	}
