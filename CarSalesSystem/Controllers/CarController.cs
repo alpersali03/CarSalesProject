@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CarSalesSystem.Data;
+﻿using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
+using CarSalesSystem.Extensions;
 using CarSalesSystem.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarSalesSystem.Controllers
 {
+
 	public class CarController : Controller
 	{
 		private readonly ApplicationDbContext _context;
@@ -51,7 +54,6 @@ namespace CarSalesSystem.Controllers
 			try
 			{
 				ViewBag.Categories = _context.Categories.ToList();
-				ViewBag.Dealers = _context.Dealers.ToList();
 				return View(new CarFormDto());
 			}
 			catch (Exception)
@@ -68,6 +70,12 @@ namespace CarSalesSystem.Controllers
 
 			try
 			{
+				var getUserId = User.GetId();
+				dto.UserId = getUserId;
+				if (getUserId == null)
+				{
+					return NotFound();
+				}
 				_carService.Add(dto);
 				return RedirectToAction("GetAll");
 			}
@@ -76,7 +84,6 @@ namespace CarSalesSystem.Controllers
 				return BadRequest("Failed to add car.");
 			}
 		}
-
 		[HttpGet]
 		public IActionResult Edit(int id)
 		{
@@ -86,8 +93,13 @@ namespace CarSalesSystem.Controllers
 				if (car == null)
 					return NotFound();
 
+				
+				ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "Name", car.CategoryId);
+				ViewBag.DealerId = new SelectList(_context.Dealers, "Id", "Name", car.DealerId);
+
 				var dto = new CarFormDto
 				{
+					Id = car.Id, 
 					Brand = car.Brand,
 					Model = car.Model,
 					Description = car.Description,
@@ -97,6 +109,7 @@ namespace CarSalesSystem.Controllers
 					FuelType = car.FuelType,
 					Transmission = car.Transmission,
 					Price = car.Price,
+					IsListed = car.IsListed,
 					Country = car.Country,
 					City = car.City,
 					CategoryId = car.CategoryId,
@@ -105,11 +118,12 @@ namespace CarSalesSystem.Controllers
 
 				return View(dto);
 			}
-			catch (Exception)
+			catch
 			{
 				return BadRequest("An error occurred while loading car details.");
 			}
 		}
+
 
 		[HttpPost]
 		public IActionResult Edit(int id, CarFormDto dto)
