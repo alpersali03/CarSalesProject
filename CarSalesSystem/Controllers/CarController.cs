@@ -261,5 +261,17 @@ namespace CarSalesSystem.Controllers
 				return BadRequest("Failed to filter cars by category.");
 			}
 		}
+		[HttpGet]
+		public IActionResult Search(string keyword)
+		{
+			if (string.IsNullOrWhiteSpace(keyword))
+			{
+				TempData["Error"] = "Please enter a keyword to search.";
+				return RedirectToAction("GetAll");
+			}
+
+			var product = _carService.Search(keyword);
+			return View("GetAll", product);
+		}
 	}
 }
