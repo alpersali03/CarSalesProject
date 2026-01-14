@@ -83,5 +83,19 @@ namespace CarSalesSystem.Services
 				throw;
 			}
 		}
+
+		public List<CarDto> Search(string keyword)
+		{
+			if (string.IsNullOrEmpty(keyword))
+			{
+				throw new ArgumentException("Please add new keyword for searching");
+			}
+
+			var cars = this._context.Cars.Include(p => p.Category).Where(p => p.Model.Contains(keyword)).ToList();
+
+			var mapped = _mapper.Map<List<CarDto>>(cars);
+
+			return mapped;
+		}
 	}
 }

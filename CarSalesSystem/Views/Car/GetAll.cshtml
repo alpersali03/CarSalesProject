@@ -3,25 +3,24 @@
 @model List<CarDto>
 
 <a asp-controller="Car" asp-action="GetAll" class="btn btn-primary mb-3 top-0 left-0" type="submit">GoBack</a>
-
-
-
-<div class="row">
-	@foreach (var car in Model)
-	{
-		<div class="col-md-4">
-			<div class="card mb-3">
-				<div class="card-body text-center">
-					<h5 class="card-title text-center"> @car.Model</h5>
-					<p class="card-title text-center"> Brand: @car.Brand</p>
-					<p class="card-title text-center"> City: @car.City</p>
-					<img src=@car.ImageUrl class="img-fluid" alt="Car image" >
-
-					<a asp-controller="Dealer" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
-					@* <a asp-controller="Product" asp-action="ProductsByCategory" asp-route-categoryId="@product.Id" class="btn btn-primary">Products by category</a>
-				<a asp-controller="Category" asp-action="Delete" asp-route-id="@dealer.Id" class="btn btn-danger" onclick="myFunction() ">Delete</a> *@
+<form asp-controller="Car" asp-action="Search" method="get">
+	<div class="row">
+		@foreach (var car in Model)
+		{
+			<div class="col-md-4">
+				<div class="card mb-3">
+					<div class="card-body text-center">
+						<h5 class="card-title text-center"> @car.Model</h5>
+						<p class="card-title text-center"> Brand: @car.Brand</p>
+						<p class="card-title text-center"> City: @car.City</p>
+						<img src=@car.ImageUrl class="img-fluid" alt="Car image" >
+						<a asp-controller="Dealer" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
+						@* <a asp-controller="Product" asp-action="ProductsByCategory" asp-route-categoryId="@product.Id" class="btn btn-primary">Products by category</a>
+					<a asp-controller="Category" asp-action="Delete" asp-route-id="@dealer.Id" class="btn btn-danger" onclick="myFunction() ">Delete</a> *@
+					</div>
 				</div>
 			</div>
-		</div>
-	}
-</div>
+		}
+	</div>
+</form>
+

@@ -9,6 +9,7 @@ namespace CarSalesSystem.Services
 		void Edit(int id, CarFormDto dto);
 		Car GetById(int id);
 
+		List<CarDto> Search(string keyword);
 
 
 	}
