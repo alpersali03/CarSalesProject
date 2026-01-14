@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarSalesSystem.Controllers
 {
-	//[Authorize(Roles = "Manager")]
+	[Authorize(Roles = "Manager")]
 	public class AdminController : Controller
 	{
 
