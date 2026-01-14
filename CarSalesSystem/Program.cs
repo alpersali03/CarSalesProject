@@ -30,6 +30,9 @@ namespace CarSalesSystem
 
 			var app = builder.Build();
 
+			await SeedRolesAsync(app);
+
+
 			// 🔽 ROLE SEEDING HERE
 			using (var scope = app.Services.CreateScope())
 			{
@@ -47,7 +50,7 @@ namespace CarSalesSystem
 					}
 				}
 
-				var adminEmail = "admin@carsales.com";
+				var adminEmail = "admin@gmail.com";
 				var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
 				if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Manager"))
@@ -83,5 +86,34 @@ namespace CarSalesSystem
 
 			await app.RunAsync();
 		}
+
+		
+		private static async Task SeedRolesAsync(WebApplication app)
+		{
+			using var scope = app.Services.CreateScope();
+
+			var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+			var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+			string[] roles = { "Manager", "Dealer", "Customer" };
+
+			foreach (var role in roles)
+			{
+				if (!await roleManager.RoleExistsAsync(role))
+				{
+					await roleManager.CreateAsync(new IdentityRole(role));
+				}
+			}
+
+			// OPTIONAL: assign Manager role to a specific user
+			var adminEmail = "admin@carsales.com"; // must exist in DB
+			var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+			if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Manager"))
+			{
+				await userManager.AddToRoleAsync(adminUser, "Manager");
+			}
+		}
+
 	}
 }
