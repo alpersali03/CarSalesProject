@@ -5,7 +5,9 @@ using CarSalesSystem.Extensions;
 using CarSalesSystem.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace CarSalesSystem.Controllers
 {
@@ -184,24 +186,11 @@ namespace CarSalesSystem.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult SortByName()
+		public IActionResult SortByName(string letter)
 		{
 			try
 			{
-				var cars = _context.Cars
-					.OrderBy(c => c.Brand)
-					.ThenBy(c => c.Model)
-					.Select(c => new CarDto
-					{
-						Id = c.Id,
-						Brand = c.Brand,
-						Model = c.Model,
-						Price = c.Price,
-						ImageUrl = c.ImageUrl,
-						City = c.City
-					})
-					.ToList();
-
+				var cars = _carService.SortByName(letter);
 				return View("GetAll", cars);
 			}
 			catch (Exception)
@@ -211,23 +200,11 @@ namespace CarSalesSystem.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult SortByPrice()
+		public IActionResult SortByPrice(string sortOrder)
 		{
 			try
 			{
-				var cars = _context.Cars
-					.OrderBy(c => c.Price)
-					.Select(c => new CarDto
-					{
-						Id = c.Id,
-						Brand = c.Brand,
-						Model = c.Model,
-						Price = c.Price,
-						ImageUrl = c.ImageUrl,
-						City = c.City
-					})
-					.ToList();
-
+				var cars = _carService.SortByPrice(sortOrder);
 				return View("GetAll", cars);
 			}
 			catch (Exception)
@@ -273,5 +250,6 @@ namespace CarSalesSystem.Controllers
 			var product = _carService.Search(keyword);
 			return View("GetAll", product);
 		}
+		
 	}
 }
