@@ -1,8 +1,51 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using CarSalesSystem.DTOs
+@model List<CarDto>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+
+<section class="hero-search">
+    <div class="container-xl">
+        <h1>Find Your Next Car</h1>
+
+        <div class="search-box">
+            <div class="filter-pill">Cars</div>
+            <div class="filter-pill">Brand</div>
+            <div class="filter-pill">Fuel</div>
+            <div class="filter-pill">Price</div>
+            <div class="filter-pill">Year</div>
+            <div class="filter-pill">Location</div>
+
+            <a asp-controller="Car" asp-action="GetAll" asp-route-fuel="Petrol" class="filter-pill">
+                Petrol
+            </a>
+
+            <a asp-controller="Car" asp-action="GetAll" asp-route-fuel="Diesel" class="filter-pill">
+                Diesel
+            </a>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="latest-cars">
+    <div class="container-xl">
+        <h2>Latest Listings</h2>
+
+        <div class="row g-4">
+            @foreach (var car in Model)
+            {
+                <div class="col-md-3">
+                    <div class="car-card">
+                        <img src="@car.ImageUrl" alt="Car image" />
+                        <span class="price">@car.Price BGN</span>
+
+                        <h5>@car.Brand @car.Model</h5>
+                        <p>@car.Year • @car.FuelType • @car.Mileage km</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
