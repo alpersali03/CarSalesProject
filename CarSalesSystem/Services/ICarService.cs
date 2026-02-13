@@ -10,6 +10,10 @@ namespace CarSalesSystem.Services
 		Car GetById(int id);
 
 		List<CarDto> Search(string keyword);
+		List<CarDto> SortByName(string sortOrder);
+		List<CarDto> SortByPrice(string letter);
+		List<CarDto> GetLatest(int count);
+
 
 
 	}

@@ -1,0 +1,12 @@
+﻿@using CarSalesSystem.DTOs
+@model DealerDto
+
+<form asp-action="DeleteConfirmed" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+
+    <p>Are you sure you want to delete dealer <strong>@Model.Name</strong>?</p>
+
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="GetAllDealers" class="btn btn-secondary">Cancel</a>
+</form>

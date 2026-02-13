@@ -13,7 +13,10 @@ namespace CarSalesSystem.Services
         Dealer Details(int id);
         void Edit(DealerDto dto);
 
-        Dealer GetDealerByUserId(string  userId);    
+        Dealer GetDealerByUserId(string  userId);
+        void Delete(int id);
+
+		List<Car> GetAllCars(int dealerId);
 
 	}
 }

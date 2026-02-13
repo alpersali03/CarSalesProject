@@ -97,5 +97,65 @@ namespace CarSalesSystem.Services
 
 			return mapped;
 		}
+
+		public List<CarDto> SortByPrice(string sortOrder)
+		{
+			var cars = this._context.Cars.Include(p => p.Category).ToList();
+
+			switch (sortOrder)
+			{
+				case "asc":
+
+					cars = cars.OrderBy(p => p.Price).ToList();
+					break;
+				case "desc":
+
+					cars = cars.OrderByDescending(p => p.Price).ToList();
+					break;
+				default:
+					cars = cars.OrderBy(p => p.Id).ToList(); // default sort
+					break;
+			}
+			var mapped = _mapper.Map<List<CarDto>>(cars);
+
+			return mapped;
+		}
+
+		public List<CarDto> SortByName(string letter)
+		{
+			var cars = this._context.Cars.Include(p => p.Category).ToList();
+
+			switch (letter)
+			{
+				case "asc":
+					cars = cars.OrderBy(p => p.Model).ToList();
+					break;
+				case "desc":
+
+					cars = cars.OrderByDescending(p => p.Model).ToList();
+					break;
+				default:
+					cars = cars.OrderBy(p => p.Id).ToList(); // default sort
+					break;
+			}
+			var mapped = _mapper.Map<List<CarDto>>(cars);
+
+
+
+			return mapped;
+
+		}
+
+		public List<CarDto> GetLatest(int count)
+		{
+			var cars = _context.Cars
+				.Where(c => c.IsListed)
+				.OrderByDescending(c => c.Id)
+				.Take(count)
+				.ToList();
+
+			return _mapper.Map<List<CarDto>>(cars);
+		}
+
 	}
 }

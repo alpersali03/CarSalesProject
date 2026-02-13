@@ -3,6 +3,7 @@ using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CarSalesSystem.Services
 {
@@ -63,14 +64,14 @@ namespace CarSalesSystem.Services
 
 		public void Update(Dealer dealer)
 		{
-			
-				if (dealer == null)
-					throw new ArgumentNullException(nameof(dealer));
 
-				_context.Dealers.Update(dealer);
-				_context.SaveChanges();
-			
-			
+			if (dealer == null)
+				throw new ArgumentNullException(nameof(dealer));
+
+			_context.Dealers.Update(dealer);
+			_context.SaveChanges();
+
+
 		}
 
 		public Dealer Details(int id)
@@ -112,6 +113,31 @@ namespace CarSalesSystem.Services
 		{
 			var dealer = _context.Dealers.FirstOrDefault(d => d.UserId == userId);
 			return dealer;
+		}
+
+		public void Delete(int id)
+		{
+			var dealer = _context.Dealers
+				.Include(d => d.Cars)
+				.FirstOrDefault(d => d.Id == id);
+
+			if (dealer == null)
+				throw new ArgumentException("Dealer not found.");
+
+			_context.Dealers.Remove(dealer);
+			_context.SaveChanges();
+		}
+
+		public List<Car> GetAllCars(int dealerId)
+		{
+			var dealer = _context.Dealers
+				.Include(d => d.Cars)
+				.FirstOrDefault(d => d.Id == dealerId);
+
+			if (dealer == null)
+				throw new ArgumentException("Dealer not found.");
+
+			return dealer.Cars.ToList();
 		}
 	}
 }
