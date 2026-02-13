@@ -8,6 +8,12 @@
         public decimal Price { get; set; }
         public string ImageUrl { get; set; } = null!;
         public string City { get; set; } = null!;
-       
+		public int Year { get; set; }
+
+		public int Mileage { get; set; }
+
+
+		public string FuelType { get; set; } = null!;
+
 	}
 }

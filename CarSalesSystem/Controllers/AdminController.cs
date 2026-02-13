@@ -1,4 +1,6 @@
-﻿using CarSalesSystem.DTOs;
+﻿using AutoMapper;
+using CarSalesSystem.Data.Model;
+using CarSalesSystem.DTOs;
 using CarSalesSystem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +12,11 @@ namespace CarSalesSystem.Controllers
 	{
 
 		private readonly IDealerService _dealerService;
-		public AdminController(IDealerService dealerService)
+		private readonly IMapper _mapper;
+		public AdminController(IDealerService dealerService, IMapper mapper)
 		{
 			_dealerService = dealerService;
+			_mapper = mapper;
 		}
 		[HttpGet]
 		public IActionResult GetAllDealers()
@@ -22,10 +26,11 @@ namespace CarSalesSystem.Controllers
 				List<DTOs.DealerDto> dealers = _dealerService.GetAll();
 				return View(dealers);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				return BadRequest("An error occurred while loading dealers.");
+				return BadRequest(ex.Message);
 			}
+
 
 		}
 		[HttpGet]
@@ -34,38 +39,91 @@ namespace CarSalesSystem.Controllers
 			try
 			{
 				var dealer = _dealerService.GetById(id);
-				return View(dealer);
+
+				if (dealer == null)
+				{
+					return NotFound("Dealer not found.");
+				}
+
+				var dealerDto = _mapper.Map<DealerDto>(dealer);
+				return View(dealerDto);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				return BadRequest("Dealer not found!");
+				return BadRequest(ex.Message);
+			}
+
+		}
+
+
+		[HttpPost]
+		public IActionResult Edit(DealerDto dealer)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					return View(dealer);
+				}
+
+				_dealerService.Edit(dealer);
+
+				return RedirectToAction(nameof(GetAllDealers));
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
 			}
 		}
-		[HttpPost]
-		public IActionResult Edit(DealerDto dealerDto)
+
+
+		[HttpGet]
+		public IActionResult Delete(int id)
 		{
-			//try
-			//{
-			//	_dealerService.Update(dealerDto);
-			//	return RedirectToAction("Edit");
-			//}
-			//catch (Exception)
-			//{
-			//	return BadRequest("An error occurred while editing the dealer.");
-			//}
-			return View();
+			try
+			{
+				var dealer = _dealerService.GetById(id);
+
+				if (dealer == null)
+				{
+					return NotFound("Dealer not found.");
+				}
+
+				var dealerDto = _mapper.Map<DealerDto>(dealer);
+				return View(dealerDto);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
 		}
-		//public IActionResult Delete(int id)
-		//{
-		//	try
-		//	{
-		//		DealerDto dealer = _dealerService.Delete(id);
-		//		return View(dealer);
-		//	}
-		//	catch (Exception)
-		//	{
-		//		return BadRequest("An error occurred while loading the dealer for deletion.");
-		//	}
-		//}
+
+		[HttpPost]
+		public IActionResult DeleteConfirmed(int id)
+		{
+			try
+			{
+				_dealerService.Delete(id);
+				return RedirectToAction(nameof(GetAllDealers));
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+		[HttpGet]	
+		public IActionResult GetAllCars(int dealerId)
+		{
+			try
+			{
+				var cars = _dealerService.GetAllCars(dealerId);
+				return View(cars);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
 	}
 }
