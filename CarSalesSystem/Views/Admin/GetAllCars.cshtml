@@ -1,0 +1,35 @@
+﻿@using CarSalesSystem.Data.Model
+@model List<Car>
+
+<h2 class="text-center">Dealer Cars</h2>
+
+@if (!Model.Any())
+{
+    <p class="text-center text-muted">No cars found for this dealer.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Fuel</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in Model)
+            {
+                <tr>
+                    <td>@car.Brand</td>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td>@car.FuelType</td>
+                    <td>@car.Price</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

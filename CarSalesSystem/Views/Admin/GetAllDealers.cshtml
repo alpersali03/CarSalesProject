@@ -15,9 +15,11 @@
 					<h5 class="card-title text-center"> @dealer.Name</h5>
 
 
-					<a asp-controller="Admin" asp-action="GetAllDealers" asp-route-id="@dealer.Id" class="btn btn-warning">GetAll</a>
-					@* <a asp-controller="Product" asp-action="ProductsByCategory" asp-route-categoryId="@product.Id" class="btn btn-primary">Products by category</a>
-				<a asp-controller="Category" asp-action="Delete" asp-route-id="@dealer.Id" class="btn btn-danger" onclick="myFunction() ">Delete</a> *@
+					@* <a asp-controller="Admin" asp-action="GetAllDealers" asp-route-id="@dealer.Id" class="btn btn-warning">GetAll</a> *@
+					<a asp-controller="Admin" asp-area="Admin" asp-action="Edit" asp-route-id="@dealer.Id" class="btn btn-warning">Edit</a>
+					<a asp-controller="Admin" asp-area="Admin" asp-action="Delete" asp-route-id="@dealer.Id" class="btn btn-warning">Delete</a>
+					<a asp-controller="Admin" asp-action="GetAllCars" asp-route-dealerId="@dealer.Id" class="btn btn-warning">GetAllCars</a>
+					
 				</div>
 			</div>
 		</div>
