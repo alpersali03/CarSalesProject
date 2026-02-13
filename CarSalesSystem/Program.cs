@@ -101,7 +101,7 @@ namespace CarSalesSystem
 			var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 			var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-			string[] roles = { "Manager", "Dealer", "Customer" };
+			string[] roles = { "Manager", "Dealer"};
 
 			foreach (var role in roles)
 			{
