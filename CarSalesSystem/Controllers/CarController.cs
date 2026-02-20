@@ -16,11 +16,14 @@ namespace CarSalesSystem.Controllers
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly ICarService _carService;
+		private readonly IDealerService _dealerService;
 
-		public CarController(ApplicationDbContext context, ICarService carService)
+
+		public CarController(ApplicationDbContext context, ICarService carService, IDealerService dealerService)
 		{
 			_context = context;
 			_carService = carService;
+			_dealerService = dealerService;
 		}
 
 		[HttpGet]
@@ -55,6 +58,13 @@ namespace CarSalesSystem.Controllers
 		{
 			try
 			{
+				var userId = User.GetId();
+
+				if (!_dealerService.CheckIsDealerByUserId(userId))
+				{
+					return Forbid();
+				}
+
 				ViewBag.Categories = _context.Categories.ToList();
 				return View(new CarFormDto());
 			}
