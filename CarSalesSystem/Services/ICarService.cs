@@ -15,6 +15,7 @@ namespace CarSalesSystem.Services
 		List<CarDto> GetLatest(int count);
 		List<CarDto> GetByFuel(string fuelType);
 		List<CarDto> GetByYear(int? minYear, int? maxYear);
+		List<CarDto> GetByBrand(string brandType);
 
 
 	}

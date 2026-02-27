@@ -187,5 +187,16 @@ namespace CarSalesSystem.Services
 
 			return _mapper.Map<List<CarDto>>(cars);
 		}
+
+		public List<CarDto> GetByBrand(string brandType)
+		{
+			var cars = _context.Cars
+				.Where(c => c.Brand == brandType)
+				.Include(c => c.Category)
+				.Include(c => c.Dealer)
+				.ToList();
+			return _mapper.Map<List<CarDto>>(cars);
+		}
+		
 	}
 }
