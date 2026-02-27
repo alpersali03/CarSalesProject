@@ -251,18 +251,7 @@ namespace CarSalesSystem.Controllers
 				return BadRequest("Failed to filter cars by category.");
 			}
 		}
-		[HttpGet]
-		public IActionResult Search(string keyword)
-		{
-			if (string.IsNullOrWhiteSpace(keyword))
-			{
-				TempData["Error"] = "Please enter a keyword to search.";
-				return RedirectToAction("GetAll");
-			}
-
-			var product = _carService.Search(keyword);
-			return View("GetAll", product);
-		}
+		
 		[HttpGet]
 		public IActionResult GetByFuel(string fuelType)
 		{
@@ -308,6 +297,21 @@ namespace CarSalesSystem.Controllers
 			catch (Exception)
 			{
 				return BadRequest("Failed to filter cars by brand.");
+			}
+		}
+		[HttpGet]
+		public IActionResult Search(int? minYear, int? maxYear, string? fuelType, string? brandType)
+		{
+			try
+			{
+				List<CarDto> cars = _carService.Search(minYear, maxYear, fuelType, brandType);
+				return View("GetAll", cars);
+
+			}
+			
+			catch (Exception)
+			{
+				return BadRequest("Failed to perform search.");
 			}
 		}
 	}
