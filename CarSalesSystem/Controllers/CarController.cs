@@ -41,7 +41,10 @@ namespace CarSalesSystem.Controllers
 						Model = c.Model,
 						Price = c.Price,
 						ImageUrl = c.ImageUrl,
-						City = c.City
+						City = c.City,
+						Year = c.Year,
+						FuelType = c.FuelType,
+						Mileage = c.Mileage
 					})
 					.ToList();
 
@@ -281,22 +284,18 @@ namespace CarSalesSystem.Controllers
 			return View("GetAll", cars);
 		}
 		[HttpGet]
-		public IActionResult GetByYear(int year)
+		public IActionResult GetByYear(int? minYear, int? maxYear)
 		{
-			var cars = _carService.GetByYear(year);
 			try
 			{
-				if (year <= 0)
-				{
-					return BadRequest("Year must be a positive integer.");
-				}
+				var cars = _carService.GetByYear(minYear, maxYear);
 
+				return View("GetAll", cars); 
 			}
 			catch (Exception)
 			{
-				return BadRequest("Failed to filter cars by year.");
+				return BadRequest("Failed to filter cars by year range.");
 			}
-			return View("GetAll", cars);
 		}
 	}
 }
