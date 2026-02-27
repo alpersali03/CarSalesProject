@@ -16,12 +16,16 @@
 
             <a asp-controller="Car" asp-action="GetByFuel" asp-route-fuelType="Petrol" class="btn btn-outline-primary me-2">Petrol </a>
             <a asp-controller="Car" asp-action="GetByFuel" asp-route-fuelType="Diesel" class="btn btn-outline-primary me-2">Diesel </a>
-            <a asp-controller="Car" asp-action="GetByYear" asp-route-year="Year" class="btn btn-outline-primary me-2">Year </a>
-            <div class="form-group">
-                <label asp-for="Year">Year</label>
-                <select asp-for="Year" class="form-control"
-                asp-items="@(new SelectList(ViewBag.Year, "Year"))"></select>
-            </div>
+            @* <a asp-controller="Car" asp-action="GetByYear" asp-route-year="Year" class="btn btn-outline-primary me-2">Year </a> *@
+            <form asp-controller="Car" asp-action="GetByYear" method="get" class="d-flex gap-2 align-items-center">
+                <input type="number" name="minYear" class="form-control" style="max-width: 130px;"
+                       placeholder="Min year" min="1886" max="2100" />
+
+                <input type="number" name="maxYear" class="form-control" style="max-width: 130px;"
+                       placeholder="Max year" min="1886" max="2100" />
+
+                <button type="submit" class="btn btn-outline-primary">Year</button>
+            </form>
             @* <a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="asc" class="btn btn-success me-2">Sort by Price ↑ </a>
             <a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="desc" class="btn btn-danger">Sort by Price ↓ </a> *@
 

@@ -165,11 +165,26 @@ namespace CarSalesSystem.Services
 			return _mapper.Map<List<CarDto>>(cars);
 		}
 
-		public List<CarDto> GetByYear(int year)
+		public List<CarDto> GetByYear(int? minYear, int? maxYear)
 		{
-			var cars = _context.Cars
-				.Where(c => c.Year == year)
+			if (minYear.HasValue && maxYear.HasValue && minYear > maxYear)
+			{
+				(minYear, maxYear) = (maxYear, minYear);
+			}
+
+			var query = _context.Cars.AsQueryable();
+
+			if (minYear.HasValue)
+				query = query.Where(c => c.Year >= minYear.Value);
+
+			if (maxYear.HasValue)
+				query = query.Where(c => c.Year <= maxYear.Value);
+
+			var cars = query
+				.Include(c => c.Category)
+				.Include(c => c.Dealer)
 				.ToList();
+
 			return _mapper.Map<List<CarDto>>(cars);
 		}
 	}
