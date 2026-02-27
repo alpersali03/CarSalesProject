@@ -260,6 +260,43 @@ namespace CarSalesSystem.Controllers
 			var product = _carService.Search(keyword);
 			return View("GetAll", product);
 		}
-		
+		[HttpGet]
+		public IActionResult GetByFuel(string fuelType)
+		{
+			var cars = _carService.GetByFuel(fuelType);
+			try
+			{
+				if (fuelType == null)
+				{
+					return BadRequest("Fuel type is required.");
+				}
+				
+			}
+
+			catch (Exception)
+			{
+				return BadRequest("Failed to filter cars by fuel type.");
+
+			}
+			return View("GetAll", cars);
+		}
+		[HttpGet]
+		public IActionResult GetByYear(int year)
+		{
+			var cars = _carService.GetByYear(year);
+			try
+			{
+				if (year <= 0)
+				{
+					return BadRequest("Year must be a positive integer.");
+				}
+
+			}
+			catch (Exception)
+			{
+				return BadRequest("Failed to filter cars by year.");
+			}
+			return View("GetAll", cars);
+		}
 	}
 }
