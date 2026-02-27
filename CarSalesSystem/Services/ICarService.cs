@@ -16,6 +16,7 @@ namespace CarSalesSystem.Services
 		List<CarDto> GetByFuel(string fuelType);
 		List<CarDto> GetByYear(int? minYear, int? maxYear);
 		List<CarDto> GetByBrand(string brandType);
+		List<CarDto> Search(int? minYear, int? maxYear, string? fuelType, string? brandType);
 
 
 	}

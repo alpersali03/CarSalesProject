@@ -197,6 +197,24 @@ namespace CarSalesSystem.Services
 				.ToList();
 			return _mapper.Map<List<CarDto>>(cars);
 		}
-		
+
+		public List<CarDto> Search(int? minYear, int? maxYear, string? fuelType, string? brandType)
+		{
+			var cars = _context.Cars.AsQueryable();
+
+			if (!string.IsNullOrEmpty(fuelType))
+				cars = cars.Where(c => c.FuelType == fuelType);
+
+			if (!string.IsNullOrEmpty(brandType))
+				cars = cars.Where(c => c.Brand == brandType);
+
+			if (minYear.HasValue)
+				cars = cars.Where(c => c.Year >= minYear.Value);
+
+			if (maxYear.HasValue)
+				cars = cars.Where(c => c.Year <= maxYear.Value);
+
+			return _mapper.Map<List<CarDto>>(cars);
+		}
 	}
 }

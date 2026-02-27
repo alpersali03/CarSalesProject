@@ -7,34 +7,56 @@
     <div class="container-xl">
         <h1>Find Your Next Car</h1>
 
-        <div class="search-box">
-            <div class="filter-pill">Cars</div>
-            <div class="filter-pill">Brand</div>
-            <div class="filter-pill">Fuel</div>
-            <div class="filter-pill">Price</div>
-            <div class="filter-pill">Year</div>
+        <form asp-controller="Car" asp-action="Search" method="get" class="search-box">
 
-            <a asp-controller="Car" asp-action="GetByFuel" asp-route-fuelType="Petrol" class="btn btn-outline-primary me-2">Petrol </a>
-            <a asp-controller="Car" asp-action="GetByFuel" asp-route-fuelType="Diesel" class="btn btn-outline-primary me-2">Diesel </a>
-            @* <a asp-controller="Car" asp-action="GetByYear" asp-route-year="Year" class="btn btn-outline-primary me-2">Year </a> *@
-            <form asp-controller="Car" asp-action="GetByYear" method="get" class="d-flex gap-2 align-items-center">
-                <input type="number" name="minYear" class="form-control" style="max-width: 130px;"
-                       placeholder="Min year" min="1886" max="2100" />
+            
+            <div class="filter-group">
+                <label class="filter-label">Fuel Type</label>
+                <div class="d-flex gap-2">
+                    <input type="radio" class="btn-check" name="fuelType" id="fuelPetrol" value="Petrol" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="fuelPetrol">Petrol</label>
 
-                <input type="number" name="maxYear" class="form-control" style="max-width: 130px;"
-                       placeholder="Max year" min="1886" max="2100" />
+                    <input type="radio" class="btn-check" name="fuelType" id="fuelDiesel" value="Diesel" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="fuelDiesel">Diesel</label>
 
-                <button type="submit" class="btn btn-outline-primary">Year</button>
-            </form>
-            <a asp-controller="Car" asp-action="GetByBrand" asp-route-brandType="Brand" class="btn btn-outline-primary me-2">Brand </a>
-            @* <a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="asc" class="btn btn-success me-2">Sort by Price ↑ </a>
-            <a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="desc" class="btn btn-danger">Sort by Price ↓ </a> *@
+                    <input type="radio" class="btn-check" name="fuelType" id="fuelAny" value="" autocomplete="off" checked>
+                    <label class="btn btn-outline-secondary" for="fuelAny">Any</label>
+                </div>
+            </div>
 
+            
+            <div class="filter-group">
+                <label class="filter-label" for="brandType">Brand</label>
+                <select name="brandType" id="brandType" class="form-select" style="max-width: 200px;">
+                    <option value="">Any Brand</option>
+                    <option value="Toyota">Toyota</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Ford">Ford</option>
+                </select>
+            </div>
 
-        </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Year Range</label>
+                <div class="d-flex gap-2">
+                    <input type="number" name="minYear" class="form-control"
+                           style="max-width: 130px;" placeholder="Min year"
+                           min="1886" max="2100" />
+                    <input type="number" name="maxYear" class="form-control"
+                           style="max-width: 130px;" placeholder="Max year"
+                           min="1886" max="2100" />
+                </div>
+            </div>
+
+            
+            <button type="submit" class="btn btn-success px-4">
+                🔍 Search
+            </button>
+           
+
+        </form>
     </div>
 </section>
-
 
 <section class="latest-cars">
     <div class="container-xl">
