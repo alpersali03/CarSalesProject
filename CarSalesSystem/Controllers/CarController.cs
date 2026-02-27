@@ -108,13 +108,13 @@ namespace CarSalesSystem.Controllers
 				if (car == null)
 					return NotFound();
 
-				
+
 				ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "Name", car.CategoryId);
 				ViewBag.DealerId = new SelectList(_context.Dealers, "Id", "Name", car.DealerId);
 
 				var dto = new CarFormDto
 				{
-					Id = car.Id, 
+					Id = car.Id,
 					Brand = car.Brand,
 					Model = car.Model,
 					Description = car.Description,
@@ -273,7 +273,7 @@ namespace CarSalesSystem.Controllers
 				{
 					return BadRequest("Fuel type is required.");
 				}
-				
+
 			}
 
 			catch (Exception)
@@ -290,11 +290,24 @@ namespace CarSalesSystem.Controllers
 			{
 				var cars = _carService.GetByYear(minYear, maxYear);
 
-				return View("GetAll", cars); 
+				return View("GetAll", cars);
 			}
 			catch (Exception)
 			{
 				return BadRequest("Failed to filter cars by year range.");
+			}
+		}
+		[HttpGet]
+		public IActionResult GetByBrand(string brandType)
+		{
+			try
+			{
+				var cars = _carService.GetByBrand(brandType);
+				return View("GetAll", cars);
+			}
+			catch (Exception)
+			{
+				return BadRequest("Failed to filter cars by brand.");
 			}
 		}
 	}
