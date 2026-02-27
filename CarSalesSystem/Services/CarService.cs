@@ -157,5 +157,20 @@ namespace CarSalesSystem.Services
 			return _mapper.Map<List<CarDto>>(cars);
 		}
 
+		public List<CarDto> GetByFuel(string fuelType)
+		{
+			var cars = _context.Cars
+				.Where(c => c.FuelType == fuelType)
+				.ToList();
+			return _mapper.Map<List<CarDto>>(cars);
+		}
+
+		public List<CarDto> GetByYear(int year)
+		{
+			var cars = _context.Cars
+				.Where(c => c.Year == year)
+				.ToList();
+			return _mapper.Map<List<CarDto>>(cars);
+		}
 	}
 }

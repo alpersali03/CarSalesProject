@@ -13,7 +13,8 @@ namespace CarSalesSystem.Services
 		List<CarDto> SortByName(string sortOrder);
 		List<CarDto> SortByPrice(string letter);
 		List<CarDto> GetLatest(int count);
-
+		List<CarDto> GetByFuel(string fuelType);
+		List<CarDto> GetByYear(int year);
 
 
 	}
