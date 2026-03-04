@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\views\\car\\getall.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:views\\car\\getall.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\services\\carservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:services\\carservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\controllers\\carcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:controllers\\carcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\views\\car\\getall.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:views\\car\\getall.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\views\\admin\\getalldealers.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -21,10 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\controllers\\carcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|solutionrelative:controllers\\carcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{99E5DB89-F3BF-4F0E-969B-34C04E574565}|CarSalesSystem.csproj|c:\\users\\pc\\documents\\github\\carsalesproject\\carsalessystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -226,15 +226,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "GetAllDealers.cshtml",
               "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Admin\\GetAllDealers.cshtml",
               "RelativeDocumentMoniker": "Views\\Admin\\GetAllDealers.cshtml",
@@ -247,7 +247,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "GetAllCars.cshtml",
               "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Admin\\GetAllCars.cshtml",
               "RelativeDocumentMoniker": "Views\\Admin\\GetAllCars.cshtml",
@@ -260,7 +260,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
@@ -273,7 +273,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "CarController.cs",
               "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Controllers\\CarController.cs",
               "RelativeDocumentMoniker": "Controllers\\CarController.cs",
@@ -286,20 +286,32 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "CarService.cs",
               "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Services\\CarService.cs",
               "RelativeDocumentMoniker": "Services\\CarService.cs",
               "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Services\\CarService.cs",
               "RelativeToolTip": "Services\\CarService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMkAAAACAAAAAAAAAA==",
+              "ViewState": "AgIAALIAAAAAAAAAAAAlwMkAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-13T12:18:44.736Z",
               "EditorCaption": ""
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "GetAll.cshtml",
               "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\CarSalesProject\\CarSalesSystem\\Views\\Car\\GetAll.cshtml",
               "RelativeDocumentMoniker": "Views\\Car\\GetAll.cshtml",
@@ -309,18 +321,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-02-27T12:14:22.328Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
               "$type": "Document",
