@@ -26,9 +26,11 @@ namespace CarSalesSystem.Controllers
 			_dealerService = dealerService;
 		}
 
+
 		[HttpGet]
 		public IActionResult GetAll()
 		{
+			PopulateBrands();
 			try
 			{
 				var cars = _context.Cars
@@ -59,6 +61,7 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult Add()
 		{
+			PopulateBrands();
 			try
 			{
 				var userId = User.GetId();
@@ -80,6 +83,7 @@ namespace CarSalesSystem.Controllers
 		[HttpPost]
 		public IActionResult Add(CarFormDto dto)
 		{
+			PopulateBrands();
 			if (!ModelState.IsValid)
 				return View(dto);
 
@@ -102,6 +106,7 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult Edit(int id)
 		{
+			PopulateBrands();
 			try
 			{
 				var car = _carService.GetById(id);
@@ -143,6 +148,7 @@ namespace CarSalesSystem.Controllers
 		[HttpPost]
 		public IActionResult Edit(int id, CarFormDto dto)
 		{
+			PopulateBrands();
 			if (!ModelState.IsValid)
 				return View(dto);
 
@@ -160,6 +166,7 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult Details(int id)
 		{
+			PopulateBrands();
 			try
 			{
 				var car = _context.Cars
@@ -181,15 +188,10 @@ namespace CarSalesSystem.Controllers
 		[HttpPost]
 		public IActionResult Delete(int id)
 		{
+			var userId = User.GetId();
 			try
 			{
-				var car = _context.Cars.Find(id);
-				if (car == null)
-					return NotFound();
-
-				_context.Cars.Remove(car);
-				_context.SaveChanges();
-
+				_carService.Delete(userId, id);
 				return RedirectToAction("GetAll");
 			}
 			catch (Exception)
@@ -201,6 +203,7 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult SortByName(string letter)
 		{
+			PopulateBrands();
 			try
 			{
 				var cars = _carService.SortByName(letter);
@@ -215,6 +218,7 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult SortByPrice(string sortOrder)
 		{
+			PopulateBrands();
 			try
 			{
 				var cars = _carService.SortByPrice(sortOrder);
@@ -229,6 +233,7 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult CarsByCategory(int categoryId)
 		{
+			PopulateBrands();
 			try
 			{
 				var cars = _context.Cars
@@ -255,6 +260,7 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult GetByFuel(string fuelType)
 		{
+			PopulateBrands();
 			var cars = _carService.GetByFuel(fuelType);
 			try
 			{
@@ -275,6 +281,7 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult GetByYear(int? minYear, int? maxYear)
 		{
+			PopulateBrands();
 			try
 			{
 				var cars = _carService.GetByYear(minYear, maxYear);
@@ -289,6 +296,7 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult GetByBrand(string brandType)
 		{
+			PopulateBrands();
 			try
 			{
 				var cars = _carService.GetByBrand(brandType);
@@ -302,17 +310,26 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult Search(int? minYear, int? maxYear, string? fuelType, string? brandType)
 		{
+			PopulateBrands();
 			try
 			{
 				List<CarDto> cars = _carService.Search(minYear, maxYear, fuelType, brandType);
 				return View("GetAll", cars);
 
 			}
-			
+
 			catch (Exception)
 			{
 				return BadRequest("Failed to perform search.");
 			}
+		}
+		private void PopulateBrands()
+		{
+			ViewData["Brands"] = _context.Cars
+				.Select(c => c.Brand)
+				.Distinct()
+				.OrderBy(b => b)
+				.ToList();
 		}
 	}
 }
