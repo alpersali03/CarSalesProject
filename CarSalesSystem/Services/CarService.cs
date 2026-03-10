@@ -216,5 +216,36 @@ namespace CarSalesSystem.Services
 
 			return _mapper.Map<List<CarDto>>(cars);
 		}
+
+		public void Delete(string userId, int id)
+		{
+			if (!_dealerService.CheckIsDealerByUserId(userId))
+			{
+				throw new UnauthorizedAccessException("Only dealers can delete cars.");
+			}
+
+			var car = _context.Cars.Find(id);
+			if (car == null)
+			{
+				throw new ArgumentException("Car not found");
+			}
+
+			var dealer = _dealerService.GetDealerByUserId(userId);
+			if (car.DealerId != dealer.Id)
+			{
+				throw new UnauthorizedAccessException("You can only delete your own cars.");
+			}
+
+			_context.Cars.Remove(car);
+			_context.SaveChanges();
+		}
+		public List<string> PopulateBrands()
+		{
+			return _context.Cars
+				.Select(c => c.Brand)
+				.Distinct()
+				.OrderBy(b => b)
+				.ToList();
+		}
 	}
 }
