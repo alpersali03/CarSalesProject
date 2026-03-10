@@ -1,102 +1,71 @@
-﻿@model CarSalesSystem.Data.Model.Car
+﻿<div class="details-page">
+    <div class="details-header">
+        <h1>@Model.Brand @Model.Model</h1>
+        <div class="subtitle">@Model.Year &nbsp;•&nbsp; @Model.FuelType &nbsp;•&nbsp; @Model.City, @Model.Country</div>
+    </div>
 
-@{
-    ViewData["Title"] = "Details";
-}
+    <div class="details-layout">
+        <div class="details-image">
+            <img src="@Model.ImageUrl" alt="@Model.Brand @Model.Model" onerror="this.src='/images/no-image.png'" />
+            <div class="price-overlay">@Model.Price.ToString("N2") BGN</div>
+        </div>
 
-<h1>Details</h1>
+        <div class="details-info">
+            <div class="info-section-title">Specifications</div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Brand</div>
+                    <div class="info-value">@Model.Brand</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Model</div>
+                    <div class="info-value">@Model.Model</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Year</div>
+                    <div class="info-value">@Model.Year</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Mileage</div>
+                    <div class="info-value">@Model.Mileage.ToString("N0") km</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Fuel Type</div>
+                    <div class="info-value">@Model.FuelType</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Transmission</div>
+                    <div class="info-value">@Model.Transmission</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Category</div>
+                    <div class="info-value">@Model.Category?.Name</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Dealer</div>
+                    <div class="info-value">@Model.Dealer?.Name</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">City</div>
+                    <div class="info-value">@Model.City</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Country</div>
+                    <div class="info-value">@Model.Country</div>
+                </div>
+            </div>
 
-<div>
-    <h4>Car</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Brand)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Brand)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Model)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Model)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Year)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Mileage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Mileage)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FuelType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FuelType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Transmission)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Transmission)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsListed)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsListed)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Dealer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Dealer.Name)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <div class="info-section-title">Description</div>
+                <div class="description-box">@Model.Description</div>
+            }
+
+            <div class="action-row">
+                <a asp-controller="Car" asp-action="GetAll" class="btn-back">← Back</a>
+                <a asp-controller="Car" asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">Edit</a>
+                <a asp-controller="Payment" asp-action="Buy" asp-route-carId="@Model.Id" class="btn-buy-big">Buy Now</a>
+            </div>
+        </div>
+    </div>
 </div>

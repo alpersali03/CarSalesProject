@@ -1,45 +1,45 @@
 ﻿@using CarSalesSystem.DTOs
 @using CarSalesSystem.Data.Model
 @model List<CarDto>
-
-
-
 <a asp-controller="Car" asp-action="GetAll" class="btn btn-primary mb-3 top-0 left-0" type="submit">GoBack</a>
-<form asp-controller="Car" asp-action="Search" method="get">
-	<div>
-		<input type="text" name="keyword" class="form-control" placeholder="Enter a searching keyword" />
-		<button class="btn btn-primary mt-3" type="submit"> Search</button>
-	</div>
-</form>
 <div class="text-center mb-3">
-	<a asp-controller="Car" asp-action="SortByName" asp-route-letter="asc" class="btn btn-outline-primary me-2">Sort by Name ↑ </a>
-	<a asp-controller="Car" asp-action="SortByName" asp-route-letter="desc" class="btn btn-outline-secondary">Sort by Name ↓ </a>
-	<a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="asc" class="btn btn-success me-2">Sort by Price ↑ </a>
-	<a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="desc" class="btn btn-danger">Sort by Price ↓ </a>
+    <a asp-controller="Car" asp-action="SortByName" asp-route-letter="asc" class="btn btn-outline-primary me-2">Sort by Name ↑</a>
+    <a asp-controller="Car" asp-action="SortByName" asp-route-letter="desc" class="btn btn-outline-secondary">Sort by Name ↓</a>
+    <a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="asc" class="btn btn-success me-2">Sort by Price ↑</a>
+    <a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="desc" class="btn btn-danger">Sort by Price ↓</a>
 </div>
-(@if (!Model.Any())
+@if (!Model.Any())
 {
-	<p class="text-center text-muted">No cars found.</p>
+    <h1 class="text-center text-muted">No cars found.</h1>
 }
-)
+<div class="row">
+    @foreach (var car in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-center">@car.Model</h5>
+                    <p class="card-title text-center">Brand: @car.Brand</p>
+                    <p class="card-title text-center">City: @car.City</p>
+                    <img src="@car.ImageUrl" class="img-fluid" alt="Car image">
 
-	<div class="row">
-		@foreach (var car in Model)
-		{
-			<div class="col-md-4">
-				<div class="card mb-3">
-					<div class="card-body text-center">
-						<h5 class="card-title text-center"> @car.Model</h5>
-						<p class="card-title text-center"> Brand: @car.Brand</p>
-						<p class="card-title text-center"> City: @car.City</p>
-						<img src=@car.ImageUrl class="img-fluid" alt="Car image" >
-						<a asp-controller="Dealer" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
-						@* <a asp-controller="Product" asp-action="ProductsByCategory" asp-route-categoryId="@product.Id" class="btn btn-primary">Products by category</a>
-					<a asp-controller="Category" asp-action="Delete" asp-route-id="@dealer.Id" class="btn btn-danger" onclick="myFunction() ">Delete</a> *@
-					</div>
-				</div>
-			</div>
-		}
-	</div>
+                    <div class="mt-2">
+                        <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-info">Details</a>
+                        <a asp-controller="Payment" asp-action="Buy" asp-route-carId="@car.Id" class="btn btn-warning">Buy</a>
+                    </div>
 
-
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="mt-2">
+                            <a asp-controller="Car" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
+                            <form asp-controller="Car" asp-action="Delete" asp-route-id="@car.Id" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
