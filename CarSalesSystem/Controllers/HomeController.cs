@@ -18,6 +18,7 @@ namespace CarSalesSystem.Controllers
 
 		public IActionResult Index()
 		{
+			ViewData["Brands"] = _carService.PopulateBrands();
 			var cars = _carService.GetLatest(6);
 			return View(cars);
 		}
@@ -36,3 +37,6 @@ namespace CarSalesSystem.Controllers
 
     }
 }
+
+
+
