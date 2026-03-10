@@ -1,41 +1,37 @@
 ﻿@using CarSalesSystem.DTOs
 @model List<CarDto>
 
-
-
 <section class="hero-search">
     <div class="container-xl">
         <h1>Find Your Next Car</h1>
 
         <form asp-controller="Car" asp-action="Search" method="get" class="search-box">
-
-            
-            <div class="filter-group">
-                <label class="filter-label">Fuel Type</label>
-                <div class="d-flex gap-2">
-                    <input type="radio" class="btn-check" name="fuelType" id="fuelPetrol" value="Petrol" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="fuelPetrol">Petrol</label>
-
-                    <input type="radio" class="btn-check" name="fuelType" id="fuelDiesel" value="Diesel" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="fuelDiesel">Diesel</label>
-
-                    <input type="radio" class="btn-check" name="fuelType" id="fuelAny" value="" autocomplete="off" checked>
-                    <label class="btn btn-outline-secondary" for="fuelAny">Any</label>
+                <div class="filter-group">
+                <div class="filter-group">
+                    <label class="filter-label" for="fuelType">Fuel Type</label>
+                    <select name="fuelType" id="fuelType" class="form-select" style="max-width: 200px;">
+                        <option value="">Any Fuel</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                        <option value="Hybrid">Hybrid</option>
+                    </select>
                 </div>
             </div>
 
-            
             <div class="filter-group">
                 <label class="filter-label" for="brandType">Brand</label>
                 <select name="brandType" id="brandType" class="form-select" style="max-width: 200px;">
                     <option value="">Any Brand</option>
-                    <option value="Toyota">Toyota</option>
-                    <option value="BMW">BMW</option>
-                    <option value="Ford">Ford</option>
+    					@{ var brands = ViewData["Brands"] as List<string> ?? new List<string>(); }
+                        @foreach (var brand in brands)
+                        {
+                            <option value="@brand">@brand</option>
+                        }
+)
                 </select>
             </div>
 
-            
             <div class="filter-group">
                 <label class="filter-label">Year Range</label>
                 <div class="d-flex gap-2">
@@ -48,12 +44,9 @@
                 </div>
             </div>
 
-            
             <button type="submit" class="btn btn-success px-4">
                 🔍 Search
             </button>
-           
-
         </form>
     </div>
 </section>
