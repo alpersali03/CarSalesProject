@@ -169,10 +169,8 @@ namespace CarSalesSystem.Controllers
 			PopulateBrands();
 			try
 			{
-				var car = _context.Cars
-					.Include(c => c.Category)
-					.Include(c => c.Dealer)
-					.FirstOrDefault(c => c.Id == id);
+				
+				var car = _carService.GetById(id);
 
 				if (car == null)
 					return NotFound();
