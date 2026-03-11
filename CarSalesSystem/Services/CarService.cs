@@ -247,5 +247,13 @@ namespace CarSalesSystem.Services
 				.OrderBy(b => b)
 				.ToList();
 		}
+
+		public void Details(int id)
+		{
+			var car = _context.Cars
+					.Include(c => c.Category)
+					.Include(c => c.Dealer)
+					.FirstOrDefault(c => c.Id == id);
+		}
 	}
 }

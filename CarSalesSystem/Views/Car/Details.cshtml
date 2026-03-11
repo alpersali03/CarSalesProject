@@ -1,71 +1,48 @@
-﻿<div class="details-page">
+﻿@model CarSalesSystem.Data.Model.Car
+@{
+    ViewData["Title"] = $"{Model.Brand} {Model.Model}";
+}
+
+<div class="details-page">
     <div class="details-header">
         <h1>@Model.Brand @Model.Model</h1>
         <div class="subtitle">@Model.Year &nbsp;•&nbsp; @Model.FuelType &nbsp;•&nbsp; @Model.City, @Model.Country</div>
     </div>
-
     <div class="details-layout">
-        <div class="details-image">
-            <img src="@Model.ImageUrl" alt="@Model.Brand @Model.Model" onerror="this.src='/images/no-image.png'" />
-            <div class="price-overlay">@Model.Price.ToString("N2") BGN</div>
+
+        <div>
+            <div class="details-image">
+                <img src="@Model.ImageUrl" alt="@Model.Brand @Model.Model" onerror="this.src='/images/no-image.png'" />
+            </div>
+            <div class="price-badge">@Model.Price.ToString("N2") BGN</div>
         </div>
 
         <div class="details-info">
-            <div class="info-section-title">Specifications</div>
-            <div class="info-grid">
-                <div class="info-item">
-                    <div class="info-label">Brand</div>
-                    <div class="info-value">@Model.Brand</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Model</div>
-                    <div class="info-value">@Model.Model</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Year</div>
-                    <div class="info-value">@Model.Year</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Mileage</div>
-                    <div class="info-value">@Model.Mileage.ToString("N0") km</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Fuel Type</div>
-                    <div class="info-value">@Model.FuelType</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Transmission</div>
-                    <div class="info-value">@Model.Transmission</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Category</div>
-                    <div class="info-value">@Model.Category?.Name</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Dealer</div>
-                    <div class="info-value">@Model.Dealer?.Name</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">City</div>
-                    <div class="info-value">@Model.City</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Country</div>
-                    <div class="info-value">@Model.Country</div>
-                </div>
-            </div>
+            <div class="section-label">Specifications</div>
+            <table class="spec-table">
+                <tr><td>Brand</td><td>@Model.Brand</td></tr>
+                <tr><td>Model</td><td>@Model.Model</td></tr>
+                <tr><td>Year</td><td>@Model.Year</td></tr>
+                <tr><td>Mileage</td><td>@Model.Mileage.ToString("N0") km</td></tr>
+                <tr><td>Fuel Type</td><td>@Model.FuelType</td></tr>
+                <tr><td>Transmission</td><td>@Model.Transmission</td></tr>
+                <tr><td>Category</td><td>@Model.Category?.Name</td></tr>
+                <tr><td>Dealer</td><td>@Model.Dealer?.Name</td></tr>
+                <tr><td>City</td><td>@Model.City</td></tr>
+                <tr><td>Country</td><td>@Model.Country</td></tr>
+            </table>
 
             @if (!string.IsNullOrWhiteSpace(Model.Description))
             {
-                <div class="info-section-title">Description</div>
+                <div class="section-label" style="margin-top:16px;">Description</div>
                 <div class="description-box">@Model.Description</div>
             }
 
             <div class="action-row">
                 <a asp-controller="Car" asp-action="GetAll" class="btn-back">← Back</a>
-                <a asp-controller="Car" asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">Edit</a>
                 <a asp-controller="Payment" asp-action="Buy" asp-route-carId="@Model.Id" class="btn-buy-big">Buy Now</a>
             </div>
         </div>
+
     </div>
 </div>

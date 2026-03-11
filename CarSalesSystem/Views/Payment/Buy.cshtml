@@ -1,0 +1,90 @@
+﻿@using CarSalesSystem.DTOs
+@model PaymentDto
+@{
+    ViewData["Title"] = "Buy Car";
+}
+
+<div class="details-page">
+    <div class="details-header">
+        <h1>Complete Purchase</h1>
+        <div class="subtitle">Review your order and enter payment details</div>
+    </div>
+
+    <div class="details-layout">
+
+        <!-- Left: Car summary -->
+        <div>
+            @if (ViewBag.Car != null)
+            {
+                <div class="details-image">
+                    <img src="@ViewBag.Car.ImageUrl" alt="@ViewBag.Car.Brand @ViewBag.Car.Model"
+                         onerror="this.src='/images/no-image.png'" />
+                </div>
+                <div class="price-badge">@ViewBag.Car.Price.ToString("N2") BGN</div>
+
+                <div style="margin-top: 16px;">
+                    <table class="spec-table">
+                        <tr><td>Brand</td><td>@ViewBag.Car.Brand</td></tr>
+                        <tr><td>Model</td><td>@ViewBag.Car.Model</td></tr>
+                        <tr><td>Year</td><td>@ViewBag.Car.Year</td></tr>
+                        <tr><td>Fuel Type</td><td>@ViewBag.Car.FuelType</td></tr>
+                        <tr><td>Mileage</td><td>@ViewBag.Car.Mileage.ToString("N0") km</td></tr>
+                        <tr><td>City</td><td>@ViewBag.Car.City</td></tr>
+                    </table>
+                </div>
+            }
+        </div>
+
+        <!-- Right: Payment form -->
+        <div class="details-info">
+            <div class="section-label">Payment Details</div>
+
+            <form asp-controller="Payment" asp-action="Buy" method="post">
+                @Html.AntiForgeryToken()
+
+                <!-- Pass carId through -->
+                <input type="hidden" asp-for="CarId" />
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Cardholder Name</label>
+                    <input asp-for="FullName" class="form-control" placeholder="Name as on card" />
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Card Number</label>
+                    <input asp-for="CardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19" />
+                    <span asp-validation-for="CardNumber" class="text-danger small"></span>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-4">
+                        <label class="form-label fw-semibold">Expiry Month</label>
+                        <input asp-for="ExpirationMonth" class="form-control" placeholder="MM" maxlength="2" />
+                        <span asp-validation-for="ExpirationMonth" class="text-danger small"></span>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label fw-semibold">Expiry Year</label>
+                        <input asp-for="ExpirationYear" class="form-control" placeholder="YYYY" maxlength="4" />
+                        <span asp-validation-for="ExpirationYear" class="text-danger small"></span>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label fw-semibold">CVV</label>
+                        <input asp-for="CVV" class="form-control" placeholder="123" maxlength="4" />
+                        <span asp-validation-for="CVV" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="action-row mt-3">
+                    <a asp-controller="Car" asp-action="GetAll" class="btn-back">← Back</a>
+                    <button type="submit" class="btn-buy-big">Confirm Payment</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -19,6 +19,8 @@ namespace CarSalesSystem.Services
 		List<CarDto> Search(int? minYear, int? maxYear, string? fuelType, string? brandType);
 		void Delete(string userId, int id);
 
+		void Details(int id);	
+
 		List<string> PopulateBrands();
 	}
 }
