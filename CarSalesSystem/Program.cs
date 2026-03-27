@@ -33,6 +33,7 @@ namespace CarSalesSystem
 			builder.Services.AddTransient<IDealerService, DealerService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 			builder.Services.AddScoped<ICarService, CarService>();
+			builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 			var app = builder.Build();
 

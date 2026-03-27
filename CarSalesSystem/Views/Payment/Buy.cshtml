@@ -16,11 +16,12 @@
         <div>
             @if (ViewBag.Car != null)
             {
-                <div class="details-image">
+                <div class="details-image" style="position: relative;">
                     <img src="@ViewBag.Car.ImageUrl" alt="@ViewBag.Car.Brand @ViewBag.Car.Model"
                          onerror="this.src='/images/no-image.png'" />
+                    <div class="price-badge">@ViewBag.Car.Price.ToString("N2") BGN</div>
                 </div>
-                <div class="price-badge">@ViewBag.Car.Price.ToString("N2") BGN</div>
+                <div style="margin-top: 16px;"> 
 
                 <div style="margin-top: 16px;">
                     <table class="spec-table">
@@ -32,6 +33,7 @@
                         <tr><td>City</td><td>@ViewBag.Car.City</td></tr>
                     </table>
                 </div>
+                </div> 
             }
         </div>
 

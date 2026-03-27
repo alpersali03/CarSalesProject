@@ -1,5 +1,6 @@
 ﻿@using CarSalesSystem.DTOs
 @using CarSalesSystem.Data.Model
+@using CarSalesSystem.Extensions
 @model List<CarDto>
 <a asp-controller="Car" asp-action="GetAll" class="btn btn-primary mb-3 top-0 left-0" type="submit">GoBack</a>
 <div class="text-center mb-3">
@@ -25,7 +26,10 @@
 
                     <div class="mt-2">
                         <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-info">Details</a>
-                        <a asp-controller="Payment" asp-action="Buy" asp-route-carId="@car.Id" class="btn btn-warning">Buy</a>
+                        @if (!User.IsAdmin())
+                        {
+                            <a asp-controller="Payment" asp-action="Buy" asp-route-carId="@car.Id" class="btn btn-warning">Buy</a>
+                        }
                     </div>
 
                     @if (User.Identity.IsAuthenticated)
@@ -38,6 +42,7 @@
                             </form>
                         </div>
                     }
+                   
                 </div>
             </div>
         </div>
