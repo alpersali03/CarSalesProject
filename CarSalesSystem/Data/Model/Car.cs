@@ -44,6 +44,8 @@ namespace CarSalesSystem.Data.Model
         public int DealerId { get; set; }
         [ForeignKey("DealerId")]
         public Dealer Dealer { get; set; } = null!;
-    }
+
+        public bool IsBought { get; set; }
+	}
 
 }

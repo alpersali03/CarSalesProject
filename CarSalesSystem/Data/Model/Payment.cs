@@ -16,5 +16,6 @@ namespace CarSalesSystem.Data.Model
 		public int CarId { get; set; }
 		public Car Car { get; set; } = null!;
 		public bool IsSuccessful { get; set; }
+
 	}
 }

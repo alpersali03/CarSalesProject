@@ -17,5 +17,7 @@
 
 		public int DealerId { get; set; }
 
+        public bool IsBought { get; set; }  
+
 	}
 }

@@ -13,5 +13,7 @@
 		public string FullName { get; set; } = null!;
 		public string ExpirationMonth { get; set; } = null!;
 		public int ExpirationYear { get; set; }
+
+		public bool IsBought { get; set; }
 	}
 }
