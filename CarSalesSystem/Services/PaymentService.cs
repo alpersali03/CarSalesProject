@@ -52,6 +52,7 @@ namespace CarSalesSystem.Services
 				CarId = dto.CarId,
 				UserId = userId
 			};
+			car.IsBought = true;
 			_context.Payments.Add(payment);
 			_context.SaveChanges();
 

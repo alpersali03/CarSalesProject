@@ -255,5 +255,28 @@ namespace CarSalesSystem.Services
 					.Include(c => c.Dealer)
 					.FirstOrDefault(c => c.Id == id);
 		}
+
+		public List<CarDto> GetAll()
+		{
+
+			var cars = _context.Cars
+					.Include(c => c.Category)
+					.Include(c => c.Dealer)
+					.Where(c => c.IsBought == false)
+					.Select(c => new CarDto
+					{
+						Id = c.Id,
+						Brand = c.Brand,
+						Model = c.Model,
+						Price = c.Price,
+						ImageUrl = c.ImageUrl,
+						City = c.City,
+						Year = c.Year,
+						FuelType = c.FuelType,
+						Mileage = c.Mileage
+					})
+					.ToList();
+			return _mapper.Map<List<CarDto>>(cars);
+		}
 	}
 }

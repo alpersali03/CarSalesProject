@@ -7,5 +7,6 @@ namespace CarSalesSystem.Services
 		void Add(PaymentDto dto);
 		void Detalis(int id);
 		void Buy(PaymentDto dto, string userId);
+
 	}
 }

@@ -22,5 +22,7 @@ namespace CarSalesSystem.Services
 		void Details(int id);	
 
 		List<string> PopulateBrands();
+
+		List<CarDto> GetAll();	
 	}
 }
