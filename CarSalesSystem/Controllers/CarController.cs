@@ -33,22 +33,7 @@ namespace CarSalesSystem.Controllers
 			PopulateBrands();
 			try
 			{
-				var cars = _context.Cars
-					.Include(c => c.Category)
-					.Include(c => c.Dealer)
-					.Select(c => new CarDto
-					{
-						Id = c.Id,
-						Brand = c.Brand,
-						Model = c.Model,
-						Price = c.Price,
-						ImageUrl = c.ImageUrl,
-						City = c.City,
-						Year = c.Year,
-						FuelType = c.FuelType,
-						Mileage = c.Mileage
-					})
-					.ToList();
+				var cars = _carService.GetAll();
 
 				return View(cars);
 			}

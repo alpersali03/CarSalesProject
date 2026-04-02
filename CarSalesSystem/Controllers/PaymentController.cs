@@ -91,7 +91,7 @@ namespace CarSalesSystem.Controllers
 		{
 			try
 			{
-				var car = _context.Cars.FirstOrDefault(c => c.Id == carId);
+				var car = _carService.GetById(carId);
 				if (car == null)
 					return NotFound();
 
@@ -109,9 +109,14 @@ namespace CarSalesSystem.Controllers
 		[HttpPost]
 		public IActionResult Buy(PaymentDto dto)
 		{
+			if(dto.IsBought == true)
+			{
+				throw new ArgumentException("This car is already bought!");
+			}
+
 			if (!ModelState.IsValid)
 			{
-				var car = _context.Cars.FirstOrDefault(c => c.Id == dto.CarId);
+				var car = _carService.GetById(dto.CarId);
 				ViewBag.CarId = dto.CarId;
 				ViewBag.Car = car;
 				return View(dto);
