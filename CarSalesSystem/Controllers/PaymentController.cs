@@ -1,139 +1,103 @@
-﻿using CarSalesSystem.Data;
-using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
 using CarSalesSystem.Extensions;
 using CarSalesSystem.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CarSalesSystem.Controllers
 {
+	[Authorize]
 	public class PaymentController : Controller
 	{
-		private readonly ApplicationDbContext _context;
 		private readonly ICarService _carService;
 		private readonly IPaymentService _paymentService;
 
-		public PaymentController(ApplicationDbContext context, ICarService carService, IPaymentService paymentService)
+		public PaymentController(ICarService carService, IPaymentService paymentService)
 		{
-			_context = context;
 			_carService = carService;
 			_paymentService = paymentService;
-		}
-
-		public IActionResult Index()
-		{
-			return View();
-		}
-
-		[HttpGet]
-		public IActionResult Add()
-		{
-			return View(new PaymentDto());
-		}
-
-		[HttpPost]
-		public IActionResult Add(PaymentDto dto)
-		{
-			if (!ModelState.IsValid)
-				return View(dto);
-			try
-			{
-				_paymentService.Add(dto);
-				return RedirectToAction("GetAll");
-			}
-			catch (Exception)
-			{
-				return RedirectToAction("Error", "Home");
-			}
 		}
 
 		[HttpGet]
 		public IActionResult Details(int id)
 		{
-			try
+			var userId = User.GetId();
+			if (string.IsNullOrWhiteSpace(userId))
 			{
-				var payment = _context.Payments
-					.Include(p => p.DebitCard)
-					.Include(p => p.Car)
-					.FirstOrDefault(p => p.Id == id);
-				if (payment == null)
-					return NotFound();
-				return View(payment);
+				return Challenge();
 			}
-			catch (Exception)
+
+			var payment = _paymentService.GetPaymentForUser(id, userId, User.IsAdmin());
+			if (payment == null)
 			{
-				return RedirectToAction("Error", "Home");
+				return NotFound();
 			}
+
+			return View(payment);
 		}
 
 		[HttpGet]
 		public IActionResult GetAll()
 		{
-			try
+			var userId = User.GetId();
+			if (string.IsNullOrWhiteSpace(userId))
 			{
-				var payments = _context.Payments
-					.Include(p => p.DebitCard)
-					.Include(p => p.Car)
-					.ToList();
-				return View(payments);
+				return Challenge();
 			}
-			catch (Exception)
-			{
-				return RedirectToAction("Error", "Home");
-			}
-		}
 
-		// ── BUY ──────────────────────────────────────────────────────────────
+			var payments = _paymentService.GetPaymentsForUser(userId, User.IsAdmin());
+			return View(payments);
+		}
 
 		[HttpGet]
 		public IActionResult Buy(int carId)
 		{
-			try
+			var car = _carService.GetById(carId);
+			if (car == null)
 			{
-				var car = _carService.GetById(carId);
-				if (car == null)
-					return NotFound();
-
-				ViewBag.CarId = carId;
-				ViewBag.Car = car;
-
-				return View(new PaymentDto { CarId = carId });   // ← fixed
+				return NotFound();
 			}
-			catch (Exception)
+
+			if (car.IsBought)
 			{
-				return RedirectToAction("Error", "Home");
+				return BadRequest("This car has already been sold.");
 			}
+
+			ViewBag.Car = car;
+			return View(new PaymentDto { CarId = carId });
 		}
 
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public IActionResult Buy(PaymentDto dto)
 		{
-			if(dto.IsBought == true)
+			var userId = User.GetId();
+			if (string.IsNullOrWhiteSpace(userId))
 			{
-				throw new ArgumentException("This car is already bought!");
+				return Challenge();
+			}
+
+			var car = _carService.GetById(dto.CarId);
+			if (car == null)
+			{
+				return NotFound();
 			}
 
 			if (!ModelState.IsValid)
 			{
-				var car = _carService.GetById(dto.CarId);
-				ViewBag.CarId = dto.CarId;
 				ViewBag.Car = car;
 				return View(dto);
 			}
 
-			try
+			var result = _paymentService.Buy(dto, userId);
+			if (!result.Succeeded)
 			{
-				// 1. Save the debit card
-				string user = User.GetId();
-				_paymentService.Buy(dto, user);
+				ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Payment failed.");
+				ViewBag.Car = car;
+				return View(dto);
+			}
 
-				return RedirectToAction("GetAll");
-			}
-			catch (Exception)
-			{
-				return RedirectToAction("Error", "Home");
-			}
+			return RedirectToAction(nameof(GetAll));
 		}
 	}
 }

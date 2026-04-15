@@ -1,0 +1,47 @@
+@model List<CarSalesSystem.Data.Model.Car>
+
+@{
+    ViewData["Title"] = "Compare cars";
+}
+
+<section class="section-shell">
+    <div class="container-xl">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Compare</span>
+                <h1>Car comparison</h1>
+            </div>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <h2>No cars selected yet.</h2>
+                <p>Add cars to compare from the catalog or any details page.</p>
+            </div>
+        }
+        else
+        {
+            <div class="compare-grid">
+                @foreach (var car in Model)
+                {
+                    <article class="compare-card">
+                        <img src="@car.ImageUrl" alt="@car.Brand @car.Model" onerror="this.src='/image/photo4.jpg'" />
+                        <h3>@car.Brand @car.Model</h3>
+                        <div class="compare-price">@car.Price.ToString("N0") BGN</div>
+                        <dl>
+                            <div><dt>Year</dt><dd>@car.Year</dd></div>
+                            <div><dt>Fuel</dt><dd>@car.FuelType</dd></div>
+                            <div><dt>Transmission</dt><dd>@car.Transmission</dd></div>
+                            <div><dt>Mileage</dt><dd>@car.Mileage.ToString("N0") km</dd></div>
+                            <div><dt>Category</dt><dd>@car.Category?.Name</dd></div>
+                            <div><dt>Dealer</dt><dd>@car.Dealer?.Name</dd></div>
+                            <div><dt>City</dt><dd>@car.City</dd></div>
+                        </dl>
+                        <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-dark btn-sm">Open listing</a>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+</section>

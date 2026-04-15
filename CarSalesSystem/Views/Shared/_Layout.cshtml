@@ -1,79 +1,106 @@
-﻿@using System.Security.Claims
 @using CarSalesSystem.Extensions
 @using CarSalesSystem.Services
-@inject IDealerService _dealerService
+@inject IDealerService DealerService
+
+@{
+    var currentUserId = User.GetId();
+    var isDealer = !string.IsNullOrWhiteSpace(currentUserId) && DealerService.CheckIsDealerByUserId(currentUserId);
+}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - CarSalesSystem</title>
+	<title>@ViewData["Title"] - AutoNova Market</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/CarSalesSystem.styles.css" asp-append-version="true" />
-
 </head>
 <body>
-	<header>
-		<nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-			<div class="container-fluid">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarSalesSystem</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-						aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-						</li>
+	<div class="page-shell">
+		<header class="site-header">
+			<div class="container-xl">
+				<nav class="site-nav">
+					<a class="brand-mark" asp-controller="Home" asp-action="Index">
+						<span class="brand-accent">AutoNova</span>
+						<span class="brand-sub">Market</span>
+					</a>
+
+					<div class="nav-links">
+						<a asp-controller="Home" asp-action="Index">Home</a>
+						<a asp-controller="Car" asp-action="GetAll">Browse Cars</a>
+						<a asp-controller="Dealer" asp-action="GetAll">Dealers</a>
+						@if (User.Identity?.IsAuthenticated == true)
+						{
+							<a asp-controller="Favorite" asp-action="Index">Favorites</a>
+							<a asp-controller="Payment" asp-action="GetAll">Payments</a>
+						}
+						@if (isDealer)
+						{
+							<a asp-controller="Dealer" asp-action="MyDashboard">Dealer Dashboard</a>
+							<a asp-controller="Car" asp-action="Add">Add Listing</a>
+						}
+						else if (User.Identity?.IsAuthenticated == true && !User.IsAdmin())
+						{
+							<a asp-controller="Dealer" asp-action="Add">Become Dealer</a>
+						}
 						@if (User.IsAdmin())
 						{
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="GetAllDealers">Manage Dealers </a>
-							</li>
-
+							<a asp-controller="Admin" asp-action="GetAllDealers">Admin</a>
 						}
+					</div>
 
-						@if (_dealerService.CheckIsDealerByUserId(User.GetId()))
-						{
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="Add">Add cars </a>
-							</li>
-						}
-						else if (!User.IsAdmin())
-						{
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Dealer" asp-action="Add">Become dealer</a>
-							</li>
-						}
-						
+					<div class="nav-meta">
+						<a class="compare-chip" asp-controller="Car" asp-action="Compare" asp-route-ids="" data-compare-link>
+							Compare
+							<span data-compare-count>0</span>
+						</a>
+						<partial name="_LoginPartial" />
+					</div>
+				</nav>
+			</div>
+		</header>
 
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="GetAll">Get all cars </a>
-						</li>
-					</ul>
-					<partial name="_LoginPartial" />
+		<main class="page-main">
+			@RenderBody()
+		</main>
+
+		<footer class="site-footer">
+			<div class="container-xl footer-grid">
+				<div>
+					<h4>AutoNova Market</h4>
+					<p>Modern car marketplace for buyers, dealers, and quick comparisons.</p>
+				</div>
+				<div>
+					<h5>Explore</h5>
+					<a asp-controller="Car" asp-action="GetAll">All listings</a>
+					<a asp-controller="Dealer" asp-action="GetAll">Dealers</a>
+					<a asp-controller="Favorite" asp-action="Index">Saved cars</a>
+				</div>
+				<div>
+					<h5>Account</h5>
+					<a asp-area="Identity" asp-page="/Account/Login">Login</a>
+					<a asp-area="Identity" asp-page="/Account/Register">Register</a>
+					<a asp-controller="Home" asp-action="Privacy">Privacy</a>
 				</div>
 			</div>
-		</nav>
-	</header>
-	
-	<main role="main">
-		@RenderBody()
-	</main>
+		</footer>
+	</div>
 
-
-	 <footer class="border-top footer text-muted">
-		<div class="container">
-			&copy; 2025 - CarSalesSystem -
-			<a asp-controller="Home" asp-action="Privacy">Privacy</a>
+	<div class="compare-dock" data-compare-dock hidden>
+		<div>
+			<strong>Compare cars</strong>
+			<p class="mb-0" data-compare-summary>Select up to 4 cars to compare them side by side.</p>
 		</div>
-	</footer> 
+		<div class="compare-dock-actions">
+			<button type="button" class="btn btn-light btn-sm" data-compare-clear>Clear</button>
+			<a class="btn btn-warning btn-sm" asp-controller="Car" asp-action="Compare" asp-route-ids="" data-compare-link>
+				Open compare
+			</a>
+		</div>
+	</div>
+
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>

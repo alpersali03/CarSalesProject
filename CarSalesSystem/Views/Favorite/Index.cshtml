@@ -1,0 +1,51 @@
+@model CarSalesSystem.Models.CarCatalogViewModel
+
+@{
+    ViewData["Title"] = "Your favorites";
+}
+
+<section class="section-shell">
+    <div class="container-xl">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Buyer tools</span>
+                <h1>Your favorite cars</h1>
+                <p class="section-copy">Everything you saved for a second look, ready for compare or checkout.</p>
+            </div>
+            <a asp-controller="Car" asp-action="GetAll" class="btn btn-outline-dark">Browse more cars</a>
+        </div>
+
+        @if (!Model.Cars.Any())
+        {
+            <div class="empty-state">
+                <h2>No favorites yet.</h2>
+                <p>Save cars from the catalog and they will appear here.</p>
+            </div>
+        }
+        else
+        {
+            <div class="catalog-grid">
+                @foreach (var car in Model.Cars)
+                {
+                    <article class="catalog-card">
+                        <div class="catalog-media">
+                            <img src="@car.ImageUrl" alt="@car.Brand @car.Model" onerror="this.src='/image/photo1.jpg'" />
+                            <span class="catalog-price">@car.Price.ToString("N0") BGN</span>
+                        </div>
+                        <div class="catalog-body">
+                            <div class="catalog-meta">@car.Year · @car.FuelType</div>
+                            <h3>@car.Brand @car.Model</h3>
+                            <p>@car.City, @car.Country</p>
+                            <div class="catalog-actions">
+                                <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-dark btn-sm">Details</a>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-compare-button data-car-id="@car.Id">
+                                    Compare
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+</section>

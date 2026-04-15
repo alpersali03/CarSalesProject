@@ -1,4 +1,4 @@
-﻿@using CarSalesSystem.DTOs
+@using CarSalesSystem.DTOs
 @model PaymentDto
 @{
     ViewData["Title"] = "Buy Car";
@@ -11,8 +11,6 @@
     </div>
 
     <div class="details-layout">
-
-        <!-- Left: Car summary -->
         <div>
             @if (ViewBag.Car != null)
             {
@@ -21,7 +19,6 @@
                          onerror="this.src='/images/no-image.png'" />
                     <div class="price-badge">@ViewBag.Car.Price.ToString("N2") BGN</div>
                 </div>
-                <div style="margin-top: 16px;"> 
 
                 <div style="margin-top: 16px;">
                     <table class="spec-table">
@@ -33,18 +30,15 @@
                         <tr><td>City</td><td>@ViewBag.Car.City</td></tr>
                     </table>
                 </div>
-                </div> 
             }
         </div>
 
-        <!-- Right: Payment form -->
         <div class="details-info">
             <div class="section-label">Payment Details</div>
 
             <form asp-controller="Payment" asp-action="Buy" method="post">
                 @Html.AntiForgeryToken()
-
-                <!-- Pass carId through -->
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
                 <input type="hidden" asp-for="CarId" />
 
                 <div class="mb-3">
@@ -77,13 +71,16 @@
                     </div>
                 </div>
 
+                <p class="text-muted small mb-3">
+                    This demo stores only masked card metadata for local testing.
+                </p>
+
                 <div class="action-row mt-3">
-                    <a asp-controller="Car" asp-action="GetAll" class="btn-back">← Back</a>
+                    <a asp-controller="Car" asp-action="GetAll" class="btn-back">&larr; Back</a>
                     <button type="submit" class="btn-buy-big">Confirm Payment</button>
                 </div>
             </form>
         </div>
-
     </div>
 </div>
 

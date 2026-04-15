@@ -1,0 +1,114 @@
+@model CarSalesSystem.Models.DealerDashboardViewModel
+
+@{
+    ViewData["Title"] = "Dealer dashboard";
+}
+
+<section class="section-shell">
+    <div class="container-xl">
+        <div class="profile-hero">
+            <div>
+                <span class="eyebrow">Dealer dashboard</span>
+                <h1>@Model.Dealer.Name</h1>
+                <p class="section-copy">@Model.Dealer.CompanyName · @Model.Dealer.PhoneNumber</p>
+            </div>
+            <div class="profile-metrics">
+                <div><strong>@Model.ActiveListingsCount</strong><span>live listings</span></div>
+                <div><strong>@Model.SoldCarsCount</strong><span>cars sold</span></div>
+                <div><strong>@Model.TotalRevenue.ToString("N0")</strong><span>BGN revenue</span></div>
+                <div><strong>@Model.FavoritesReceived</strong><span>favorites</span></div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <section class="dashboard-card">
+                <div class="section-head section-head-tight">
+                    <div>
+                        <span class="eyebrow">Inventory</span>
+                        <h2>Live listings</h2>
+                    </div>
+                    <a asp-controller="Car" asp-action="Add" class="btn btn-warning btn-sm">Add listing</a>
+                </div>
+                @if (!Model.ActiveListings.Any())
+                {
+                    <p class="section-copy">No active listings yet.</p>
+                }
+                else
+                {
+                    <div class="dashboard-list">
+                        @foreach (var car in Model.ActiveListings)
+                        {
+                            <article class="dashboard-list-item">
+                                <div>
+                                    <strong>@car.Brand @car.Model</strong>
+                                    <p>@car.Price.ToString("N0") BGN · @car.City</p>
+                                </div>
+                                <div class="dashboard-actions">
+                                    <a asp-controller="Car" asp-action="Edit" asp-route-id="@car.Id">Edit</a>
+                                    <form asp-controller="Dealer" asp-action="ToggleListingStatus" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="carId" value="@car.Id" />
+                                        <button type="submit" class="link-button">Hide</button>
+                                    </form>
+                                </div>
+                            </article>
+                        }
+                    </div>
+                }
+            </section>
+
+            <section class="dashboard-card">
+                <div class="section-head section-head-tight">
+                    <div>
+                        <span class="eyebrow">Sales</span>
+                        <h2>Recent sales</h2>
+                    </div>
+                </div>
+                @if (!Model.RecentSales.Any())
+                {
+                    <p class="section-copy">No sales yet.</p>
+                }
+                else
+                {
+                    <div class="dashboard-list">
+                        @foreach (var sale in Model.RecentSales)
+                        {
+                            <article class="dashboard-list-item">
+                                <div>
+                                    <strong>@sale.CarTitle</strong>
+                                    <p>@sale.Amount.ToString("N0") BGN · @sale.PaidOnUtc.ToLocalTime().ToString("g")</p>
+                                </div>
+                                <a asp-controller="Payment" asp-action="Details" asp-route-id="@sale.PaymentId">Payment</a>
+                            </article>
+                        }
+                    </div>
+                }
+            </section>
+        </div>
+
+        <section class="dashboard-card mt-4">
+            <div class="section-head section-head-tight">
+                <div>
+                    <span class="eyebrow">Closed deals</span>
+                    <h2>Sold inventory</h2>
+                </div>
+            </div>
+            @if (!Model.SoldCars.Any())
+            {
+                <p class="section-copy">Sold cars will appear here after checkout.</p>
+            }
+            else
+            {
+                <div class="sold-grid">
+                    @foreach (var car in Model.SoldCars)
+                    {
+                        <article class="sold-card">
+                            <strong>@car.Brand @car.Model</strong>
+                            <span>@car.Price.ToString("N0") BGN</span>
+                        </article>
+                    }
+                </div>
+            }
+        </section>
+    </div>
+</section>

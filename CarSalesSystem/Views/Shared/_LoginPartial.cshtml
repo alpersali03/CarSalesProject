@@ -1,27 +1,17 @@
-﻿@using CarSalesSystem.Extensions
-@using CarSalesSystem.Services
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-<ul class="navbar-nav">
+
+<div class="auth-actions">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-            <a class="bg-success bg-opacity-50 nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" > Profile </a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
+    <a class="auth-link auth-link-profile" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
+    <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+        <button type="submit" class="auth-link auth-link-logout">Logout</button>
+    </form>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
+    <a class="auth-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    <a class="auth-link auth-link-primary" asp-area="Identity" asp-page="/Account/Register">Register</a>
 }
-</ul>
+</div>

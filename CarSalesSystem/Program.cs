@@ -1,8 +1,9 @@
-﻿using CarSalesSystem.Data;
+using CarSalesSystem.Common;
+using CarSalesSystem.Data;
 using CarSalesSystem.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
+using Microsoft.Extensions.Options;
 
 namespace CarSalesSystem
 {
@@ -14,60 +15,44 @@ namespace CarSalesSystem
 
 			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
 				?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+			var isSqlite = IsSqliteConnection(connectionString);
 
-			// Register EF Core DbContext
+			builder.Services.Configure<SeedDataOptions>(
+				builder.Configuration.GetSection(SeedDataOptions.SectionName));
+
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseSqlServer(connectionString));
+			{
+				if (isSqlite)
+				{
+					options.UseSqlite(connectionString);
+				}
+				else
+				{
+					options.UseSqlServer(connectionString);
+				}
+			});
 
-			// Add services to the container.
 			builder.Services
-	.AddDefaultIdentity<IdentityUser>(options =>
-	{
-		options.SignIn.RequireConfirmedAccount = true;
-	})
-	.AddRoles<IdentityRole>()
-	.AddEntityFrameworkStores<ApplicationDbContext>();
+				.AddDefaultIdentity<IdentityUser>(options =>
+				{
+					options.SignIn.RequireConfirmedAccount = true;
+				})
+				.AddRoles<IdentityRole>()
+				.AddEntityFrameworkStores<ApplicationDbContext>();
 
 			builder.Services.AddControllersWithViews();
-			builder.Services.AddAutoMapper(cfg => { }, AppDomain.CurrentDomain.GetAssemblies());
+			builder.Services.AddAutoMapper(_ => { }, AppDomain.CurrentDomain.GetAssemblies());
 			builder.Services.AddTransient<IDealerService, DealerService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 			builder.Services.AddScoped<ICarService, CarService>();
 			builder.Services.AddScoped<IPaymentService, PaymentService>();
+			builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
 			var app = builder.Build();
 
+			await ApplyMigrationsAsync(app);
 			await SeedRolesAsync(app);
 
-
-			// 🔽 ROLE SEEDING HERE
-			using (var scope = app.Services.CreateScope())
-			{
-				var services = scope.ServiceProvider;
-				var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-				var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-
-				string[] roles = { "Manager", "Dealer", "Customer" };
-
-				foreach (var role in roles)
-				{
-					if (!await roleManager.RoleExistsAsync(role))
-					{
-						await roleManager.CreateAsync(new IdentityRole(role));
-					}
-				}
-
-				var adminEmail = "admin@gmail.com";
-				var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
-				if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Manager"))
-				{
-					await userManager.AddToRoleAsync(adminUser, "Manager");
-				}
-			}
-
-
-			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseMigrationsEndPoint();
@@ -75,7 +60,6 @@ namespace CarSalesSystem
 			else
 			{
 				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
 
@@ -83,7 +67,7 @@ namespace CarSalesSystem
 			app.UseStaticFiles();
 
 			app.UseRouting();
-
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.MapControllerRoute(
@@ -94,15 +78,30 @@ namespace CarSalesSystem
 			await app.RunAsync();
 		}
 
-		
+		private static bool IsSqliteConnection(string connectionString)
+		{
+			return connectionString.Contains("Data Source=", StringComparison.OrdinalIgnoreCase)
+				|| connectionString.Contains("Filename=", StringComparison.OrdinalIgnoreCase);
+		}
+
+		private static async Task ApplyMigrationsAsync(WebApplication app)
+		{
+			using var scope = app.Services.CreateScope();
+			var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+			await dbContext.Database.MigrateAsync();
+		}
+
 		private static async Task SeedRolesAsync(WebApplication app)
 		{
 			using var scope = app.Services.CreateScope();
 
 			var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 			var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+			var seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedDataOptions>>().Value;
 
-			string[] roles = { "Manager", "Dealer"};
+			var roles = seedOptions.Roles.Length > 0
+				? seedOptions.Roles
+				: ["Manager", "Dealer"];
 
 			foreach (var role in roles)
 			{
@@ -112,15 +111,16 @@ namespace CarSalesSystem
 				}
 			}
 
-			// OPTIONAL: assign Manager role to a specific user
-			var adminEmail = "admin@carsales.com"; // must exist in DB
-			var adminUser = await userManager.FindByEmailAsync(adminEmail);
+			if (string.IsNullOrWhiteSpace(seedOptions.AdminEmail))
+			{
+				return;
+			}
 
+			var adminUser = await userManager.FindByEmailAsync(seedOptions.AdminEmail);
 			if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Manager"))
 			{
 				await userManager.AddToRoleAsync(adminUser, "Manager");
 			}
 		}
-
 	}
 }

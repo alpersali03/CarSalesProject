@@ -15,9 +15,13 @@ namespace CarSalesSystem.DTOs
     
         public string PhoneNumber { get; set; } = null!;
 
-      
+	  
         public string? UserId { get; set; }
 
 		public IEnumerable<Car> Cars { get; set; } = new List<Car>();
+
+		public int ActiveListingsCount { get; set; }
+
+		public int SoldCarsCount { get; set; }
     }
 }

@@ -1,98 +1,103 @@
-﻿@using CarSalesSystem.DTOs
-@using CarSalesSystem.Data.Model
-@model CarFormDto
+@model CarSalesSystem.DTOs.CarFormDto
 
-@* @{
-    ViewData["Title"] = "Add";
-} *@
+@{
+    ViewData["Title"] = "Add Listing";
+}
 
-<h1>Add a car</h1>
+<section class="section-shell section-shell-tight">
+    <div class="container-xl">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Dealer Tools</span>
+                <h1>Create a Listing</h1>
+                <p class="section-copy">Publish a polished car profile with the key details buyers care about first.</p>
+            </div>
+        </div>
 
-<h4>Car</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Add" asp-controller="Car" method="post">
+        <div class="form-shell">
+            <div class="form-card">
+                <form asp-action="Add" asp-controller="Car" method="post" class="stack-form">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Brand" class="control-label"></label>
-                <input asp-for="Brand" class="form-control" />
-                <span asp-validation-for="Brand" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Model" class="control-label"></label>
-                <input asp-for="Model" class="form-control" />
-                <span asp-validation-for="Model" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Year" class="control-label"></label>
-                <input asp-for="Year" class="form-control" />
-                <span asp-validation-for="Year" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Mileage" class="control-label"></label>
-                <input asp-for="Mileage" class="form-control" />
-                <span asp-validation-for="Mileage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FuelType" class="control-label"></label>
-                <input asp-for="FuelType" class="form-control" />
-                <span asp-validation-for="FuelType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Transmission" class="control-label"></label>
-                <input asp-for="Transmission" class="form-control" />
-                <span asp-validation-for="Transmission" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsListed" /> @Html.DisplayNameFor(model => model.IsListed)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Country" class="control-label"></label>
-                <input asp-for="Country" class="form-control" />
-                <span asp-validation-for="Country" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId">Category name</label>
-                <select asp-for="CategoryId" class="form-control"
-                asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"></select>
-            </div>
+                    <div class="form-grid-wide">
+                        <div>
+                            <label asp-for="Brand"></label>
+                            <input asp-for="Brand" class="form-control" placeholder="BMW" />
+                            <span asp-validation-for="Brand" class="text-danger small"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Model"></label>
+                            <input asp-for="Model" class="form-control" placeholder="320d" />
+                            <span asp-validation-for="Model" class="text-danger small"></span>
+                        </div>
+                        <div class="form-span-full">
+                            <label asp-for="Description"></label>
+                            <textarea asp-for="Description" class="form-control form-textarea" placeholder="Describe condition, features, history, and standout selling points."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+                        <div class="form-span-full">
+                            <label asp-for="ImageUrl"></label>
+                            <input asp-for="ImageUrl" class="form-control" placeholder="https://example.com/car.jpg" />
+                            <span asp-validation-for="ImageUrl" class="text-danger small"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Year"></label>
+                            <input asp-for="Year" class="form-control" />
+                            <span asp-validation-for="Year" class="text-danger small"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Mileage"></label>
+                            <input asp-for="Mileage" class="form-control" />
+                            <span asp-validation-for="Mileage" class="text-danger small"></span>
+                        </div>
+                        <div>
+                            <label asp-for="FuelType"></label>
+                            <input asp-for="FuelType" class="form-control" placeholder="Diesel" />
+                            <span asp-validation-for="FuelType" class="text-danger small"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Transmission"></label>
+                            <input asp-for="Transmission" class="form-control" placeholder="Automatic" />
+                            <span asp-validation-for="Transmission" class="text-danger small"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Price"></label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+                        <div>
+                            <label asp-for="CategoryId">Category</label>
+                            <select asp-for="CategoryId" class="form-select" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"></select>
+                            <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Country"></label>
+                            <input asp-for="Country" class="form-control" placeholder="Bulgaria" />
+                            <span asp-validation-for="Country" class="text-danger small"></span>
+                        </div>
+                        <div>
+                            <label asp-for="City"></label>
+                            <input asp-for="City" class="form-control" placeholder="Sofia" />
+                            <span asp-validation-for="City" class="text-danger small"></span>
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <input type="submit" value="Add" class="btn btn-primary" />
-            </div>  
-        </form>
+                    <label class="filter-check">
+                        <input asp-for="IsListed" />
+                        Publish this listing immediately
+                    </label>
+
+                    <div class="action-row">
+                        <a asp-action="GetAll" class="btn btn-outline-secondary">Back to Cars</a>
+                        <button type="submit" class="btn btn-dark">Create Listing</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Add">Back to List</a>
-
-</div>
+</section>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }

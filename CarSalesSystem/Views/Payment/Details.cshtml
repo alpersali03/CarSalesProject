@@ -1,0 +1,89 @@
+@model CarSalesSystem.Data.Model.Payment
+
+@{
+    ViewData["Title"] = "Payment Details";
+}
+
+<section class="section-shell section-shell-tight">
+    <div class="container-xl">
+        <div class="section-head section-head-tight">
+            <div>
+                <span class="eyebrow">Receipt</span>
+                <h1>Payment #@Model.Id</h1>
+                <p class="section-copy">Stored payment metadata only. No raw card number or CVV is kept by the application.</p>
+            </div>
+            <a asp-action="GetAll" class="btn btn-outline-secondary">Back to Payments</a>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="detail-card detail-card-padded">
+                <span class="section-label">Transaction</span>
+                <div class="dashboard-list">
+                    <div class="dashboard-list-item">
+                        <div>
+                            <strong>Status</strong>
+                            <p>@(Model.IsSuccessful ? "Successful" : "Failed")</p>
+                        </div>
+                        <span class="dealer-pill">@(Model.IsSuccessful ? "Approved" : "Declined")</span>
+                    </div>
+                    <div class="dashboard-list-item">
+                        <div>
+                            <strong>Total Amount</strong>
+                            <p>@Model.TotalAmount.ToString("N2") BGN</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-list-item">
+                        <div>
+                            <strong>Paid On</strong>
+                            <p>@Model.PaymentTime.ToLocalTime().ToString("dd MMM yyyy HH:mm")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-card detail-card-padded">
+                <span class="section-label">Vehicle</span>
+                <div class="dashboard-list">
+                    <div class="dashboard-list-item">
+                        <div>
+                            <strong>@Model.Car.Brand @Model.Car.Model</strong>
+                            <p>Car ID #@Model.CarId</p>
+                        </div>
+                        <a asp-controller="Car" asp-action="Details" asp-route-id="@Model.CarId" class="btn btn-sm btn-outline-dark">
+                            View Car
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-card detail-card-padded">
+                <span class="section-label">Stored Metadata</span>
+                <div class="dashboard-list">
+                    <div class="dashboard-list-item">
+                        <div>
+                            <strong>Cardholder</strong>
+                            <p>@Model.CardholderName</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-list-item">
+                        <div>
+                            <strong>Card</strong>
+                            <p>**** **** **** @Model.CardLast4</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-list-item">
+                        <div>
+                            <strong>Expiry</strong>
+                            <p>@Model.ExpirationMonth/@Model.ExpirationYear</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-card detail-card-padded">
+                <span class="section-label">Security Note</span>
+                <p class="section-copy">This local checkout keeps only masked last-four metadata plus cardholder and expiry values for demo receipts.</p>
+            </div>
+        </div>
+    </div>
+</section>

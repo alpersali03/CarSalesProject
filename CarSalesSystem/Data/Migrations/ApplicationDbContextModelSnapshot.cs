@@ -169,7 +169,7 @@ namespace CarSalesSystem.Data.Migrations
                     b.ToTable("Dealers");
                 });
 
-            modelBuilder.Entity("CarSalesSystem.Data.Model.DebitCard", b =>
+            modelBuilder.Entity("CarSalesSystem.Data.Model.FavoriteCar", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -177,27 +177,24 @@ namespace CarSalesSystem.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CVV")
+                    b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CardNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("ExpirationMonth")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ExpirationYear")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FullName")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("DebitCards");
+                    b.HasIndex("CarId");
+
+                    b.HasIndex("UserId", "CarId")
+                        .IsUnique();
+
+                    b.ToTable("FavoriteCars");
                 });
 
             modelBuilder.Entity("CarSalesSystem.Data.Model.Payment", b =>
@@ -211,7 +208,21 @@ namespace CarSalesSystem.Data.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DebitCardId")
+                    b.Property<string>("CardLast4")
+                        .IsRequired()
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
+                    b.Property<string>("CardholderName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExpirationMonth")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<int>("ExpirationYear")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsSuccessful")
@@ -229,8 +240,6 @@ namespace CarSalesSystem.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
-
-                    b.HasIndex("DebitCardId");
 
                     b.ToTable("Payments");
                 });
@@ -464,15 +473,18 @@ namespace CarSalesSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarSalesSystem.Data.Model.DebitCard", "DebitCard")
-                        .WithMany("Payments")
-                        .HasForeignKey("DebitCardId")
+                    b.Navigation("Car");
+                });
+
+            modelBuilder.Entity("CarSalesSystem.Data.Model.FavoriteCar", b =>
+                {
+                    b.HasOne("CarSalesSystem.Data.Model.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Car");
-
-                    b.Navigation("DebitCard");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -536,10 +548,6 @@ namespace CarSalesSystem.Data.Migrations
                     b.Navigation("Cars");
                 });
 
-            modelBuilder.Entity("CarSalesSystem.Data.Model.DebitCard", b =>
-                {
-                    b.Navigation("Payments");
-                });
 #pragma warning restore 612, 618
         }
     }

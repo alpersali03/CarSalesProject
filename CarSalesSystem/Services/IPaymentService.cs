@@ -1,12 +1,14 @@
-﻿using CarSalesSystem.DTOs;
+using CarSalesSystem.Data.Model;
+using CarSalesSystem.DTOs;
 
 namespace CarSalesSystem.Services
 {
 	public interface IPaymentService
 	{
-		void Add(PaymentDto dto);
-		void Detalis(int id);
-		void Buy(PaymentDto dto, string userId);
+		List<Payment> GetPaymentsForUser(string userId, bool isManager);
 
+		Payment? GetPaymentForUser(int id, string userId, bool isManager);
+
+		PaymentPurchaseResult Buy(PaymentDto dto, string userId);
 	}
 }

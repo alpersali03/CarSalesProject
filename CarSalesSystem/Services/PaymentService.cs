@@ -1,7 +1,6 @@
-﻿using CarSalesSystem.Data;
+using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
-using Humanizer;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarSalesSystem.Services
@@ -9,58 +8,87 @@ namespace CarSalesSystem.Services
 	public class PaymentService : IPaymentService
 	{
 		private readonly ApplicationDbContext _context;
+
 		public PaymentService(ApplicationDbContext context)
 		{
 			_context = context;
 		}
-		public void Add(PaymentDto dto)
+
+		public List<Payment> GetPaymentsForUser(string userId, bool isManager)
 		{
-			var payment = new Payment
+			var query = _context.Payments
+				.Include(p => p.Car)
+				.AsQueryable();
+
+			if (!isManager)
 			{
-				PaymentTime = dto.PaymentTime,
-				TotalAmount = dto.TotalAmount,
-				IsSuccessful = dto.IsSuccessful,
-			};
-			_context.Payments.Add(payment);
-			_context.SaveChanges();
+				query = query.Where(p => p.UserId == userId);
+			}
+
+			return query
+				.OrderByDescending(p => p.PaymentTime)
+				.ToList();
 		}
 
-		public void Buy(PaymentDto dto, string userId)
+		public Payment? GetPaymentForUser(int id, string userId, bool isManager)
 		{
-			var debitCard = new DebitCard
+			var query = _context.Payments
+				.Include(p => p.Car)
+				.Where(p => p.Id == id);
+
+			if (!isManager)
 			{
-				CardNumber = dto.CardNumber,
-				CVV = dto.CVV,
-				FullName = dto.FullName,
-				ExpirationMonth = dto.ExpirationMonth,
-				ExpirationYear = dto.ExpirationYear,
+				query = query.Where(p => p.UserId == userId);
+			}
 
-			};
-			_context.DebitCards.Add(debitCard);
-			_context.SaveChanges();
+			return query.FirstOrDefault();
+		}
 
-			// 2. Look up car price
+		public PaymentPurchaseResult Buy(PaymentDto dto, string userId)
+		{
+			if (string.IsNullOrWhiteSpace(userId))
+			{
+				return PaymentPurchaseResult.Failure("You must be signed in to buy a car.");
+			}
+
+			using var transaction = _context.Database.BeginTransaction();
+
 			var car = _context.Cars.FirstOrDefault(c => c.Id == dto.CarId);
+			if (car == null)
+			{
+				return PaymentPurchaseResult.Failure("The selected car was not found.");
+			}
 
-			// 3. Save the payment
+			if (car.IsBought)
+			{
+				return PaymentPurchaseResult.Failure("This car has already been sold.");
+			}
+
+			var normalizedCardNumber = new string(dto.CardNumber.Where(char.IsDigit).ToArray());
+			if (normalizedCardNumber.Length < 4)
+			{
+				return PaymentPurchaseResult.Failure("The card number is invalid.");
+			}
+
 			var payment = new Payment
 			{
-				PaymentTime = DateTime.Now,
-				TotalAmount = car?.Price ?? 0,
+				PaymentTime = DateTime.UtcNow,
+				TotalAmount = car.Price,
 				IsSuccessful = true,
-				DebitCardId = debitCard.Id,
 				CarId = dto.CarId,
-				UserId = userId
+				UserId = userId,
+				CardLast4 = normalizedCardNumber[^4..],
+				CardholderName = dto.FullName.Trim(),
+				ExpirationMonth = dto.ExpirationMonth,
+				ExpirationYear = dto.ExpirationYear
 			};
-			car.IsBought = true;
+
 			_context.Payments.Add(payment);
+			car.IsBought = true;
 			_context.SaveChanges();
+			transaction.Commit();
 
-		}
-
-		public void Detalis(int id)
-		{
-			throw new NotImplementedException();
+			return PaymentPurchaseResult.Success();
 		}
 	}
 }

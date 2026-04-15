@@ -1,41 +1,45 @@
-﻿using CarSalesSystem.Data;
-using CarSalesSystem.Data.Model;
+using CarSalesSystem.Data;
 using CarSalesSystem.DTOs;
 using CarSalesSystem.Extensions;
+using CarSalesSystem.Models;
 using CarSalesSystem.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Metrics;
 
 namespace CarSalesSystem.Controllers
 {
-
 	public class CarController : Controller
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly ICarService _carService;
 		private readonly IDealerService _dealerService;
+		private readonly IFavoriteService _favoriteService;
 
-
-		public CarController(ApplicationDbContext context, ICarService carService, IDealerService dealerService)
+		public CarController(
+			ApplicationDbContext context,
+			ICarService carService,
+			IDealerService dealerService,
+			IFavoriteService favoriteService)
 		{
 			_context = context;
 			_carService = carService;
 			_dealerService = dealerService;
+			_favoriteService = favoriteService;
 		}
 
-
 		[HttpGet]
-		public IActionResult GetAll()
+		public IActionResult GetAll([FromQuery] CarSearchViewModel search)
 		{
-			PopulateBrands();
 			try
 			{
-				var cars = _carService.GetAll();
+				var favoriteIds = _favoriteService.GetFavoriteCarIds(User.GetId());
+				var cars = search.FavoritesOnly && User.Identity?.IsAuthenticated == true
+					? _favoriteService.GetFavoriteCars(User.GetId()!)
+					: _carService.Search(search);
 
-				return View(cars);
+				var viewModel = BuildCatalogViewModel(search, cars, favoriteIds);
+				return View(viewModel);
 			}
 			catch (Exception)
 			{
@@ -44,103 +48,139 @@ namespace CarSalesSystem.Controllers
 		}
 
 		[HttpGet]
+		public IActionResult Compare(string ids)
+		{
+			var carIds = ParseIds(ids);
+			var cars = _carService.GetByIds(carIds);
+			return View(cars);
+		}
+
+		[HttpGet]
+		[Authorize]
 		public IActionResult Add()
 		{
-			PopulateBrands();
-			try
+			var userId = User.GetId();
+			if (string.IsNullOrWhiteSpace(userId) || !_dealerService.CheckIsDealerByUserId(userId))
 			{
-				var userId = User.GetId();
-
-				if (!_dealerService.CheckIsDealerByUserId(userId))
-				{
-					return Forbid();
-				}
-
-				ViewBag.Categories = _context.Categories.ToList();
-				return View(new CarFormDto());
+				return Forbid();
 			}
-			catch (Exception)
-			{
-				return BadRequest("An error occurred while loading form data.");
-			}
+
+			ViewBag.Categories = _context.Categories.OrderBy(c => c.Name).ToList();
+			return View(new CarFormDto());
 		}
 
 		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
 		public IActionResult Add(CarFormDto dto)
 		{
-			PopulateBrands();
+			ViewBag.Categories = _context.Categories.OrderBy(c => c.Name).ToList();
+
 			if (!ModelState.IsValid)
+			{
 				return View(dto);
+			}
 
 			try
 			{
-				var getUserId = User.GetId();
-				dto.UserId = getUserId;
-				if (getUserId == null)
+				var userId = User.GetId();
+				if (string.IsNullOrWhiteSpace(userId))
 				{
-					return NotFound();
+					return Challenge();
 				}
+
+				dto.UserId = userId;
 				_carService.Add(dto);
-				return RedirectToAction("GetAll");
+				return RedirectToAction(nameof(GetAll));
+			}
+			catch (UnauthorizedAccessException)
+			{
+				return Forbid();
 			}
 			catch (Exception)
 			{
 				return BadRequest("Failed to add car.");
 			}
 		}
+
 		[HttpGet]
+		[Authorize]
 		public IActionResult Edit(int id)
 		{
-			PopulateBrands();
-			try
+			var userId = User.GetId();
+			if (string.IsNullOrWhiteSpace(userId))
 			{
-				var car = _carService.GetById(id);
-				if (car == null)
-					return NotFound();
-
-
-				ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "Name", car.CategoryId);
-				ViewBag.DealerId = new SelectList(_context.Dealers, "Id", "Name", car.DealerId);
-
-				var dto = new CarFormDto
-				{
-					Id = car.Id,
-					Brand = car.Brand,
-					Model = car.Model,
-					Description = car.Description,
-					ImageUrl = car.ImageUrl,
-					Year = car.Year,
-					Mileage = car.Mileage,
-					FuelType = car.FuelType,
-					Transmission = car.Transmission,
-					Price = car.Price,
-					IsListed = car.IsListed,
-					Country = car.Country,
-					City = car.City,
-					CategoryId = car.CategoryId,
-					DealerId = car.DealerId
-				};
-
-				return View(dto);
+				return Challenge();
 			}
-			catch
+
+			var dealer = _dealerService.GetDealerByUserId(userId);
+			if (dealer == null)
 			{
-				return BadRequest("An error occurred while loading car details.");
+				return Forbid();
 			}
+
+			var car = _carService.GetById(id);
+			if (car == null)
+			{
+				return NotFound();
+			}
+
+			if (car.DealerId != dealer.Id)
+			{
+				return Forbid();
+			}
+
+			ViewBag.CategoryId = new SelectList(_context.Categories.OrderBy(c => c.Name), "Id", "Name", car.CategoryId);
+
+			return View(new CarFormDto
+			{
+				Id = car.Id,
+				Brand = car.Brand,
+				Model = car.Model,
+				Description = car.Description,
+				ImageUrl = car.ImageUrl,
+				Year = car.Year,
+				Mileage = car.Mileage,
+				FuelType = car.FuelType,
+				Transmission = car.Transmission,
+				Price = car.Price,
+				IsListed = car.IsListed,
+				Country = car.Country,
+				City = car.City,
+				CategoryId = car.CategoryId
+			});
 		}
 
-
 		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
 		public IActionResult Edit(int id, CarFormDto dto)
 		{
-			PopulateBrands();
+			ViewBag.CategoryId = new SelectList(_context.Categories.OrderBy(c => c.Name), "Id", "Name", dto.CategoryId);
+
 			if (!ModelState.IsValid)
+			{
 				return View(dto);
+			}
+
+			var userId = User.GetId();
+			if (string.IsNullOrWhiteSpace(userId))
+			{
+				return Challenge();
+			}
 
 			try
 			{
-				_carService.Edit(id, dto);
-				return RedirectToAction("GetAll");
+				_carService.Edit(id, dto, userId);
+				return RedirectToAction(nameof(GetAll));
+			}
+			catch (UnauthorizedAccessException)
+			{
+				return Forbid();
+			}
+			catch (ArgumentException)
+			{
+				return NotFound();
 			}
 			catch (Exception)
 			{
@@ -151,15 +191,15 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult Details(int id)
 		{
-			PopulateBrands();
 			try
 			{
-				
 				var car = _carService.GetById(id);
-
 				if (car == null)
+				{
 					return NotFound();
+				}
 
+				ViewBag.IsFavorite = _favoriteService.GetFavoriteCarIds(User.GetId()).Contains(id);
 				return View(car);
 			}
 			catch (Exception)
@@ -169,13 +209,28 @@ namespace CarSalesSystem.Controllers
 		}
 
 		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
 		public IActionResult Delete(int id)
 		{
 			var userId = User.GetId();
+			if (string.IsNullOrWhiteSpace(userId))
+			{
+				return Challenge();
+			}
+
 			try
 			{
 				_carService.Delete(userId, id);
-				return RedirectToAction("GetAll");
+				return RedirectToAction(nameof(GetAll));
+			}
+			catch (UnauthorizedAccessException)
+			{
+				return Forbid();
+			}
+			catch (ArgumentException)
+			{
+				return NotFound();
 			}
 			catch (Exception)
 			{
@@ -186,132 +241,90 @@ namespace CarSalesSystem.Controllers
 		[HttpGet]
 		public IActionResult SortByName(string letter)
 		{
-			PopulateBrands();
-			try
-			{
-				var cars = _carService.SortByName(letter);
-				return View("GetAll", cars);
-			}
-			catch (Exception)
-			{
-				return BadRequest("Failed to sort by name.");
-			}
+			var search = new CarSearchViewModel();
+			var viewModel = BuildCatalogViewModel(search, _carService.SortByName(letter), _favoriteService.GetFavoriteCarIds(User.GetId()));
+			return View("GetAll", viewModel);
 		}
 
 		[HttpGet]
 		public IActionResult SortByPrice(string sortOrder)
 		{
-			PopulateBrands();
-			try
-			{
-				var cars = _carService.SortByPrice(sortOrder);
-				return View("GetAll", cars);
-			}
-			catch (Exception)
-			{
-				return BadRequest("Failed to sort by price.");
-			}
+			var search = new CarSearchViewModel();
+			var viewModel = BuildCatalogViewModel(search, _carService.SortByPrice(sortOrder), _favoriteService.GetFavoriteCarIds(User.GetId()));
+			return View("GetAll", viewModel);
 		}
 
 		[HttpGet]
 		public IActionResult CarsByCategory(int categoryId)
 		{
-			PopulateBrands();
-			try
-			{
-				var cars = _context.Cars
-					.Where(c => c.CategoryId == categoryId)
-					.Select(c => new CarDto
-					{
-						Id = c.Id,
-						Brand = c.Brand,
-						Model = c.Model,
-						Price = c.Price,
-						ImageUrl = c.ImageUrl,
-						City = c.City
-					})
-					.ToList();
-
-				return View("GetAll", cars);
-			}
-			catch (Exception)
-			{
-				return BadRequest("Failed to filter cars by category.");
-			}
+			return RedirectToAction(nameof(GetAll), new CarSearchViewModel { CategoryId = categoryId });
 		}
-		
+
 		[HttpGet]
 		public IActionResult GetByFuel(string fuelType)
 		{
-			PopulateBrands();
-			var cars = _carService.GetByFuel(fuelType);
-			try
-			{
-				if (fuelType == null)
-				{
-					return BadRequest("Fuel type is required.");
-				}
-
-			}
-
-			catch (Exception)
-			{
-				return BadRequest("Failed to filter cars by fuel type.");
-
-			}
-			return View("GetAll", cars);
+			return RedirectToAction(nameof(GetAll), new CarSearchViewModel { FuelType = fuelType });
 		}
+
 		[HttpGet]
 		public IActionResult GetByYear(int? minYear, int? maxYear)
 		{
-			PopulateBrands();
-			try
-			{
-				var cars = _carService.GetByYear(minYear, maxYear);
-
-				return View("GetAll", cars);
-			}
-			catch (Exception)
-			{
-				return BadRequest("Failed to filter cars by year range.");
-			}
+			return RedirectToAction(nameof(GetAll), new CarSearchViewModel { MinYear = minYear, MaxYear = maxYear });
 		}
+
 		[HttpGet]
 		public IActionResult GetByBrand(string brandType)
 		{
-			PopulateBrands();
-			try
-			{
-				var cars = _carService.GetByBrand(brandType);
-				return View("GetAll", cars);
-			}
-			catch (Exception)
-			{
-				return BadRequest("Failed to filter cars by brand.");
-			}
+			return RedirectToAction(nameof(GetAll), new CarSearchViewModel { BrandType = brandType });
 		}
+
 		[HttpGet]
-		public IActionResult Search(int? minYear, int? maxYear, string? fuelType, string? brandType)
+		public IActionResult Search([FromQuery] CarSearchViewModel search)
 		{
-			PopulateBrands();
-			try
-			{
-				List<CarDto> cars = _carService.Search(minYear, maxYear, fuelType, brandType);
-				return View("GetAll", cars);
-
-			}
-
-			catch (Exception)
-			{
-				return BadRequest("Failed to perform search.");
-			}
+			return RedirectToAction(nameof(GetAll), search);
 		}
-		private void PopulateBrands()
+
+		private CarCatalogViewModel BuildCatalogViewModel(CarSearchViewModel search, List<CarDto> cars, HashSet<int> favoriteIds)
 		{
-			ViewData["Brands"] = _context.Cars
-				.Select(c => c.Brand)
+			return new CarCatalogViewModel
+			{
+				Cars = cars,
+				Search = search,
+				Brands = _carService.PopulateBrands(),
+				Categories = _context.Categories
+					.Select(c => new CategoryDto { Id = c.Id, Name = c.Name })
+					.OrderBy(c => c.Name)
+					.ToList(),
+				FavoriteCarIds = favoriteIds,
+				CurrentDealerId = GetCurrentDealerId(),
+				CanManageCars = User.Identity?.IsAuthenticated == true
+			};
+		}
+
+		private int? GetCurrentDealerId()
+		{
+			var userId = User.GetId();
+			if (string.IsNullOrWhiteSpace(userId))
+			{
+				return null;
+			}
+
+			return _dealerService.GetDealerByUserId(userId)?.Id;
+		}
+
+		private static List<int> ParseIds(string? ids)
+		{
+			if (string.IsNullOrWhiteSpace(ids))
+			{
+				return [];
+			}
+
+			return ids.Split(',', StringSplitOptions.RemoveEmptyEntries)
+				.Select(id => int.TryParse(id, out var parsed) ? parsed : (int?)null)
+				.Where(id => id.HasValue)
+				.Select(id => id!.Value)
 				.Distinct()
-				.OrderBy(b => b)
+				.Take(4)
 				.ToList();
 		}
 	}

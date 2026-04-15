@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: carsales-system
+    runtime: docker
+    plan: free
+    dockerfilePath: ./CarSalesSystem/Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:10000
+      - key: ConnectionStrings__DefaultConnection
+        value: Data Source=/app/App_Data/carsales.db

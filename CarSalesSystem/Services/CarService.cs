@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CarSalesSystem.Data;
 using CarSalesSystem.Data.Model;
 using CarSalesSystem.DTOs;
+using CarSalesSystem.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarSalesSystem.Services
@@ -11,7 +12,7 @@ namespace CarSalesSystem.Services
 		private readonly ApplicationDbContext _context;
 		private readonly IMapper _mapper;
 		private readonly ILogger<CarService> _logger;
-		private readonly IDealerService _dealerService;	
+		private readonly IDealerService _dealerService;
 
 		public CarService(ApplicationDbContext context, IMapper mapper, ILogger<CarService> logger, IDealerService dealerService)
 		{
@@ -21,46 +22,65 @@ namespace CarSalesSystem.Services
 			_dealerService = dealerService;
 		}
 
-
 		public void Add(CarFormDto dto)
 		{
-
-			if (string.IsNullOrEmpty(dto.Brand) ||
-		string.IsNullOrEmpty(dto.Model) ||
-		string.IsNullOrEmpty(dto.City) ||
-		string.IsNullOrEmpty(dto.Country) ||
-		string.IsNullOrEmpty(dto.Transmission))
+			if (string.IsNullOrWhiteSpace(dto.UserId))
 			{
-				throw new ArgumentNullException("Cannot add a car, nullable data added!");
+				throw new UnauthorizedAccessException("Only authenticated dealers can add cars.");
 			}
+
+			var dealer = _dealerService.GetDealerByUserId(dto.UserId);
+			if (dealer == null)
+			{
+				throw new UnauthorizedAccessException("Only registered dealers can add cars.");
+			}
+
 			var car = _mapper.Map<Car>(dto);
-				car.IsListed = true;
-			
-			car.DealerId = _dealerService.GetDealerByUserId(dto.UserId).Id;
+			car.IsListed = true;
+			car.DealerId = dealer.Id;
 			_context.Cars.Add(car);
-
-				_context.SaveChanges();
-			
-			
+			_context.SaveChanges();
 		}
 
-
-		public Car GetById(int id)
+		public Car? GetById(int id)
 		{
-			return _context.Cars.FirstOrDefault(c => c.Id == id);
+			return _context.Cars
+				.Include(c => c.Category)
+				.Include(c => c.Dealer)
+				.FirstOrDefault(c => c.Id == id);
 		}
 
+		public List<Car> GetByIds(IEnumerable<int> ids)
+		{
+			var normalizedIds = ids.Distinct().Take(4).ToList();
+			return _context.Cars
+				.Include(c => c.Category)
+				.Include(c => c.Dealer)
+				.Where(c => normalizedIds.Contains(c.Id))
+				.ToList();
+		}
 
-		public void Edit(int id, CarFormDto dto)
+		public void Edit(int id, CarFormDto dto, string userId)
 		{
 			try
 			{
+				var dealer = _dealerService.GetDealerByUserId(userId);
+				if (dealer == null)
+				{
+					throw new UnauthorizedAccessException("Only registered dealers can edit cars.");
+				}
+
 				var car = _context.Cars.FirstOrDefault(c => c.Id == id);
-
 				if (car == null)
-					throw new ArgumentException("Car not found");
+				{
+					throw new ArgumentException("Car not found.");
+				}
 
-				car.Id = dto.Id;
+				if (car.DealerId != dealer.Id)
+				{
+					throw new UnauthorizedAccessException("You can only edit your own cars.");
+				}
+
 				car.Brand = dto.Brand;
 				car.Model = dto.Model;
 				car.Description = dto.Description;
@@ -73,7 +93,7 @@ namespace CarSalesSystem.Services
 				car.Country = dto.Country;
 				car.City = dto.City;
 				car.CategoryId = dto.CategoryId;
-				car.DealerId = dto.DealerId;
+				car.IsListed = dto.IsListed;
 
 				_context.SaveChanges();
 			}
@@ -91,65 +111,41 @@ namespace CarSalesSystem.Services
 				throw new ArgumentException("Please add new keyword for searching");
 			}
 
-			var cars = this._context.Cars.Include(p => p.Category).Where(p => p.Model.Contains(keyword)).ToList();
-
-			var mapped = _mapper.Map<List<CarDto>>(cars);
-
-			return mapped;
+			var cars = BaseQuery()
+				.Where(p => p.Model.Contains(keyword) || p.Brand.Contains(keyword))
+				.ToList();
+			return _mapper.Map<List<CarDto>>(cars);
 		}
 
 		public List<CarDto> SortByPrice(string sortOrder)
 		{
-			var cars = this._context.Cars.Include(p => p.Category).ToList();
-
-			switch (sortOrder)
+			var query = BaseQuery();
+			query = sortOrder switch
 			{
-				case "asc":
+				"asc" => query.OrderBy(p => p.Price),
+				"desc" => query.OrderByDescending(p => p.Price),
+				_ => query.OrderByDescending(p => p.Id)
+			};
 
-					cars = cars.OrderBy(p => p.Price).ToList();
-					break;
-				case "desc":
-
-					cars = cars.OrderByDescending(p => p.Price).ToList();
-					break;
-				default:
-					cars = cars.OrderBy(p => p.Id).ToList(); // default sort
-					break;
-			}
-			var mapped = _mapper.Map<List<CarDto>>(cars);
-
-			return mapped;
+			return _mapper.Map<List<CarDto>>(query.ToList());
 		}
 
 		public List<CarDto> SortByName(string letter)
 		{
-			var cars = this._context.Cars.Include(p => p.Category).ToList();
-
-			switch (letter)
+			var query = BaseQuery();
+			query = letter switch
 			{
-				case "asc":
-					cars = cars.OrderBy(p => p.Model).ToList();
-					break;
-				case "desc":
+				"asc" => query.OrderBy(p => p.Model),
+				"desc" => query.OrderByDescending(p => p.Model),
+				_ => query.OrderByDescending(p => p.Id)
+			};
 
-					cars = cars.OrderByDescending(p => p.Model).ToList();
-					break;
-				default:
-					cars = cars.OrderBy(p => p.Id).ToList(); // default sort
-					break;
-			}
-			var mapped = _mapper.Map<List<CarDto>>(cars);
-
-
-
-			return mapped;
-
+			return _mapper.Map<List<CarDto>>(query.ToList());
 		}
 
 		public List<CarDto> GetLatest(int count)
 		{
-			var cars = _context.Cars
-				.Where(c => c.IsListed)
+			var cars = BaseQuery()
 				.OrderByDescending(c => c.Id)
 				.Take(count)
 				.ToList();
@@ -159,10 +155,8 @@ namespace CarSalesSystem.Services
 
 		public List<CarDto> GetByFuel(string fuelType)
 		{
-			var cars = _context.Cars
-				.Where(c => c.FuelType == fuelType)
-				.ToList();
-			return _mapper.Map<List<CarDto>>(cars);
+			return _mapper.Map<List<CarDto>>(
+				BaseQuery().Where(c => c.FuelType == fuelType).ToList());
 		}
 
 		public List<CarDto> GetByYear(int? minYear, int? maxYear)
@@ -172,49 +166,73 @@ namespace CarSalesSystem.Services
 				(minYear, maxYear) = (maxYear, minYear);
 			}
 
-			var query = _context.Cars.AsQueryable();
+			var query = BaseQuery();
 
 			if (minYear.HasValue)
+			{
 				query = query.Where(c => c.Year >= minYear.Value);
+			}
 
 			if (maxYear.HasValue)
+			{
 				query = query.Where(c => c.Year <= maxYear.Value);
+			}
 
-			var cars = query
-				.Include(c => c.Category)
-				.Include(c => c.Dealer)
-				.ToList();
-
-			return _mapper.Map<List<CarDto>>(cars);
+			return _mapper.Map<List<CarDto>>(query.ToList());
 		}
 
 		public List<CarDto> GetByBrand(string brandType)
 		{
-			var cars = _context.Cars
-				.Where(c => c.Brand == brandType)
-				.Include(c => c.Category)
-				.Include(c => c.Dealer)
-				.ToList();
-			return _mapper.Map<List<CarDto>>(cars);
+			return _mapper.Map<List<CarDto>>(
+				BaseQuery().Where(c => c.Brand == brandType).ToList());
 		}
 
-		public List<CarDto> Search(int? minYear, int? maxYear, string? fuelType, string? brandType)
+		public List<CarDto> Search(CarSearchViewModel search)
 		{
-			var cars = _context.Cars.AsQueryable();
+			var query = BaseQuery();
 
-			if (!string.IsNullOrEmpty(fuelType))
-				cars = cars.Where(c => c.FuelType == fuelType);
+			if (!string.IsNullOrWhiteSpace(search.FuelType))
+			{
+				query = query.Where(c => c.FuelType == search.FuelType);
+			}
 
-			if (!string.IsNullOrEmpty(brandType))
-				cars = cars.Where(c => c.Brand == brandType);
+			if (!string.IsNullOrWhiteSpace(search.BrandType))
+			{
+				query = query.Where(c => c.Brand == search.BrandType);
+			}
 
-			if (minYear.HasValue)
-				cars = cars.Where(c => c.Year >= minYear.Value);
+			if (!string.IsNullOrWhiteSpace(search.City))
+			{
+				query = query.Where(c => c.City.Contains(search.City));
+			}
 
-			if (maxYear.HasValue)
-				cars = cars.Where(c => c.Year <= maxYear.Value);
+			if (search.CategoryId.HasValue && search.CategoryId > 0)
+			{
+				query = query.Where(c => c.CategoryId == search.CategoryId.Value);
+			}
 
-			return _mapper.Map<List<CarDto>>(cars);
+			if (search.MinYear.HasValue)
+			{
+				query = query.Where(c => c.Year >= search.MinYear.Value);
+			}
+
+			if (search.MaxYear.HasValue)
+			{
+				query = query.Where(c => c.Year <= search.MaxYear.Value);
+			}
+
+			if (search.MinPrice.HasValue)
+			{
+				query = query.Where(c => c.Price >= search.MinPrice.Value);
+			}
+
+			if (search.MaxPrice.HasValue)
+			{
+				query = query.Where(c => c.Price <= search.MaxPrice.Value);
+			}
+
+			return _mapper.Map<List<CarDto>>(
+				query.OrderByDescending(c => c.Id).ToList());
 		}
 
 		public void Delete(string userId, int id)
@@ -231,7 +249,7 @@ namespace CarSalesSystem.Services
 			}
 
 			var dealer = _dealerService.GetDealerByUserId(userId);
-			if (car.DealerId != dealer.Id)
+			if (dealer == null || car.DealerId != dealer.Id)
 			{
 				throw new UnauthorizedAccessException("You can only delete your own cars.");
 			}
@@ -239,9 +257,10 @@ namespace CarSalesSystem.Services
 			_context.Cars.Remove(car);
 			_context.SaveChanges();
 		}
+
 		public List<string> PopulateBrands()
 		{
-			return _context.Cars
+			return BaseQuery()
 				.Select(c => c.Brand)
 				.Distinct()
 				.OrderBy(b => b)
@@ -250,33 +269,23 @@ namespace CarSalesSystem.Services
 
 		public void Details(int id)
 		{
-			var car = _context.Cars
-					.Include(c => c.Category)
-					.Include(c => c.Dealer)
-					.FirstOrDefault(c => c.Id == id);
+			_ = GetById(id);
 		}
 
 		public List<CarDto> GetAll()
 		{
+			return _mapper.Map<List<CarDto>>(
+				BaseQuery()
+					.OrderByDescending(c => c.Id)
+					.ToList());
+		}
 
-			var cars = _context.Cars
-					.Include(c => c.Category)
-					.Include(c => c.Dealer)
-					.Where(c => c.IsBought == false)
-					.Select(c => new CarDto
-					{
-						Id = c.Id,
-						Brand = c.Brand,
-						Model = c.Model,
-						Price = c.Price,
-						ImageUrl = c.ImageUrl,
-						City = c.City,
-						Year = c.Year,
-						FuelType = c.FuelType,
-						Mileage = c.Mileage
-					})
-					.ToList();
-			return _mapper.Map<List<CarDto>>(cars);
+		private IQueryable<Car> BaseQuery()
+		{
+			return _context.Cars
+				.Include(c => c.Category)
+				.Include(c => c.Dealer)
+				.Where(c => !c.IsBought && c.IsListed);
 		}
 	}
 }

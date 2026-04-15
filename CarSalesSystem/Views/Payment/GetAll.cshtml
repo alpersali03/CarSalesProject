@@ -1,48 +1,59 @@
-﻿@model IEnumerable<CarSalesSystem.Data.Model.Payment>
+@model IEnumerable<CarSalesSystem.Data.Model.Payment>
 
 @{
-    ViewData["Title"] = "All Payments";
+    ViewData["Title"] = "Payments";
 }
 
-<div class="container mt-5">
-    <h2 class="text-center text-warning fw-bold">All Payments</h2>
-    <hr class="mb-4">
+<section class="section-shell section-shell-tight">
+    <div class="container-xl">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Orders</span>
+                <h1>Payment History</h1>
+                <p class="section-copy">Review your completed purchases and open any transaction for the full receipt details.</p>
+            </div>
+        </div>
 
-    @if (!Model.Any())
-    {
-        <p class="text-center text-muted">No payments found.</p>
-    }
-    else
-    {
-        <table class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Car</th>
-                    <th>Total Amount</th>
-                    <th>Payment Time</th>
-                    <th>Successful</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var payment in Model)
-                {
-                    <tr>
-                        <td>@payment.Id</td>
-                        <td>@payment.Car?.Model</td>
-                        <td>@payment.TotalAmount.ToString("C")</td>
-                        <td>@payment.PaymentTime.ToString("g")</td>
-                        <td>@(payment.IsSuccessful ? "✅" : "❌")</td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@payment.Id"
-                               class="btn btn-sm btn-outline-warning">
-                                View
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-</div>
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <h3>No purchases yet</h3>
+                <p>Your successful payments will appear here after checkout.</p>
+            </div>
+        }
+        else
+        {
+            <div class="payment-table-card">
+                <table class="payment-table">
+                    <thead>
+                        <tr>
+                            <th>Payment</th>
+                            <th>Vehicle</th>
+                            <th>Amount</th>
+                            <th>Paid On</th>
+                            <th>Card</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var payment in Model)
+                        {
+                            <tr>
+                                <td>#@payment.Id</td>
+                                <td>@payment.Car?.Brand @payment.Car?.Model</td>
+                                <td>@payment.TotalAmount.ToString("N2") BGN</td>
+                                <td>@payment.PaymentTime.ToLocalTime().ToString("dd MMM yyyy HH:mm")</td>
+                                <td>**** @payment.CardLast4</td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@payment.Id" class="btn btn-sm btn-outline-dark">
+                                        Receipt
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</section>

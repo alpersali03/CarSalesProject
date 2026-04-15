@@ -13,12 +13,24 @@ namespace CarSalesSystem.Data
 		public DbSet<Car> Cars { get; set; }
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<Dealer> Dealers { get; set; }
-		public DbSet<DebitCard> DebitCards { get; set; }
 		public DbSet<Payment> Payments { get; set; }
+		public DbSet<FavoriteCar> FavoriteCars { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
+
+			builder.Entity<Car>()
+				.Property(c => c.Price)
+				.HasColumnType("decimal(18,2)");
+
+			builder.Entity<Payment>()
+				.Property(p => p.TotalAmount)
+				.HasColumnType("decimal(18,2)");
+
+			builder.Entity<FavoriteCar>()
+				.HasIndex(f => new { f.UserId, f.CarId })
+				.IsUnique();
 
 			builder.Entity<Category>().HasData
 				(

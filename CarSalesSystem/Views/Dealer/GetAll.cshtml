@@ -1,31 +1,47 @@
-﻿@using CarSalesSystem.DTOs
-@using CarSalesSystem.Data.Model
-@using CarSalesSystem.Extensions
-@model List<DealerDto>
+@model List<CarSalesSystem.DTOs.DealerDto>
 
-<a asp-controller="Dealer" asp-action="GetAll" class="btn btn-primary mb-3 top-0 left-0" type="submit">GoBack</a>
+@{
+    ViewData["Title"] = "Dealers";
+}
 
-<div class="row">
-	@foreach (var dealer in Model)
-	{
+<section class="section-shell">
+    <div class="container-xl">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Dealer network</span>
+                <h1>Meet the dealers</h1>
+                <p class="section-copy">Browse the most active dealers, check their public profile, and see who is consistently listing fresh inventory.</p>
+            </div>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Dealer" asp-action="MyDashboard" class="btn btn-outline-dark">My dashboard</a>
+            }
+        </div>
 
-			<div class="col-md-4">
-				<div class="card mb-3">
-					<div class="card-body text-center">
-						<h5 class="card-title text-center"> @dealer.Name</h5>
-						<p class="card-title text-center"> Number: @dealer.PhoneNumber</p>
-						<p class="card-title text-center"> CompanyName: @dealer.CompanyName</p>
-
-						@if (dealer.UserId == User.GetId())
-						{
-							<a asp-controller="Dealer" asp-action="Edit" asp-route-id="@dealer.Id" class="btn btn-warning">Edit</a>
-							<a asp-controller="Dealer" asp-action="Delete" asp-route-id="@dealer.Id" class="btn btn-warning">Delete</a>
-						}
-						@* <a asp-controller="Product" asp-action="ProductsByCategory" asp-route-categoryId="@product.Id" class="btn btn-primary">Products by category</a>
-						<a asp-controller="Category" asp-action="Delete" asp-route-id="@dealer.Id" class="btn btn-danger" onclick="myFunction() ">Delete</a> *@
-					</div>
-				</div>
-			</div>
-	
-	}
-</div>
+        <div class="dealer-grid">
+            @foreach (var dealer in Model)
+            {
+                <article class="dealer-card">
+                    <div class="dealer-card-top">
+                        <div>
+                            <h3>@dealer.Name</h3>
+                            <p>@dealer.CompanyName</p>
+                        </div>
+                        <span class="dealer-pill">@dealer.ActiveListingsCount live</span>
+                    </div>
+                    <div class="dealer-stats">
+                        <div><strong>@dealer.SoldCarsCount</strong><span>sold</span></div>
+                        <div><strong>@dealer.PhoneNumber</strong><span>phone</span></div>
+                    </div>
+                    <div class="catalog-secondary-actions">
+                        <a asp-controller="Dealer" asp-action="Details" asp-route-id="@dealer.Id">Public profile</a>
+                        @if (dealer.UserId == User.GetId())
+                        {
+                            <a asp-controller="Dealer" asp-action="Edit" asp-route-id="@dealer.Id">Edit profile</a>
+                        }
+                    </div>
+                </article>
+            }
+        </div>
+    </div>
+</section>

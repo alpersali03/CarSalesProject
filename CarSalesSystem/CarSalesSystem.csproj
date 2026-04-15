@@ -31,4 +31,11 @@
     <ContainerPort Include="8081" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="CarSalesSystem.Tests\**\*.cs" />
+    <Content Remove="CarSalesSystem.Tests\**\*" />
+    <EmbeddedResource Remove="CarSalesSystem.Tests\**\*" />
+    <None Remove="CarSalesSystem.Tests\**\*" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/.idea/
+**/TestResults/
+.git/
+.github/
+.codex-build*/
+.codex-test-build*/

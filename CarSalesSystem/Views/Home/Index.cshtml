@@ -1,74 +1,138 @@
-﻿@using CarSalesSystem.DTOs
-@model List<CarDto>
+@model CarSalesSystem.Models.HomePageViewModel
 
-<section class="hero-search">
-    <div class="container-xl">
-        <h1>Find Your Next Car</h1>
+@{
+    ViewData["Title"] = "Drive your next upgrade";
+}
 
-        <form asp-controller="Car" asp-action="Search" method="get" class="search-box">
-                <div class="filter-group">
-                <div class="filter-group">
-                    <label class="filter-label" for="fuelType">Fuel Type</label>
-                    <select name="fuelType" id="fuelType" class="form-select" style="max-width: 200px;">
-                        <option value="">Any Fuel</option>
-                        <option value="Petrol">Petrol</option>
-                        <option value="Diesel">Diesel</option>
-                        <option value="Electric">Electric</option>
-                        <option value="Hybrid">Hybrid</option>
-                    </select>
+<section class="hero-band">
+    <div class="container-xl hero-grid">
+        <div>
+            <span class="eyebrow">Car marketplace, refreshed</span>
+            <h1>Find better cars faster, then compare, save, and buy with confidence.</h1>
+            <p class="hero-copy">
+                Explore curated dealer listings, save favorites, compare up to four cars, and track your next move from a cleaner marketplace experience.
+            </p>
+            <div class="hero-stats">
+                <div><strong>@Model.ActiveCarsCount</strong><span>active listings</span></div>
+                <div><strong>@Model.DealersCount</strong><span>verified dealers</span></div>
+                <div><strong>@Model.SoldCarsCount</strong><span>cars sold</span></div>
+            </div>
+        </div>
+
+        <div class="hero-panel">
+            <h2>Search the catalog</h2>
+            <form asp-controller="Car" asp-action="GetAll" method="get" class="hero-search-form">
+                <div class="form-grid">
+                    <div>
+                        <label for="brandType">Brand</label>
+                        <select name="brandType" id="brandType" class="form-select">
+                            <option value="">Any brand</option>
+                            @foreach (var brand in Model.Brands)
+                            {
+                                <option value="@brand">@brand</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label for="fuelType">Fuel type</label>
+                        <select name="fuelType" id="fuelType" class="form-select">
+                            <option value="">Any fuel</option>
+                            <option value="Petrol">Petrol</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Electric">Electric</option>
+                            <option value="Hybrid">Hybrid</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="categoryId">Category</label>
+                        <select name="categoryId" id="categoryId" class="form-select">
+                            <option value="">Any category</option>
+                            @foreach (var category in Model.Categories)
+                            {
+                                <option value="@category.Id">@category.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label for="city">City</label>
+                        <input type="text" name="city" id="city" class="form-control" placeholder="Sofia, Plovdiv..." />
+                    </div>
+                    <div>
+                        <label for="minPrice">Min price</label>
+                        <input type="number" step="100" name="minPrice" id="minPrice" class="form-control" placeholder="5000" />
+                    </div>
+                    <div>
+                        <label for="maxPrice">Max price</label>
+                        <input type="number" step="100" name="maxPrice" id="maxPrice" class="form-control" placeholder="50000" />
+                    </div>
                 </div>
-            </div>
-
-            <div class="filter-group">
-                <label class="filter-label" for="brandType">Brand</label>
-                <select name="brandType" id="brandType" class="form-select" style="max-width: 200px;">
-                    <option value="">Any Brand</option>
-    					@{ var brands = ViewData["Brands"] as List<string> ?? new List<string>(); }
-                        @foreach (var brand in brands)
-                        {
-                            <option value="@brand">@brand</option>
-                        }
-)
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label class="filter-label">Year Range</label>
-                <div class="d-flex gap-2">
-                    <input type="number" name="minYear" class="form-control"
-                           style="max-width: 130px;" placeholder="Min year"
-                           min="1886" max="2100" />
-                    <input type="number" name="maxYear" class="form-control"
-                           style="max-width: 130px;" placeholder="Max year"
-                           min="1886" max="2100" />
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-success px-4">
-                🔍 Search
-            </button>
-        </form>
+                <button type="submit" class="btn btn-warning btn-lg w-100 mt-3">Browse filtered listings</button>
+            </form>
+        </div>
     </div>
 </section>
 
-<section class="latest-cars">
+<section class="section-shell">
     <div class="container-xl">
-        <h2>Latest Listings</h2>
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Fresh listings</span>
+                <h2>Latest arrivals</h2>
+            </div>
+            <a asp-controller="Car" asp-action="GetAll" class="btn btn-outline-dark">View all cars</a>
+        </div>
 
-        <div class="row g-4">
-            @foreach (var car in Model)
+        <div class="catalog-grid">
+            @foreach (var car in Model.FeaturedCars)
             {
-                <div class="col-md-3">
-                    <div class="car-card">
-                        <img src="@car.ImageUrl" alt="Car image" />
-                        <span class="price">@car.Price BGN</span>
-
-                        <h5>@car.Brand @car.Model</h5>
-                        <p>@car.Year • @car.FuelType • @car.Mileage km</p>
+                <article class="catalog-card">
+                    <div class="catalog-media">
+                        <img src="@car.ImageUrl" alt="@car.Brand @car.Model" onerror="this.src='/image/photo1.jpg'" />
+                        <span class="catalog-price">@car.Price.ToString("N0") BGN</span>
                     </div>
-                </div>
+                    <div class="catalog-body">
+                        <div class="catalog-meta">@car.Year · @car.FuelType · @car.Mileage.ToString("N0") km</div>
+                        <h3>@car.Brand @car.Model</h3>
+                        <p>@car.City, @car.Country · @car.CategoryName</p>
+                        <div class="catalog-actions">
+                            <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-dark btn-sm">Details</a>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-compare-button data-car-id="@car.Id">
+                                Compare
+                            </button>
+                        </div>
+                    </div>
+                </article>
             }
         </div>
     </div>
 </section>
 
+<section class="section-shell section-shell-muted">
+    <div class="container-xl">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Dealer spotlight</span>
+                <h2>Top active dealers</h2>
+            </div>
+        </div>
+        <div class="dealer-grid">
+            @foreach (var dealer in Model.TopDealers)
+            {
+                <article class="dealer-card">
+                    <div class="dealer-card-top">
+                        <div>
+                            <h3>@dealer.Name</h3>
+                            <p>@dealer.CompanyName</p>
+                        </div>
+                        <span class="dealer-pill">@dealer.ActiveListingsCount live</span>
+                    </div>
+                    <div class="dealer-stats">
+                        <div><strong>@dealer.SoldCarsCount</strong><span>sold</span></div>
+                        <div><strong>@dealer.Revenue.ToString("N0")</strong><span>BGN revenue</span></div>
+                    </div>
+                    <a asp-controller="Dealer" asp-action="Details" asp-route-id="@dealer.Id" class="btn btn-outline-dark btn-sm">View dealer</a>
+                </article>
+            }
+        </div>
+    </div>
+</section>

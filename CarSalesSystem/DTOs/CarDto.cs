@@ -17,7 +17,15 @@
 
 		public int DealerId { get; set; }
 
-        public bool IsBought { get; set; }  
+        public bool IsBought { get; set; }
+
+		public bool IsListed { get; set; }
+
+		public string Country { get; set; } = null!;
+
+		public string CategoryName { get; set; } = null!;
+
+		public string DealerName { get; set; } = null!;  
 
 	}
 }

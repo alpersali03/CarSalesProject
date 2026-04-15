@@ -1,50 +1,130 @@
-﻿@using CarSalesSystem.DTOs
-@using CarSalesSystem.Data.Model
-@using CarSalesSystem.Extensions
-@model List<CarDto>
-<a asp-controller="Car" asp-action="GetAll" class="btn btn-primary mb-3 top-0 left-0" type="submit">GoBack</a>
-<div class="text-center mb-3">
-    <a asp-controller="Car" asp-action="SortByName" asp-route-letter="asc" class="btn btn-outline-primary me-2">Sort by Name ↑</a>
-    <a asp-controller="Car" asp-action="SortByName" asp-route-letter="desc" class="btn btn-outline-secondary">Sort by Name ↓</a>
-    <a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="asc" class="btn btn-success me-2">Sort by Price ↑</a>
-    <a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="desc" class="btn btn-danger">Sort by Price ↓</a>
-</div>
-@if (!Model.Any())
-{
-    <h1 class="text-center text-muted">No cars found.</h1>
+@model CarSalesSystem.Models.CarCatalogViewModel
+
+@{
+    ViewData["Title"] = "Browse cars";
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
 }
-<div class="row">
-    @foreach (var car in Model)
-    {
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-center">@car.Model</h5>
-                    <p class="card-title text-center">Brand: @car.Brand</p>
-                    <p class="card-title text-center">City: @car.City</p>
-                    <img src="@car.ImageUrl" class="img-fluid" alt="Car image">
 
-                    <div class="mt-2">
-                        <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-info">Details</a>
-                        @if (!User.IsAdmin())
-                        {
-                            <a asp-controller="Payment" asp-action="Buy" asp-route-carId="@car.Id" class="btn btn-warning">Buy</a>
-                        }
-                    </div>
-
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <div class="mt-2">
-                            <a asp-controller="Car" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
-                            <form asp-controller="Car" asp-action="Delete" asp-route-id="@car.Id" method="post" style="display:inline;">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </div>
-                    }
-                   
-                </div>
+<section class="section-shell section-shell-tight">
+    <div class="container-xl">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Marketplace</span>
+                <h1>Browse cars</h1>
+                <p class="section-copy">Use layered filters, compare up to four cars, and save the listings worth revisiting.</p>
             </div>
         </div>
-    }
-</div>
+
+        <form asp-controller="Car" asp-action="GetAll" method="get" class="filter-panel">
+            <div class="filter-panel-grid">
+                <select name="brandType" class="form-select">
+                    <option value="">Any brand</option>
+                    @foreach (var brand in Model.Brands)
+                    {
+                        <option value="@brand" selected="@(Model.Search.BrandType == brand)">@brand</option>
+                    }
+                </select>
+                <select name="fuelType" class="form-select">
+                    <option value="">Any fuel</option>
+                    @foreach (var fuel in new[] { "Petrol", "Diesel", "Electric", "Hybrid" })
+                    {
+                        <option value="@fuel" selected="@(Model.Search.FuelType == fuel)">@fuel</option>
+                    }
+                </select>
+                <select name="categoryId" class="form-select">
+                    <option value="">Any category</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.Id" selected="@(Model.Search.CategoryId == category.Id)">@category.Name</option>
+                    }
+                </select>
+                <input type="text" name="city" class="form-control" placeholder="City" value="@Model.Search.City" />
+                <input type="number" name="minPrice" class="form-control" placeholder="Min price" value="@Model.Search.MinPrice" />
+                <input type="number" name="maxPrice" class="form-control" placeholder="Max price" value="@Model.Search.MaxPrice" />
+                <input type="number" name="minYear" class="form-control" placeholder="Min year" value="@Model.Search.MinYear" />
+                <input type="number" name="maxYear" class="form-control" placeholder="Max year" value="@Model.Search.MaxYear" />
+            </div>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <label class="filter-check">
+                    <input type="checkbox" name="favoritesOnly" value="true" checked="@Model.Search.FavoritesOnly" />
+                    Favorites only
+                </label>
+            }
+
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-warning">Apply filters</button>
+                <a asp-controller="Car" asp-action="GetAll" class="btn btn-outline-dark">Reset</a>
+                <a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="asc" class="btn btn-outline-secondary">Price ↑</a>
+                <a asp-controller="Car" asp-action="SortByPrice" asp-route-sortOrder="desc" class="btn btn-outline-secondary">Price ↓</a>
+            </div>
+        </form>
+
+        @if (!Model.Cars.Any())
+        {
+            <div class="empty-state">
+                <h2>No cars matched these filters.</h2>
+                <p>Try widening the price or year range, or clear one of the category filters.</p>
+            </div>
+        }
+        else
+        {
+            <div class="catalog-grid">
+                @foreach (var car in Model.Cars)
+                {
+                    <article class="catalog-card">
+                        <div class="catalog-media">
+                            <img src="@car.ImageUrl" alt="@car.Brand @car.Model" onerror="this.src='/image/photo2.jpg'" />
+                            <span class="catalog-price">@car.Price.ToString("N0") BGN</span>
+                        </div>
+                        <div class="catalog-body">
+                            <div class="catalog-meta">@car.Year · @car.FuelType · @car.Mileage.ToString("N0") km</div>
+                            <h3>@car.Brand @car.Model</h3>
+                            <p>@car.City, @car.Country · @car.CategoryName</p>
+                            <div class="catalog-chip-row">
+                                <span class="catalog-chip">@car.DealerName</span>
+                                @if (!car.IsListed)
+                                {
+                                    <span class="catalog-chip catalog-chip-muted">Hidden</span>
+                                }
+                            </div>
+                            <div class="catalog-actions">
+                                <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-dark btn-sm">Details</a>
+                                @if (!User.IsAdmin())
+                                {
+                                    <a asp-controller="Payment" asp-action="Buy" asp-route-carId="@car.Id" class="btn btn-warning btn-sm">Buy</a>
+                                }
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-compare-button data-car-id="@car.Id">
+                                    Compare
+                                </button>
+                            </div>
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <div class="catalog-secondary-actions">
+                                    <form asp-controller="Favorite" asp-action="Toggle" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="carId" value="@car.Id" />
+                                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                        <button type="submit" class="link-button">
+                                            @(Model.FavoriteCarIds.Contains(car.Id) ? "Remove favorite" : "Save favorite")
+                                        </button>
+                                    </form>
+
+                                    @if (Model.CurrentDealerId == car.DealerId)
+                                    {
+                                        <a asp-controller="Car" asp-action="Edit" asp-route-id="@car.Id">Edit</a>
+                                        <form asp-controller="Car" asp-action="Delete" asp-route-id="@car.Id" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="link-button link-button-danger">Delete</button>
+                                        </form>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+</section>

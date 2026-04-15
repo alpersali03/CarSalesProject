@@ -15,7 +15,9 @@ namespace CarSalesSystem.Extensions
 			CreateMap<DealerDto, Dealer>();
 			CreateMap<Car, CarFormDto>();
 			CreateMap<CarFormDto, Car>();
-			CreateMap<Car, CarDto>();
+			CreateMap<Car, CarDto>()
+				.ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+				.ForMember(dest => dest.DealerName, opt => opt.MapFrom(src => src.Dealer.Name));
 			CreateMap<CarDto, Car>();
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>();

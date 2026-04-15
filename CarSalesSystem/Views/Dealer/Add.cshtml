@@ -1,46 +1,52 @@
-﻿@using CarSalesSystem.DTOs
-@using CarSalesSystem.Data.Model
-@model DealerDto
+@model CarSalesSystem.DTOs.DealerDto
 
-<div class="row">
-    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <h2 class="heading-margin text-center">@ViewBag.Title</h2>
+@{
+    ViewData["Title"] = "Become a Dealer";
+}
 
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label asp-for="Name"></label>
-                <input asp-for="Name" class="form-control" placeholder="Mr...">
-                <span asp-validation-for="Name" class="small text-danger"></span>
+<section class="section-shell section-shell-tight">
+    <div class="container-xl">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">Dealer Profile</span>
+                <h1>Create Your Showroom</h1>
+                <p class="section-copy">Set up your public seller profile so buyers can discover your listings and trust your business.</p>
             </div>
-            <div class="form-group">
-                <label asp-for="CompanyName"></label>
-                <input asp-for="CompanyName" class="form-control" placeholder="Enter company name...">
-                <span asp-validation-for="CompanyName" class="small text-danger"></span>
+        </div>
+
+        <div class="form-shell">
+            <div class="form-card form-card-narrow">
+                <form method="post" class="stack-form">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div>
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Ivan Petrov" />
+                        <span asp-validation-for="Name" class="small text-danger"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="CompanyName"></label>
+                        <input asp-for="CompanyName" class="form-control" placeholder="Auto House Sofia" />
+                        <span asp-validation-for="CompanyName" class="small text-danger"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="+359 88 123 4567" />
+                        <span asp-validation-for="PhoneNumber" class="small text-danger"></span>
+                    </div>
+
+                    <div class="action-row">
+                        <a asp-action="GetAll" class="btn btn-outline-secondary">Back to Dealers</a>
+                        <button type="submit" class="btn btn-dark">Create Dealer Profile</button>
+                    </div>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label asp-for="PhoneNumber"></label>
-                <input asp-for="PhoneNumber" class="form-control" placeholder="Enter phone number...">
-                <span asp-validation-for="PhoneNumber" class="small text-danger"></span>
-            </div>
-
-
-            @* <div class="form-group">
-                <label asp-for="UserId"></label>
-                <input asp-for="UserId" class="form-control" placeholder="Enter id...">
-                <span asp-validation-for="UserId" class="small text-danger"></span>
-            </div>
- *@
-            @* <div class="form-group">
-                <label asp-for="Cars"></label>
-                <input asp-for="Cars" class="form-control" placeholder="Enter car model...">
-                <span asp-validation-for="Cars" class="small text-danger"></span>
-            </div> *@
-
-            <input class="btn btn-primary mt-3" type="submit" value="Save" />
-        </form>
+        </div>
     </div>
-</div>
+</section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

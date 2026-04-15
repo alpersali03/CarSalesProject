@@ -1,28 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarSalesSystem.Data.Model
 {
-    public class DebitCard
-    {
-        [Key]
-        public int Id { get; set; }
+	// Legacy type retained only so historical EF migrations continue to compile.
+	// The current application no longer maps or persists raw debit card data.
+	public class DebitCard
+	{
+		[Key]
+		public int Id { get; set; }
 
-        [Required]
-        public string CardNumber { get; set; } = null!;
+		public string CardNumber { get; set; } = null!;
 
-        [Required]
-        public int CVV { get; set; }
+		public int CVV { get; set; }
 
-        [Required]
-        public string FullName { get; set; } = null!;
+		public string FullName { get; set; } = null!;
 
-        [Required]
-        public string ExpirationMonth { get; set; } = null!;
+		public string ExpirationMonth { get; set; } = null!;
 
-        [Required]
-        public int ExpirationYear { get; set; }
+		public int ExpirationYear { get; set; }
 
-        public List<Payment> Payments { get; set; } = new();
-    }
-
+		public List<Payment> Payments { get; set; } = new();
+	}
 }

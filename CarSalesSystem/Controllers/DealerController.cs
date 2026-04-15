@@ -1,181 +1,216 @@
-﻿using CarSalesSystem.Data;
+using CarSalesSystem.Data;
 using CarSalesSystem.DTOs;
 using CarSalesSystem.Extensions;
 using CarSalesSystem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-public class DealerController : Controller
+namespace CarSalesSystem.Controllers
 {
-	private readonly ApplicationDbContext _context;
-	private readonly IDealerService _dealerService;
-
-	public DealerController(ApplicationDbContext context, IDealerService dealerService)
+	public class DealerController : Controller
 	{
-		_context = context;
-		_dealerService = dealerService;
-	}
+		private readonly ApplicationDbContext _context;
+		private readonly IDealerService _dealerService;
 
-	public IActionResult Index()
-	{
-		return View();
-	}
-
-	[HttpGet]
-	public IActionResult GetAll()
-	{
-		try
+		public DealerController(ApplicationDbContext context, IDealerService dealerService)
 		{
-			var dealers = _dealerService.GetAll();
-			return View(dealers);
-		}
-		catch (Exception ex)
-		{
-			// Log the exception here
-			ModelState.AddModelError("", "An error occurred while fetching dealers.");
-			return View(new List<DealerDto>());
-		}
-	}
-
-	[HttpGet]
-	[Authorize]
-	public IActionResult Add()
-	{
-		
-		var userId = User.GetId();
-		if (_dealerService.CheckIsDealerByUserId(userId))
-		{
-			
-			TempData["Error"] = "You are already registered as a dealer.";
-			return RedirectToAction("GetAll");
+			_context = context;
+			_dealerService = dealerService;
 		}
 
-		return View(new DealerDto());
-	}
+		[HttpGet]
+		public IActionResult GetAll()
+		{
+			try
+			{
+				var dealers = _dealerService.GetAll();
+				return View(dealers);
+			}
+			catch (Exception)
+			{
+				ModelState.AddModelError("", "An error occurred while fetching dealers.");
+				return View(new List<DealerDto>());
+			}
+		}
 
-
-	[HttpPost]
-	[Authorize]
-	public IActionResult Add(DealerDto dto)
-	{
-		try
+		[HttpGet]
+		[Authorize]
+		public IActionResult Add()
 		{
 			var userId = User.GetId();
-			if (userId == null)
-			{
-				return RedirectToAction("Login", "Account");
-			}
-				
-
-			if (_dealerService.CheckIsDealerByUserId(userId))
+			if (_dealerService.CheckIsDealerByUserId(userId!))
 			{
 				TempData["Error"] = "You are already registered as a dealer.";
-				return RedirectToAction("GetAll");
+				return RedirectToAction(nameof(MyDashboard));
 			}
 
-			dto.UserId = userId;
-			_dealerService.Add(dto);
-			return RedirectToAction("GetAll");
+			return View(new DealerDto());
 		}
-		catch (Exception ex)
+
+		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
+		public IActionResult Add(DealerDto dto)
 		{
-			ModelState.AddModelError("", "An error occurred while adding the dealer.");
-			return View(dto);
-		}
-	}
-
-
-	[HttpGet]
-	public IActionResult Edit(int id)
-	{
-		try
-		{
-			var dealerById = _dealerService.GetDealerByUserId(User.GetId());
-
-			var dealer = _dealerService.GetById(id);
-			if (dealer.UserId != User.GetId())
+			try
 			{
-				return RedirectToAction("Error", "Home");
+				var userId = User.GetId();
+				if (userId == null)
+				{
+					return RedirectToAction("Login", "Account");
+				}
+
+				if (_dealerService.CheckIsDealerByUserId(userId))
+				{
+					TempData["Error"] = "You are already registered as a dealer.";
+					return RedirectToAction(nameof(MyDashboard));
+				}
+
+				dto.UserId = userId;
+				_dealerService.Add(dto);
+				return RedirectToAction(nameof(MyDashboard));
 			}
-
-			var dto = new DealerDto
+			catch (Exception)
 			{
-				Id = dealer.Id,
-				Name = dealer.Name,
-				CompanyName = dealer.CompanyName,
-				PhoneNumber = dealer.PhoneNumber,
-				UserId = dealer.UserId
-			};
-
-			return View(dto);
+				ModelState.AddModelError("", "An error occurred while adding the dealer.");
+				return View(dto);
+			}
 		}
-		catch (Exception ex)
-		{
-			ModelState.AddModelError("", "An error occurred while loading the dealer.");
-			return RedirectToAction("GetAll");
-		}
-	}
 
-	[HttpPost]
-	public IActionResult Edit(int id, DealerDto dealerDto)
-	{
-		try
+		[HttpGet]
+		[Authorize]
+		public IActionResult Edit(int id)
 		{
-			if (!ModelState.IsValid)
+			try
 			{
+				var dealer = _dealerService.GetById(id);
+				if (dealer == null)
+				{
+					return NotFound();
+				}
+
+				if (dealer.UserId != User.GetId())
+				{
+					return Forbid();
+				}
+
+				return View(new DealerDto
+				{
+					Id = dealer.Id,
+					Name = dealer.Name,
+					CompanyName = dealer.CompanyName,
+					PhoneNumber = dealer.PhoneNumber,
+					UserId = dealer.UserId
+				});
+			}
+			catch (Exception)
+			{
+				ModelState.AddModelError("", "An error occurred while loading the dealer.");
+				return RedirectToAction(nameof(GetAll));
+			}
+		}
+
+		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
+		public IActionResult Edit(int id, DealerDto dealerDto)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					return View(dealerDto);
+				}
+
+				var currentUserId = User.GetId();
+				if (currentUserId == null)
+				{
+					return Unauthorized();
+				}
+
+				var dealer = _dealerService.GetById(id);
+				if (dealer == null)
+				{
+					return NotFound();
+				}
+
+				if (dealer.UserId != currentUserId)
+				{
+					return Forbid();
+				}
+
+				dealer.Name = dealerDto.Name;
+				dealer.CompanyName = dealerDto.CompanyName;
+				dealer.PhoneNumber = dealerDto.PhoneNumber;
+
+				_dealerService.Update(dealer);
+
+				return RedirectToAction(nameof(MyDashboard));
+			}
+			catch (Exception)
+			{
+				ModelState.AddModelError("", "An error occurred while editing the dealer.");
 				return View(dealerDto);
 			}
+		}
 
-			var currentUserId = User.GetId();
-			if (currentUserId == null)
-			{
-				return Unauthorized();
-			}
-
-			var dealer = _dealerService.GetById(id);
-			if (dealer == null)
+		[HttpGet]
+		public IActionResult Details(int id)
+		{
+			var profile = _dealerService.GetPublicProfile(id);
+			if (profile == null)
 			{
 				return NotFound();
 			}
 
-			if (dealer.UserId != currentUserId)
+			return View(profile);
+		}
+
+		[HttpGet]
+		[Authorize]
+		public IActionResult MyDashboard()
+		{
+			var userId = User.GetId();
+			if (string.IsNullOrWhiteSpace(userId))
+			{
+				return Challenge();
+			}
+
+			try
+			{
+				var dashboard = _dealerService.GetDashboard(userId);
+				return View(dashboard);
+			}
+			catch (UnauthorizedAccessException)
+			{
+				return RedirectToAction(nameof(Add));
+			}
+		}
+
+		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
+		public IActionResult ToggleListingStatus(int carId)
+		{
+			var userId = User.GetId();
+			if (string.IsNullOrWhiteSpace(userId))
+			{
+				return Challenge();
+			}
+
+			try
+			{
+				_dealerService.ToggleListingStatus(userId, carId);
+				return RedirectToAction(nameof(MyDashboard));
+			}
+			catch (UnauthorizedAccessException)
 			{
 				return Forbid();
 			}
-
-			// Update fields
-			dealer.Name = dealerDto.Name;
-			dealer.CompanyName = dealerDto.CompanyName;
-			dealer.PhoneNumber = dealerDto.PhoneNumber;
-
-			_dealerService.Update(dealer);
-
-			return RedirectToAction("GetAll");
-		}
-		catch (Exception ex)
-		{
-			ModelState.AddModelError("", "An error occurred while editing the dealer.");
-			return View(dealerDto);
-		}
-	}
-
-	[HttpGet]
-	public IActionResult Details(int id)
-	{
-		try
-		{
-			var dealer = _context.Dealers.Include(d => d.Cars).FirstOrDefault(d => d.Id == id);
-			if (dealer == null)
+			catch (ArgumentException)
 			{
 				return NotFound();
 			}
-			return View(dealer);
-		}
-		catch (Exception ex)
-		{
-			ModelState.AddModelError("", "An error occurred while fetching dealer details.");
-			return RedirectToAction("GetAll");
 		}
 	}
 }
