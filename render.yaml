@@ -10,4 +10,4 @@ services:
       - key: ASPNETCORE_URLS
         value: http://0.0.0.0:10000
       - key: ConnectionStrings__DefaultConnection
-        value: Data Source=/app/App_Data/carsales.db
+        value: Data Source=/tmp/carsales/carsales.db

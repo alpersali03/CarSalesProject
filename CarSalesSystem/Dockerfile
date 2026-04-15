@@ -11,9 +11,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
 COPY --from=build /app/publish .
-RUN mkdir -p /app/App_Data
+RUN mkdir -p /app/App_Data /tmp/carsales && chmod -R 777 /app/App_Data /tmp/carsales
 
 ENV ASPNETCORE_URLS=http://0.0.0.0:10000
+ENV ConnectionStrings__DefaultConnection="Data Source=/tmp/carsales/carsales.db"
 EXPOSE 10000
 
 ENTRYPOINT ["dotnet", "CarSalesSystem.dll"]
