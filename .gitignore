@@ -24,7 +24,7 @@ TestResults/
 # Local publish/build scratch folders
 .codex-build*/
 .codex-test-build*/
-.codex-publish/
+.codex-publish*/
 .testobj/
 .testobj2/
 **/.codex-build*/
