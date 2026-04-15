@@ -29,6 +29,31 @@ namespace CarSalesSystem.Controllers
 		public IActionResult Index()
 		{
 			var favoriteIds = _favoriteService.GetFavoriteCarIds(User.GetId());
+			var dealerRevenue = _context.Payments
+				.Select(p => new { p.Car.DealerId, p.TotalAmount })
+				.ToList()
+				.GroupBy(p => p.DealerId)
+				.ToDictionary(g => g.Key, g => g.Sum(p => p.TotalAmount));
+
+			var topDealers = _context.Dealers
+				.Select(d => new DealerSummaryViewModel
+				{
+					Id = d.Id,
+					Name = d.Name,
+					CompanyName = d.CompanyName,
+					PhoneNumber = d.PhoneNumber,
+					ActiveListingsCount = d.Cars.Count(c => c.IsListed && !c.IsBought),
+					SoldCarsCount = d.Cars.Count(c => c.IsBought)
+				})
+				.OrderByDescending(d => d.ActiveListingsCount)
+				.Take(3)
+				.ToList();
+
+			foreach (var dealer in topDealers)
+			{
+				dealer.Revenue = dealerRevenue.GetValueOrDefault(dealer.Id);
+			}
+
 			var viewModel = new HomePageViewModel
 			{
 				FeaturedCars = _carService.GetLatest(8),
@@ -41,22 +66,7 @@ namespace CarSalesSystem.Controllers
 				DealersCount = _context.Dealers.Count(),
 				SoldCarsCount = _context.Cars.Count(c => c.IsBought),
 				FavoriteCarIds = favoriteIds,
-				TopDealers = _context.Dealers
-					.Select(d => new DealerSummaryViewModel
-					{
-						Id = d.Id,
-						Name = d.Name,
-						CompanyName = d.CompanyName,
-						PhoneNumber = d.PhoneNumber,
-						ActiveListingsCount = d.Cars.Count(c => c.IsListed && !c.IsBought),
-						SoldCarsCount = d.Cars.Count(c => c.IsBought),
-						Revenue = _context.Payments
-							.Where(p => p.Car.DealerId == d.Id)
-							.Sum(p => (decimal?)p.TotalAmount) ?? 0m
-					})
-					.OrderByDescending(d => d.ActiveListingsCount)
-					.Take(3)
-					.ToList()
+				TopDealers = topDealers
 			};
 
 			return View(viewModel);

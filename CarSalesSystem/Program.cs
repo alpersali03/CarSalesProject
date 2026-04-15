@@ -106,22 +106,34 @@ namespace CarSalesSystem
 		private static async Task<bool> HasTableAsync(ApplicationDbContext dbContext, string tableName)
 		{
 			var connection = dbContext.Database.GetDbConnection();
+			var openedHere = false;
 
 			if (connection.State != System.Data.ConnectionState.Open)
 			{
 				await connection.OpenAsync();
+				openedHere = true;
 			}
 
-			await using var command = connection.CreateCommand();
-			command.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = $tableName";
+			try
+			{
+				await using var command = connection.CreateCommand();
+				command.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = $tableName";
 
-			var parameter = command.CreateParameter();
-			parameter.ParameterName = "$tableName";
-			parameter.Value = tableName;
-			command.Parameters.Add(parameter);
+				var parameter = command.CreateParameter();
+				parameter.ParameterName = "$tableName";
+				parameter.Value = tableName;
+				command.Parameters.Add(parameter);
 
-			var result = await command.ExecuteScalarAsync();
-			return Convert.ToInt32(result) > 0;
+				var result = await command.ExecuteScalarAsync();
+				return Convert.ToInt32(result) > 0;
+			}
+			finally
+			{
+				if (openedHere)
+				{
+					await connection.CloseAsync();
+				}
+			}
 		}
 
 		private static async Task SeedRolesAsync(WebApplication app)
