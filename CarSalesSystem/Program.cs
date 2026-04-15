@@ -88,7 +88,40 @@ namespace CarSalesSystem
 		{
 			using var scope = app.Services.CreateScope();
 			var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+			if (dbContext.Database.IsSqlite())
+			{
+				if (!await HasTableAsync(dbContext, "AspNetUsers"))
+				{
+					await dbContext.Database.EnsureDeletedAsync();
+				}
+
+				await dbContext.Database.EnsureCreatedAsync();
+				return;
+			}
+
 			await dbContext.Database.MigrateAsync();
+		}
+
+		private static async Task<bool> HasTableAsync(ApplicationDbContext dbContext, string tableName)
+		{
+			var connection = dbContext.Database.GetDbConnection();
+
+			if (connection.State != System.Data.ConnectionState.Open)
+			{
+				await connection.OpenAsync();
+			}
+
+			await using var command = connection.CreateCommand();
+			command.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = $tableName";
+
+			var parameter = command.CreateParameter();
+			parameter.ParameterName = "$tableName";
+			parameter.Value = tableName;
+			command.Parameters.Add(parameter);
+
+			var result = await command.ExecuteScalarAsync();
+			return Convert.ToInt32(result) > 0;
 		}
 
 		private static async Task SeedRolesAsync(WebApplication app)
