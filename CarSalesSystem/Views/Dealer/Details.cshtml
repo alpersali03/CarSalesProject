@@ -10,7 +10,7 @@
             <div>
                 <span class="eyebrow">Dealer profile</span>
                 <h1>@Model.Dealer.Name</h1>
-                <p class="section-copy">@Model.Dealer.CompanyName · @Model.Dealer.PhoneNumber</p>
+                <p class="section-copy">@Model.Dealer.CompanyName • @Model.Dealer.PhoneNumber</p>
             </div>
             <div class="profile-metrics">
                 <div><strong>@Model.ActiveListings.Count</strong><span>active listings</span></div>
@@ -19,22 +19,32 @@
             </div>
         </div>
 
-        <div class="catalog-grid">
-            @foreach (var car in Model.ActiveListings)
-            {
-                <article class="catalog-card">
-                    <div class="catalog-media">
-                        <img src="@car.ImageUrl" alt="@car.Brand @car.Model" onerror="this.src='/image/photo2.jpg'" />
-                        <span class="catalog-price">@car.Price.ToString("N0") BGN</span>
-                    </div>
-                    <div class="catalog-body">
-                        <div class="catalog-meta">@car.Year · @car.FuelType</div>
-                        <h3>@car.Brand @car.Model</h3>
-                        <p>@car.City, @car.Country</p>
-                        <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-dark btn-sm">Open listing</a>
-                    </div>
-                </article>
-            }
-        </div>
+        @if (Model.ActiveListings.Any())
+        {
+            <div class="catalog-grid">
+                @foreach (var car in Model.ActiveListings)
+                {
+                    <article class="catalog-card">
+                        <div class="catalog-media">
+                            <img src="@car.ImageUrl" alt="@car.Brand @car.Model" onerror="this.src='/images/no-image.png'" />
+                            <span class="catalog-price">@car.Price.ToString("N0") BGN</span>
+                        </div>
+                        <div class="catalog-body">
+                            <div class="catalog-meta">@car.Year • @car.FuelType</div>
+                            <h3>@car.Brand @car.Model</h3>
+                            <p>@car.City, @car.Country</p>
+                            <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-dark btn-sm">Open listing</a>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <h3>No active listings right now</h3>
+                <p>This dealer does not currently have visible cars for sale.</p>
+            </div>
+        }
     </div>
 </section>

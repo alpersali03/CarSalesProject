@@ -228,7 +228,9 @@ namespace CarSalesSystem.Services
 
 			var totalRevenue = _context.Payments
 				.Where(p => p.Car.DealerId == dealerId)
-				.Sum(p => (decimal?)p.TotalAmount) ?? 0m;
+				.Select(p => p.TotalAmount)
+				.ToList()
+				.Sum();
 
 			return new DealerPublicProfileViewModel
 			{

@@ -29,6 +29,7 @@ TestResults/
 .testobj2/
 **/.codex-build*/
 .render-smoke*/
+.route-smoke*/
 
 # Logs and local data
 *.log

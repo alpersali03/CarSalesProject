@@ -30,7 +30,8 @@ namespace CarSalesSystem.Controllers
 			var payment = _paymentService.GetPaymentForUser(id, userId, User.IsAdmin());
 			if (payment == null)
 			{
-				return NotFound();
+				TempData["Error"] = "Payment not found or you do not have access to it.";
+				return RedirectToAction(nameof(GetAll));
 			}
 
 			return View(payment);
