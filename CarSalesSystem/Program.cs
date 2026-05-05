@@ -17,6 +17,7 @@ namespace CarSalesSystem
 			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
 				?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 			var isSqlite = IsSqliteConnection(connectionString);
+			var isPostgres = IsPostgresConnection(connectionString);
 
 			builder.Services.Configure<SeedDataOptions>(
 				builder.Configuration.GetSection(SeedDataOptions.SectionName));
@@ -26,6 +27,10 @@ namespace CarSalesSystem
 				if (isSqlite)
 				{
 					options.UseSqlite(connectionString);
+				}
+				else if (isPostgres)
+				{
+					options.UseNpgsql(connectionString);
 				}
 				else
 				{
@@ -86,6 +91,12 @@ namespace CarSalesSystem
 				|| connectionString.Contains("Filename=", StringComparison.OrdinalIgnoreCase);
 		}
 
+		private static bool IsPostgresConnection(string connectionString)
+		{
+			return connectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase)
+				&& connectionString.Contains("Username=", StringComparison.OrdinalIgnoreCase);
+		}
+
 		private static async Task ApplyMigrationsAsync(WebApplication app)
 		{
 			using var scope = app.Services.CreateScope();
@@ -98,6 +109,12 @@ namespace CarSalesSystem
 					await dbContext.Database.EnsureDeletedAsync();
 				}
 
+				await dbContext.Database.EnsureCreatedAsync();
+				return;
+			}
+
+			if (dbContext.Database.IsNpgsql())
+			{
 				await dbContext.Database.EnsureCreatedAsync();
 				return;
 			}
