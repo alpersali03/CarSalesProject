@@ -5,7 +5,6 @@ using CarSalesSystem.Services;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 namespace CarSalesSystem.Controllers
 {

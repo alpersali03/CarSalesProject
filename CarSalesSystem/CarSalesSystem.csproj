@@ -18,8 +18,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -34,8 +33,11 @@
 
   <ItemGroup>
     <Compile Remove="CarSalesSystem.Tests\**\*.cs" />
+    <Compile Remove="Data\Migrations\**\*.cs" />
     <Content Remove="CarSalesSystem.Tests\**\*" />
     <EmbeddedResource Remove="CarSalesSystem.Tests\**\*" />
+    <EmbeddedResource Remove="Data\Migrations\**\*" />
+    <None Remove="Data\Migrations\**\*" />
     <None Remove="CarSalesSystem.Tests\**\*" />
   </ItemGroup>
 

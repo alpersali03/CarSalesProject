@@ -5,6 +5,7 @@ using CarSalesSystem.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Npgsql;
 
 namespace CarSalesSystem
 {
@@ -14,29 +15,15 @@ namespace CarSalesSystem
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+			var configuredConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
 				?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-			var isSqlite = IsSqliteConnection(connectionString);
-			var isPostgres = IsPostgresConnection(connectionString);
+			var connectionString = NormalizeSupabaseConnectionString(configuredConnectionString);
 
 			builder.Services.Configure<SeedDataOptions>(
 				builder.Configuration.GetSection(SeedDataOptions.SectionName));
 
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
-			{
-				if (isSqlite)
-				{
-					options.UseSqlite(connectionString);
-				}
-				else if (isPostgres)
-				{
-					options.UseNpgsql(connectionString);
-				}
-				else
-				{
-					options.UseSqlServer(connectionString);
-				}
-			});
+				options.UseNpgsql(connectionString));
 
 			builder.Services
 				.AddDefaultIdentity<IdentityUser>(options =>
@@ -53,8 +40,15 @@ namespace CarSalesSystem
 			builder.Services.AddScoped<ICarService, CarService>();
 			builder.Services.AddScoped<IPaymentService, PaymentService>();
 			builder.Services.AddScoped<IFavoriteService, FavoriteService>();
+			builder.Services.AddScoped<SqlServerToSupabaseImporter>();
 
 			var app = builder.Build();
+
+			if (args.Contains("--import-sqlserver", StringComparer.OrdinalIgnoreCase))
+			{
+				await ImportFromSqlServerAsync(app, args);
+				return;
+			}
 
 			await ApplyMigrationsAsync(app);
 			await SeedRolesAsync(app);
@@ -85,16 +79,49 @@ namespace CarSalesSystem
 			await app.RunAsync();
 		}
 
-		private static bool IsSqliteConnection(string connectionString)
+		private static string NormalizeSupabaseConnectionString(string configuredConnectionString)
 		{
-			return connectionString.Contains("Data Source=", StringComparison.OrdinalIgnoreCase)
-				|| connectionString.Contains("Filename=", StringComparison.OrdinalIgnoreCase);
-		}
+			if (configuredConnectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)
+				|| configuredConnectionString.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+			{
+				var uri = new Uri(configuredConnectionString);
+				var userInfo = uri.UserInfo.Split(':', 2);
 
-		private static bool IsPostgresConnection(string connectionString)
-		{
-			return connectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase)
-				&& connectionString.Contains("Username=", StringComparison.OrdinalIgnoreCase);
+				if (userInfo.Length != 2 || string.IsNullOrWhiteSpace(userInfo[0]) || string.IsNullOrWhiteSpace(userInfo[1]))
+				{
+					throw new InvalidOperationException(
+						"The Supabase connection string must include both username and password.");
+				}
+
+				var database = uri.AbsolutePath.Trim('/');
+				if (string.IsNullOrWhiteSpace(database))
+				{
+					database = "postgres";
+				}
+
+				var builder = new NpgsqlConnectionStringBuilder
+				{
+					Host = uri.Host,
+					Port = uri.Port > 0 ? uri.Port : 5432,
+					Database = database,
+					Username = Uri.UnescapeDataString(userInfo[0]),
+					Password = Uri.UnescapeDataString(userInfo[1]),
+					SslMode = SslMode.Require
+				};
+
+				return builder.ConnectionString;
+			}
+
+			var looksLikePostgres = configuredConnectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase)
+				&& configuredConnectionString.Contains("Username=", StringComparison.OrdinalIgnoreCase);
+
+			if (!looksLikePostgres)
+			{
+				throw new InvalidOperationException(
+					"This application is configured for Supabase/PostgreSQL only. Set ConnectionStrings__DefaultConnection to a Supabase Postgres connection string.");
+			}
+
+			return configuredConnectionString;
 		}
 
 		private static async Task ApplyMigrationsAsync(WebApplication app)
@@ -102,57 +129,18 @@ namespace CarSalesSystem
 			using var scope = app.Services.CreateScope();
 			var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-			if (dbContext.Database.IsSqlite())
-			{
-				if (!await HasTableAsync(dbContext, "AspNetUsers"))
-				{
-					await dbContext.Database.EnsureDeletedAsync();
-				}
-
-				await dbContext.Database.EnsureCreatedAsync();
-				return;
-			}
-
-			if (dbContext.Database.IsNpgsql())
-			{
-				await dbContext.Database.EnsureCreatedAsync();
-				return;
-			}
-
-			await dbContext.Database.MigrateAsync();
+			await dbContext.Database.EnsureCreatedAsync();
 		}
 
-		private static async Task<bool> HasTableAsync(ApplicationDbContext dbContext, string tableName)
+		private static async Task ImportFromSqlServerAsync(WebApplication app, string[] args)
 		{
-			var connection = dbContext.Database.GetDbConnection();
-			var openedHere = false;
+			using var scope = app.Services.CreateScope();
+			var importer = scope.ServiceProvider.GetRequiredService<SqlServerToSupabaseImporter>();
+			var sourceConnection = args
+				.FirstOrDefault(arg => arg.StartsWith("--source-connection=", StringComparison.OrdinalIgnoreCase))
+				?.Split('=', 2)[1];
 
-			if (connection.State != System.Data.ConnectionState.Open)
-			{
-				await connection.OpenAsync();
-				openedHere = true;
-			}
-
-			try
-			{
-				await using var command = connection.CreateCommand();
-				command.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = $tableName";
-
-				var parameter = command.CreateParameter();
-				parameter.ParameterName = "$tableName";
-				parameter.Value = tableName;
-				command.Parameters.Add(parameter);
-
-				var result = await command.ExecuteScalarAsync();
-				return Convert.ToInt32(result) > 0;
-			}
-			finally
-			{
-				if (openedHere)
-				{
-					await connection.CloseAsync();
-				}
-			}
+			await importer.ImportAsync(sourceConnection);
 		}
 
 		private static async Task SeedRolesAsync(WebApplication app)
